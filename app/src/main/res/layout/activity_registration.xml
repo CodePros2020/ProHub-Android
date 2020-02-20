@@ -31,16 +31,29 @@
         android:padding="20dp"
         android:weightSum="1">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal"
-            android:text="Sign Up"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            />
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="Sign Up"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnBack"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Login" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/txtFirstName"
@@ -103,12 +116,11 @@
             android:typeface="sans" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnConfirm"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:onClick="goMain"
             android:text="Confirm" />
 
     </LinearLayout>

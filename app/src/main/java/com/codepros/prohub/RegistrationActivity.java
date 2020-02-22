@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     private static final String TAG = "RegistrationActivity";
@@ -66,8 +68,12 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG,"Value is: " + value);
+
+//                String value = dataSnapshot.getValue(String.class);
+//                Log.d(TAG,"Value is: " + value);
+                HashMap<String, User> map = (HashMap<String, User>) dataSnapshot.getValue();
+                Log.d(TAG, "Value is" + map);
+
             }
 
             @Override
@@ -76,6 +82,10 @@ public class RegistrationActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+
+
+
+
     }
 
     // this may change to go to login page

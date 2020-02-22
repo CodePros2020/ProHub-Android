@@ -51,7 +51,7 @@ public class RegistrationActivity extends AppCompatActivity {
         btnLinkLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goMain(v);
+                goLogin(v);
             }
         });
 
@@ -82,20 +82,16 @@ public class RegistrationActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-
-
-
-
     }
 
     // this may change to go to login page
-    public void goMain(View view) {
+    public void goLogin(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         this.startActivity(intent);
     }
 
     // function handles registration
-    public void register(View view){
+    private void register(View view){
         String firstName = firstname.getText().toString();
         String lastName = lastname.getText().toString();
         String phoneNumber = phone.getText().toString();
@@ -113,6 +109,9 @@ public class RegistrationActivity extends AppCompatActivity {
             myUserRef.child("users").child(phoneNumber).setValue(newUser);
             Toast.makeText(getApplicationContext(), "saved!", Toast.LENGTH_LONG).show();
             // intent to next page
+            Intent intent = new Intent(this, RegistrationRoleActivity.class);
+            intent.putExtra("phoneNumber", phoneNumber);
+            this.startActivity(intent);
         }
     }
 }

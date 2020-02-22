@@ -2,4 +2,10 @@
     <string name="app_name">ProHub</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
+    <string name="login2">LOGIN</string>
+    <string name="phone">Phone Number</string>
+    <string name="password">Password</string>
+    <string name="rememberMe">Remember Me</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="action_search">Search</string>
 </resources>

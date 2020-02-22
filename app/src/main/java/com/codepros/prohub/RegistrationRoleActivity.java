@@ -79,7 +79,8 @@ public class RegistrationRoleActivity extends AppCompatActivity {
 
     // this may change to go to login page
     public void goMain(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        //Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         this.startActivity(intent);
     }
 }

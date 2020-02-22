@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -73,7 +76,6 @@ public class RegistrationActivity extends AppCompatActivity {
 //                Log.d(TAG,"Value is: " + value);
                 HashMap<String, User> map = (HashMap<String, User>) dataSnapshot.getValue();
                 Log.d(TAG, "Value is" + map);
-
             }
 
             @Override
@@ -91,22 +93,32 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     // function handles registration
-    private void register(View view){
+    private void register(View view) {
         String firstName = firstname.getText().toString();
         String lastName = lastname.getText().toString();
         String phoneNumber = phone.getText().toString();
         String passwordString = password.getText().toString();
         String confirmedPassword = confirmedPass.getText().toString();
 
-        if(!passwordString.equals(confirmedPassword) || firstName.isEmpty() || lastName.isEmpty() || passwordString.isEmpty()){
+        // validate password with confirmed password
+        // and need input for first name and last name
+        if(!passwordString.equals(confirmedPassword) || firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty()){
             // show error message
             String message = "Sorry, something went wrong, please try again!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        // validate phone number in correct format
+        else if(!PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber) || phoneNumber.length() < 9 || phoneNumber.length() > 13){
+            // show error message
+            String message = "Sorry, incorrect phone number format, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
         else{
             User newUser = new User(firstName, lastName, phoneNumber, passwordString);
             // need to save to firebase
             myUserRef.child("users").child(phoneNumber).setValue(newUser);
+            //boolean test = User.validatePassword("123", newUser.getPassword());
+            //Toast.makeText(getApplicationContext(), "authentication: "+test, Toast.LENGTH_LONG).show();
             Toast.makeText(getApplicationContext(), "saved!", Toast.LENGTH_LONG).show();
             // intent to next page
             Intent intent = new Intent(this, RegistrationRoleActivity.class);

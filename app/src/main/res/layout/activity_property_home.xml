@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PropertyHomeActivity">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/logoImage"
+            android:layout_width="56dp"
+            android:layout_height="64dp"
+            android:translationX="10dp"
+            android:translationY="5dp"
+            app:srcCompat="@drawable/logo_medium" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="61dp">
+
+            <Button
+                android:id="@+id/chatButton"
+                android:layout_width="107dp"
+                android:layout_height="match_parent"
+                android:text="Chat" />
+
+            <Button
+                android:id="@+id/newsroomButton"
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
+                android:text="News" />
+
+            <Button
+                android:id="@+id/formsButton"
+                android:layout_width="98dp"
+                android:layout_height="match_parent"
+                android:text="Forms" />
+
+            <Button
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="61dp"
+                android:layout_weight="1"
+                android:text="Settings" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/dashboardTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dashboard"
+                android:textAlignment="center"
+                android:textSize="36sp"
+                android:translationY="20dp" />
+
+            <ImageView
+                android:id="@+id/mailImageView"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:translationX="50dp"
+                android:translationY="100dp"
+                app:srcCompat="@drawable/mail" />
+
+            <ImageView
+                android:id="@+id/newsImageView"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:translationX="50dp"
+                android:translationY="180dp"
+                app:srcCompat="@drawable/news" />
+
+            <ImageView
+                android:id="@+id/formsImageView"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:translationX="50dp"
+                android:translationY="260dp"
+                app:srcCompat="@drawable/forms" />
+
+            <ImageView
+                android:id="@+id/settingsImageView"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:translationX="50dp"
+                android:translationY="340dp"
+                app:srcCompat="@drawable/settings" />
+
+            <Button
+                android:id="@+id/chatButton2"
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:backgroundTint="#008577"
+                android:text="Chat"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:translationX="160dp"
+                android:translationY="100dp" />
+
+            <Button
+                android:id="@+id/newsroomButton2"
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:backgroundTint="#008577"
+                android:text="News"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:translationX="160dp"
+                android:translationY="180dp" />
+
+            <Button
+                android:id="@+id/formsButton2"
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:backgroundTint="#008577"
+                android:text="Forms"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:translationX="160dp"
+                android:translationY="260dp" />
+
+            <Button
+                android:id="@+id/settingsButton2"
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:backgroundTint="#008577"
+                android:text="Settings"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:translationX="160dp"
+                android:translationY="340dp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

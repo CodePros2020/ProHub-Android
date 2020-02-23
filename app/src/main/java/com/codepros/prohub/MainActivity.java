@@ -14,10 +14,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+
     public void goRegistration(View view) {
         Intent intent = new Intent(this, RegistrationActivity.class);
         this.startActivity(intent);
     }
+
 
     public void goLogin(View view) {
         Intent intent = new Intent(this, LoginActivity.class);

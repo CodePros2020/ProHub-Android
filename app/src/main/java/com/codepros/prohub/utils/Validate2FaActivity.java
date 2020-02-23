@@ -75,8 +75,9 @@ public class Validate2FaActivity extends AppCompatActivity {
                 });
     }
 
+    // go to next page which is the property home page
     private void goNext(){
-        this.startActivity(new Intent(this, MainActivity.class));
+        this.startActivity(new Intent(this, PropertyHomeActivity.class));
         Toast.makeText(this, "successfully pased the 2FA!", Toast.LENGTH_LONG).show();
     }
 }

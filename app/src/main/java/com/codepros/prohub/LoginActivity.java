@@ -63,12 +63,14 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(this, Enable2FaActivity.class);
                         intent.putExtra("phoneNumber", phoneNumber);
                         this.startActivity(intent);
-
+                        return;
                     }
-                    break;
+                    Toast.makeText(getApplicationContext(), "sorry, something went wrong!", Toast.LENGTH_LONG).show();
                 }
             }
+        }else{
+            Toast.makeText(getApplicationContext(), "sorry, something went wrong!", Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(getApplicationContext(), "sorry, something went wrong!", Toast.LENGTH_LONG).show();
+
     }
 }

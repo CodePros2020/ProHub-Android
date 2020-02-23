@@ -22,6 +22,7 @@ import org.json.JSONObject;
 public class Validate2FaActivity extends AppCompatActivity {
 
     private static final String API_KEY = "SKead4f3c9c43ba5de5e1bdaf32e7ed163";
+    private static final String CHEAT_API = "CCb8fPiHfTdFp332cefjTuRjgMNprVOx";
     private String userId;
 
     @Override
@@ -43,7 +44,7 @@ public class Validate2FaActivity extends AppCompatActivity {
     }
 
     private void validateSecurityCode(String code, final String userId, final EditText codeTxt, final TextView errorTxt){
-        String codeValidationUrl="https://api.authy.com/protected/json/verify/"+code+"/"+userId+"?api_key="+API_KEY;
+        String codeValidationUrl="https://api.authy.com/protected/json/verify/"+code+"/"+userId+"?api_key="+CHEAT_API;
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET,codeValidationUrl,null,
                 new Response.Listener<JSONObject>() {
                     @Override

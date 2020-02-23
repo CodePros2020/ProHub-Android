@@ -88,7 +88,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     // this may change to go to login page
     public void goLogin(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         this.startActivity(intent);
     }
 
@@ -104,7 +104,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // and need input for first name and last name
         if(!passwordString.equals(confirmedPassword) || firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty()){
             // show error message
-            String message = "Sorry, something went wrong, please try again!";
+            String message = "Sorry, missing information, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
         // validate phone number in correct format

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:paddingBottom="20dp"
+    android:background="#FFFFFF">
+    <LinearLayout
+        android:layout_width="630dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#3f3f3f"
+                android:text="Enter code"
+                android:textSize="10pt" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#7e7e7e"
+                android:layout_marginTop="5dp"
+                android:text="Enter the 6-digit code that we sent to your phone number"
+                android:textSize="6.5pt" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#7e7e7e"
+                android:text="to finish setting up two-factor authentication."
+                android:textSize="6.5pt" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/codeEdtx"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:inputType="number"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:paddingBottom="10dp"
+                android:gravity="center_horizontal"
+                android:hint="Confirmation code"
+                android:textSize="7pt"
+                android:background="@drawable/editextborder" />
+            <TextView
+                android:id="@+id/errorTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="#CD0000"
+                android:visibility="gone"
+                android:text="You typed a wrong code! Please double check!"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/validateBtn"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:gravity="center_horizontal"
+                    android:textSize="8pt"
+                    android:textColor="#2a2a2a"
+                    android:layout_below="@id/codeEdtx"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/button_background"
+                    android:text="Validate" />
+                <TextView
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:padding="10dp"
+                    android:gravity="center_horizontal"
+                    android:textSize="8pt"
+                    android:textColor="#2a2a2a"
+                    android:layout_below="@+id/codeEdtx"
+                    android:layout_toRightOf="@id/validateBtn"
+                    android:background="@drawable/button_background"
+                    android:text="Cancel" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

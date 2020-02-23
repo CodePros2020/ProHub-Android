@@ -10,6 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".PropertyHomeActivity"></activity>
+        <activity android:name=".utils.Validate2FaActivity"></activity>
+        <activity android:name=".utils.Enable2FaActivity" />
         <activity android:name=".RegistrationRoleActivity" />
         <activity android:name=".LoginActivity" />
         <activity

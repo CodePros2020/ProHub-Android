@@ -24,7 +24,8 @@ public class User {
         this.firstname = firstname;
         this.lastname = lastname;
         this.phone = phone;
-        this.password = hashPassword(password);
+        //this.password = hashPassword(password);
+        this.password = password;
     }
 
     public String getFirstname() {
@@ -56,7 +57,8 @@ public class User {
     }
 
     public void setPassword(String password){
-        this.password = hashPassword(password);
+        //this.password = hashPassword(password);
+        this.password = password;
     }
 
     public String getRole() {
@@ -65,6 +67,10 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean authentiocation(String password){
+        return this.password.equals(password);
     }
 
     private String hashPassword(String password) {
@@ -107,8 +113,9 @@ public class User {
         }
     }
 
-    public static boolean validatePassword(String originalPassword, String storedPassword)
+    public boolean validatePassword(String originalPassword)
     {
+        String storedPassword = this.getPassword();
         String[] parts = storedPassword.split(":");
         int iterations = Integer.parseInt(parts[0]);
         try{

@@ -13,7 +13,9 @@
         <activity android:name=".utils.Validate2FaActivity"></activity>
         <activity android:name=".utils.Enable2FaActivity" />
         <activity android:name=".RegistrationRoleActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".RegistrationActivity"
             android:windowSoftInputMode="adjustPan" />

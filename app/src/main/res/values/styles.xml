@@ -8,16 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- 2FA Dialogs-->
-    <style name="TwoFADialogs" parent="@android:style/Theme.Dialog">
-        <item name="android:windowAnimationStyle">@style/TwoFADialogsAnimation</item>
-    </style>
-
-    <style name="TwoFADialogsAnimation">
-        <item name="android:windowEnterAnimation">@anim/translate_left_side</item>
-        <item name="android:windowExitAnimation">@anim/translate_right_side</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

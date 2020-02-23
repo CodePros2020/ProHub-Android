@@ -41,11 +41,13 @@ public class Enable2FaActivity extends AppCompatActivity {
         (findViewById(R.id.smsOptionLyt)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connectToAuthy();
+                //connectToAuthy();
+                goNext();
             }
         });
 
     }
+
 
     private void connectToAuthy(){
         /** 1.create the create user url with Authy API **/

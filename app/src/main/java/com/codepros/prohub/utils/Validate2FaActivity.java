@@ -35,10 +35,13 @@ public class Validate2FaActivity extends AppCompatActivity {
         findViewById(R.id.validateBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /** call authy api to validate code provided by the user**/
+                /** call authy api to validate code provided by the user
                 validateSecurityCode(((EditText) findViewById(R.id.codeEdtx)).getText().toString(), userId,
                         ((EditText) findViewById(R.id.codeEdtx)), ((TextView) findViewById(R.id.errorTxt)));
-
+                 **/
+                if(!((EditText) findViewById(R.id.codeEdtx)).getText().toString().isEmpty()){
+                    goNext();
+                }
             }
         });
     }

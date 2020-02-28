@@ -56,8 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         if(myUsers.size()>0){
             for (User user: myUsers) {
                 if(user.getPhone().equals(phoneNumber)){
-                    //if(user.validatePassword(passwordString)){
-                    if(user.authentiocation(passwordString)){
+                    if(user.authentication(passwordString)){
                         Toast.makeText(getApplicationContext(), "login successful!", Toast.LENGTH_LONG).show();
                         // intent to next page which make the 2-factor
                         Intent intent = new Intent(this, Enable2FaActivity.class);
@@ -65,12 +64,12 @@ public class LoginActivity extends AppCompatActivity {
                         this.startActivity(intent);
                         return;
                     }
-                    Toast.makeText(getApplicationContext(), "sorry, something went wrong!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "sorry, incorrect password!", Toast.LENGTH_LONG).show();
+                    return;
                 }
             }
-        }else{
-            Toast.makeText(getApplicationContext(), "sorry, something went wrong!", Toast.LENGTH_LONG).show();
         }
+        Toast.makeText(getApplicationContext(), "sorry, phone number not found!", Toast.LENGTH_LONG).show();
 
     }
 }

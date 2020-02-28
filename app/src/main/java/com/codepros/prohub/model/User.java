@@ -24,8 +24,7 @@ public class User {
         this.firstname = firstname;
         this.lastname = lastname;
         this.phone = phone;
-        //this.password = hashPassword(password);
-        this.password = password;
+        this.password = hashPassword(password);
     }
 
     public String getFirstname() {
@@ -57,8 +56,7 @@ public class User {
     }
 
     public void setPassword(String password){
-        //this.password = hashPassword(password);
-        this.password = password;
+        this.password = hashPassword(password);
     }
 
     public String getRole() {
@@ -69,83 +67,33 @@ public class User {
         this.role = role;
     }
 
-    public boolean authentiocation(String password){
-        return this.password.equals(password);
+    public boolean authentication(String password){
+        return this.password.equals(hashPassword(hashPassword(password)));
     }
 
-    private String hashPassword(String password) {
+    public String hashPassword(String password){
         String generatedPassword = null;
-        int iterations = 1000;
-        char[] chars = password.toCharArray();
-
-        try{
-            byte[] salt = getSalt();
-            PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            byte[] hash = skf.generateSecret(spec).getEncoded();
-            generatedPassword = iterations + ":" + toHex(salt) + ":" + toHex(hash);
-        }catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-
-        return generatedPassword;
-    }
-
-    private byte[] getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
-        return salt;
-    }
-
-    private String toHex(byte[] array) throws NoSuchAlgorithmException
-    {
-        BigInteger bi = new BigInteger(1, array);
-        String hex = bi.toString(16);
-        int paddingLength = (array.length * 2) - hex.length();
-        if(paddingLength > 0)
-        {
-            return String.format("%0"  +paddingLength + "d", 0) + hex;
-        }else{
-            return hex;
-        }
-    }
-
-    public boolean validatePassword(String originalPassword)
-    {
-        String storedPassword = this.getPassword();
-        String[] parts = storedPassword.split(":");
-        int iterations = Integer.parseInt(parts[0]);
-        try{
-            byte[] salt = fromHex(parts[1]);
-            byte[] hash = fromHex(parts[2]);
-
-            PBEKeySpec spec = new PBEKeySpec(originalPassword.toCharArray(), salt, iterations, hash.length * 8);
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            byte[] testHash = skf.generateSecret(spec).getEncoded();
-
-            int diff = hash.length ^ testHash.length;
-            for(int i = 0; i < hash.length && i < testHash.length; i++)
+        try {
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            //Add password bytes to digest
+            md.update(password.getBytes());
+            //Get the hash's bytes
+            byte[] bytes = md.digest();
+            //This bytes[] has bytes in decimal format;
+            //Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
             {
-                diff |= hash[i] ^ testHash[i];
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
-            return diff == 0;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
+            //Get complete hashed password in hex format
+            generatedPassword = sb.toString();
         }
-        return false;
-    }
-    private static byte[] fromHex(String hex) throws NoSuchAlgorithmException
-    {
-        byte[] bytes = new byte[hex.length() / 2];
-        for(int i = 0; i<bytes.length ;i++)
+        catch (NoSuchAlgorithmException e)
         {
-            bytes[i] = (byte)Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+            e.printStackTrace();
         }
-        return bytes;
+        return generatedPassword;
     }
 }

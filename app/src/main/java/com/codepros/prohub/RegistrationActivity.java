@@ -102,9 +102,24 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // validate password with confirmed password
         // and need input for first name and last name
-        if(!passwordString.equals(confirmedPassword) || firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty()){
+        if(!passwordString.equals(confirmedPassword)){
             // show error message
-            String message = "Sorry, missing information, please try again!";
+            String message = "Sorry, password doesn't match, please try again!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(firstName.isEmpty()){
+            // show error message
+            String message = "Sorry, first name cannot be empty, please try again!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(lastName.isEmpty()){
+            // show error message
+            String message = "Sorry, last name cannot be empty, please try again!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(phoneNumber.isEmpty()){
+            // show error message
+            String message = "Sorry, phone number cannot be empty, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
         // validate phone number in correct format
@@ -117,7 +132,6 @@ public class RegistrationActivity extends AppCompatActivity {
             User newUser = new User(firstName, lastName, phoneNumber, passwordString);
             // need to save to firebase
             myUserRef.child("users").child(phoneNumber).setValue(newUser);
-            //boolean test = User.validatePassword("123", newUser.getPassword());
             //Toast.makeText(getApplicationContext(), "authentication: "+test, Toast.LENGTH_LONG).show();
             Toast.makeText(getApplicationContext(), "saved!", Toast.LENGTH_LONG).show();
             // intent to next page

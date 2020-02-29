@@ -3,7 +3,7 @@
 Private and corporate real estate property owners are using outdated methods to communicate with tenants. Information organization and communication is a crucial process in any leasing and rental businesses. This solution will provide lessors a method of communication that can replace and perform the tasks of almost all of their current means of communications.
 
 ## Business Objectives
-### Business Need/Oppertunity/Objectives
+### Business Need/Opportunity/Objectives
 The current market of leasing and renting places requires landlords and tenants to communicate important information and documents through various methods, including emails, text, and letters. There is no standardized method that facilitates this communication, and current methods are lacking in terms of efficiency, effectiveness, and security. Additionally, if there is a dispute between landlord and tenant, the information organization and auditing process is troublesome because there is a lack of organization as there are many different mediums of communication.
 
 Landlords need a better way to communicate timely information to tenants. Currently, many landlords post alerts and notices by printing out hardcopies of the information and posting them on tenants’ doors or lobby bulletin boards. This means of communicating important information is not effective and not secure.

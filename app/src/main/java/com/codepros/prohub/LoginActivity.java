@@ -3,6 +3,7 @@ package com.codepros.prohub;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -57,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
             for (User user: myUsers) {
                 if(user.getPhone().equals(phoneNumber)){
                     if(user.authentication(passwordString)){
+                        // save username and phone number to SharedPreference
+                        saveToSharedPreferences(user);
                         Toast.makeText(getApplicationContext(), "login successful!", Toast.LENGTH_LONG).show();
                         // intent to next page which make the 2-factor
                         Intent intent = new Intent(this, Enable2FaActivity.class);
@@ -71,5 +74,14 @@ public class LoginActivity extends AppCompatActivity {
         }
         Toast.makeText(getApplicationContext(), "sorry, phone number not found!", Toast.LENGTH_LONG).show();
 
+    }
+
+    private void saveToSharedPreferences(User user){
+        SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", 0);
+        SharedPreferences.Editor prefEditor = myPreference.edit();
+        prefEditor.putString("uesrname", user.getFirstname()+" "+user.getLastname());
+        prefEditor.putString("phoneNum", user.getPhone());
+        prefEditor.putString("myRole", user.getRole());
+        prefEditor.commit();
     }
 }

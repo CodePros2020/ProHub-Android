@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.DataStatus() {
+        new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
             @Override
             public void DataIsLoad(List<User> users, List<String> keys) {
                 myUsers = users;

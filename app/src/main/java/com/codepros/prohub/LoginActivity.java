@@ -61,11 +61,19 @@ public class LoginActivity extends AppCompatActivity {
                         // save username and phone number to SharedPreference
                         saveToSharedPreferences(user);
                         Toast.makeText(getApplicationContext(), "login successful!", Toast.LENGTH_LONG).show();
-                        // intent to next page which make the 2-factor
-                        Intent intent = new Intent(this, Enable2FaActivity.class);
-                        intent.putExtra("phoneNumber", phoneNumber);
-                        this.startActivity(intent);
-                        return;
+                        if(!user.isIs2FA()){
+                            // intent to next page which make the 2-factor
+                            Intent intent = new Intent(this, Enable2FaActivity.class);
+                            intent.putExtra("phoneNumber", phoneNumber);
+                            this.startActivity(intent);
+                            return;
+                        }
+                        else{
+                            // TODO: intent to the home page based on role
+                            Intent intent = new Intent(this, PropertyHomeActivity.class);
+                            this.startActivity(intent);
+                            return;
+                        }
                     }
                     Toast.makeText(getApplicationContext(), "sorry, incorrect password!", Toast.LENGTH_LONG).show();
                     return;
@@ -79,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     private void saveToSharedPreferences(User user){
         SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", 0);
         SharedPreferences.Editor prefEditor = myPreference.edit();
-        prefEditor.putString("uesrname", user.getFirstname()+" "+user.getLastname());
+        prefEditor.putString("username", user.getFirstname()+" "+user.getLastname());
         prefEditor.putString("phoneNum", user.getPhone());
         prefEditor.putString("myRole", user.getRole());
         prefEditor.commit();

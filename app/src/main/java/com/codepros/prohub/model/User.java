@@ -16,6 +16,7 @@ public class User {
     private String phone;
     private String password;
     private String role;
+    private boolean is2FA = false;
 
     public User() {
     }
@@ -65,6 +66,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isIs2FA() {
+        return this.is2FA;
+    }
+
+    public void setIs2FA(boolean is2FA) {
+        this.is2FA = is2FA;
     }
 
     public boolean authentication(String password){

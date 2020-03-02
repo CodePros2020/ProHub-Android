@@ -5,26 +5,17 @@ public class Property {
     private int propID; // unique ID for property
     private String phone; // this is users phone number (?)
     private String name; // building name
-    private String address; // building address
+    private String streetLine1; // building address
+    private String streetLine2;
+    private String city;
+    private String province;
 
     public Property(){
-    }
-
-    public Property(String name, String address){
-        this.name = name;
-        this.address = address;
-    }
-
-    public int getPropID() {
-        return this.propID;
-    }
-
-    public void setPropID(int propID) {
-        this.propID = propID;
+        ++propID;
     }
 
     public String getPhone() {
-        return this.phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
@@ -32,19 +23,56 @@ public class Property {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getAddress() {
-        return this.address;
+    public String getStreetLine1() {
+        return streetLine1;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreetLine1(String streetLine1) {
+        this.streetLine1 = streetLine1;
     }
+
+    public String getStreetLine2() {
+        return streetLine2;
+    }
+
+    public void setStreetLine2(String streetLine2) {
+        this.streetLine2 = streetLine2;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    private String postalCode;// Postal code
+
+
+
 
 }

@@ -63,26 +63,6 @@ public class AddPropertyActivity extends AppCompatActivity {
             }
         });
 
-
-       /* // Read from the database
-        myPropertyRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-//                String value = dataSnapshot.getValue(String.class);
-//                Log.d(TAG,"Value is: " + value);
-                HashMap<String, User> map = (HashMap<String, User>) dataSnapshot.getValue();
-                Log.d(TAG, "Value is" + map);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });*/
     }
 
     // Setting list View adapter
@@ -136,7 +116,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
         // validate phone number in correct format
-        else if(province.isEmpty() || province == "Choose one!"){
+        else if(province.isEmpty() || province.equals("Choose one!")){
             // show error message
             String message = "Please choose one!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

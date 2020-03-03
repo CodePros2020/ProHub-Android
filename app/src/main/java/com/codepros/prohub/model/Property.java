@@ -9,8 +9,13 @@ public class Property {
     private String streetLine2;
     private String city;
     private String province;
+    private String postalCode;// Postal code (need validation)
 
     public Property(){
+        ++propID;
+    }
+
+    public Property(String name, String streetLine1, String streetLine2, String city, String province, String postalCode) {
         ++propID;
     }
 
@@ -70,7 +75,7 @@ public class Property {
         this.postalCode = postalCode;
     }
 
-    private String postalCode;// Postal code
+
 
 
 

@@ -9,4 +9,28 @@
     <string name="forgotPassword">Forgot Password?</string>
     <string name="action_search">Search</string>
     <string name="title_activity_enable2_fa">enable2FAActivity</string>
+    <!--Property Strings-->
+    <string name="property_welcome">Welcome Lessor</string>
+    <string name="new_property_h2">Create new Property</string>
+    <string name="property_Name">Name</string>
+    <string name="street_line1">Street Line 1</string>
+    <string name="street_line2">Street Line 2</string>
+    <string name="city">City</string>
+    <string name="province">Province</string>
+    <string name="postal">Postal Code</string>
+    <string name="saveBtn">Save</string>
+    <!--Province Spinner-->
+    <string-array name="provinces">
+        <item>Choose one!</item>
+        <item>Alberta</item>
+        <item>British Columbia</item>
+        <item>Manitoba</item>
+        <item>New Brunswick</item>
+        <item>Newfoundland and Labrador</item>
+        <item>Nova Scotia</item>
+        <item>Ontario</item>
+        <item>Prince Edward Island</item>
+        <item>Quebec</item>
+        <item>Saskatchewan</item>
+    </string-array>
 </resources>

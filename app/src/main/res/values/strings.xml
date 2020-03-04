@@ -33,4 +33,10 @@
         <item>Quebec</item>
         <item>Saskatchewan</item>
     </string-array>
+    <!--Search Filter Spinner-->
+    <string-array name="search_filter">
+        <item>Chat</item>
+        <item>Newsroom</item>
+        <item>Form</item>
+    </string-array>
 </resources>

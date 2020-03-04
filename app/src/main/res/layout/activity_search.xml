@@ -6,4 +6,10 @@
     tools:context=".SearchActivity"
     android:orientation="vertical">
 
+    <Spinner
+        android:id="@+id/search_filter_spinner"
+        style="@style/spinner_style"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
 </LinearLayout>

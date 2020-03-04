@@ -28,7 +28,8 @@
                 android:id="@+id/chatButton"
                 android:layout_width="107dp"
                 android:layout_height="match_parent"
-                android:text="Chat" />
+                android:text="Chat"
+                android:onClick="goChat"/>
 
             <Button
                 android:id="@+id/newsroomButton"
@@ -105,7 +106,8 @@
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:translationX="160dp"
-                android:translationY="100dp" />
+                android:translationY="100dp"
+                android:onClick="goChat"/>
 
             <Button
                 android:id="@+id/newsroomButton2"

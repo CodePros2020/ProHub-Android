@@ -20,7 +20,10 @@ public class FirebaseDataseHelper {
 
     public interface DataStatus{
         void DataIsLoad(List<User> users, List<String> keys);
-        void UnitDataIsLoad(List<Unit> units, List<String> keys);
+    }
+
+    public interface UnitDataStatus{
+        void DataIsLoad(List<Unit> units, List<String> keys);
     }
 
     public FirebaseDataseHelper(){
@@ -50,7 +53,7 @@ public class FirebaseDataseHelper {
         });
     }
 
-    public void readUnits(final DataStatus dataStatus){
+    public void readUnits(final UnitDataStatus unitDataStatus){
         myUnitRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -61,7 +64,7 @@ public class FirebaseDataseHelper {
                     Unit unit = keyNode.getValue(Unit.class);
                     units.add(unit);
                 }
-                dataStatus.UnitDataIsLoad(units, keys);
+                unitDataStatus.DataIsLoad(units, keys);
             }
 
             @Override

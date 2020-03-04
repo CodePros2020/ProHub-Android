@@ -3,13 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".SearchActivity">
 
     <Spinner
         android:id="@+id/search_filter_spinner"
         style="@style/spinner_style"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
+
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/atv_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type here to search"
+        android:textColor="#000000" />
+
+    <!-- List View -->
+    <ListView
+        android:id="@+id/lv_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

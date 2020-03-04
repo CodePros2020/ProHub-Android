@@ -9,13 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PropertyHomeActivity"></activity>
-        <activity android:name=".utils.Validate2FaActivity"></activity>
+        <activity android:name=".LessorHomeActivity"></activity>
+        <activity android:name=".PropertyHomeActivity" />
+        <activity android:name=".utils.Validate2FaActivity" />
         <activity android:name=".utils.Enable2FaActivity" />
         <activity android:name=".RegistrationRoleActivity" />
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".RegistrationActivity"
             android:windowSoftInputMode="adjustPan" />

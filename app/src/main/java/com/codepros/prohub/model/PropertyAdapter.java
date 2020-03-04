@@ -13,13 +13,14 @@ import com.codepros.prohub.R;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PropertyAdapter extends BaseAdapter {
 
     private final Context mContext;
-    private final ArrayList<Property> properties;
+    private final List<Property> properties;
 
-    public PropertyAdapter(Context mContext, ArrayList<Property> properties)
+    public PropertyAdapter(Context mContext, List<Property> properties)
     {
         this.mContext = mContext;
         this.properties = properties;

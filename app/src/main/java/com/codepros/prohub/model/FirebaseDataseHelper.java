@@ -14,15 +14,19 @@ import java.util.List;
 public class FirebaseDataseHelper {
     private FirebaseDatabase myDatabase;
     private DatabaseReference myUserRef;
+    private DatabaseReference myUnitRef;
     private List<User> users = new ArrayList<>();
+    private List<Unit> units = new ArrayList<>();
 
     public interface DataStatus{
         void DataIsLoad(List<User> users, List<String> keys);
+        void UnitDataIsLoad(List<Unit> units, List<String> keys);
     }
 
     public FirebaseDataseHelper(){
         myDatabase = FirebaseDatabase.getInstance();
         myUserRef = myDatabase.getReference("users");
+        myUnitRef = myDatabase.getReference("units");
     }
 
     public void readUsers(final DataStatus dataStatus){
@@ -37,6 +41,27 @@ public class FirebaseDataseHelper {
                     users.add(user);
                 }
                 dataStatus.DataIsLoad(users, keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void readUnits(final DataStatus dataStatus){
+        myUnitRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                units.clear();
+                List<String> keys = new ArrayList<>();
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    keys.add(keyNode.getKey());
+                    Unit unit = keyNode.getValue(Unit.class);
+                    units.add(unit);
+                }
+                dataStatus.UnitDataIsLoad(units, keys);
             }
 
             @Override

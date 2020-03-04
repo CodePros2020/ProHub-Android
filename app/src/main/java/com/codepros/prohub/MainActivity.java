@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void goLogin(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         this.startActivity(intent);
     }
 }

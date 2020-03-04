@@ -1,8 +1,10 @@
 package com.codepros.prohub;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +15,12 @@ import android.widget.Spinner;
 
 import com.codepros.prohub.model.FirebaseDataseHelper;
 import com.codepros.prohub.model.Unit;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +33,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     private String filterVal;
 
     private AppCompatAutoCompleteTextView atvSearch;
-    private ListView lvSearch;
 
     private ArrayAdapter<String> searchListAdapter;
     private List<Unit> unitList;
@@ -47,7 +52,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         spFilter = findViewById(R.id.search_filter_spinner);
         filter = getResources().getStringArray(R.array.search_filter);
         atvSearch = findViewById(R.id.atv_search);
-        lvSearch = findViewById(R.id.lv_search);
         unitList = new ArrayList<>();
         searchList = new ArrayList<>();
 
@@ -72,6 +76,37 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         searchListAdapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, searchList);
         atvSearch.setThreshold(1); // will start working from first character
         atvSearch.setAdapter(searchListAdapter);
+
+        // handle click event and set desc on textview
+        atvSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                String selection = parent.getItemAtPosition(pos).toString();
+
+                Query searchQuery = myDatabaseRef.child("units").orderByChild("unitName").equalTo(selection);
+                searchQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                            String propId = childDataSnapshot.child("propId").getValue().toString();
+                            String tenantId = childDataSnapshot.child("tenantId").getValue().toString();
+                            String unitName = childDataSnapshot.child("unitName").getValue().toString();
+
+                            Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                            intent.putExtra("propId", propId);
+                            intent.putExtra("tenantId", tenantId);
+                            intent.putExtra("unitName", unitName);
+                            SearchActivity.this.startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
     }
 
     // set filter spinner value

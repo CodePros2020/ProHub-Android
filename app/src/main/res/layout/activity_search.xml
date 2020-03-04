@@ -20,10 +20,4 @@
         android:hint="Type here to search"
         android:textColor="#000000" />
 
-    <!-- List View -->
-    <ListView
-        android:id="@+id/lv_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
 </LinearLayout>

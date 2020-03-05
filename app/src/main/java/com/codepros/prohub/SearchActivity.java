@@ -1,41 +1,34 @@
 package com.codepros.prohub;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.codepros.prohub.model.FirebaseDataseHelper;
 import com.codepros.prohub.model.Unit;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private static final String TAG = "SearchActivity";
     private ArrayAdapter<String> filterAdaptor;
     private Spinner spFilter;
     private String[] filter;
     private String filterVal;
-
+    private int propId;
     private AppCompatAutoCompleteTextView atvSearch;
 
     private ArrayAdapter<String> searchListAdapter;
-    private List<Unit> unitList;
+    private List<Unit> allUnitList;
+    private List<Unit> myUnitList;
     private List<String> searchList;
 
     // firebase database objects
@@ -52,8 +45,14 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         spFilter = findViewById(R.id.search_filter_spinner);
         filter = getResources().getStringArray(R.array.search_filter);
         atvSearch = findViewById(R.id.atv_search);
-        unitList = new ArrayList<>();
+        allUnitList = new ArrayList<>();
+        myUnitList = new ArrayList<>();
         searchList = new ArrayList<>();
+        propId = 1;
+//        propId = getIntent().getStringExtra("propId");
+
+        // set spinner
+        setFilterSpinner();
 
         // initialize default value
 //        Init();
@@ -62,20 +61,14 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         new FirebaseDataseHelper().readUnits(new FirebaseDataseHelper.UnitDataStatus() {
             @Override
             public void DataIsLoad(List<Unit> units, List<String> keys) {
-                unitList = units;
+                allUnitList = units;
+                for (int i = 0; i < allUnitList.size(); i++) {
+                    if (allUnitList.get(i).getPropId() == propId) {
+                        myUnitList.add(allUnitList.get(i));
+                    }
+                }
             }
         });
-
-        for (int i = 0; i < unitList.size(); i++) {
-            searchList.add(unitList.get(i).getUnitName());
-        }
-
-        // set spinner
-        setFilterSpinner();
-
-        searchListAdapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, searchList);
-        atvSearch.setThreshold(1); // will start working from first character
-        atvSearch.setAdapter(searchListAdapter);
 
         // handle click event and set desc on textview
         atvSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,28 +76,20 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                 String selection = parent.getItemAtPosition(pos).toString();
 
-                Query searchQuery = myDatabaseRef.child("units").orderByChild("unitName").equalTo(selection);
-                searchQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                            String propId = childDataSnapshot.child("propId").getValue().toString();
-                            String tenantId = childDataSnapshot.child("tenantId").getValue().toString();
-                            String unitName = childDataSnapshot.child("unitName").getValue().toString();
+                for (int i = 0; i < myUnitList.size(); i++) {
+                    if (myUnitList.get(i).getUnitName() == selection) {
+                        String propId = Integer.toString(myUnitList.get(i).getPropId());
+                        String tenantId = myUnitList.get(i).getTenantId();
+                        String unitName = myUnitList.get(i).getUnitName();
 
-                            Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-                            intent.putExtra("propId", propId);
-                            intent.putExtra("tenantId", tenantId);
-                            intent.putExtra("unitName", unitName);
-                            SearchActivity.this.startActivity(intent);
-                        }
+                        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                        intent.putExtra("propId", propId);
+                        intent.putExtra("tenantId", tenantId);
+                        intent.putExtra("unitName", unitName);
+
+                        SearchActivity.this.startActivity(intent);
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                }
             }
         });
     }
@@ -122,21 +107,26 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                                int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         filterVal = parent.getItemAtPosition(pos).toString();
+
         switch (filterVal) {
             case "Chat":
-                for (int i = 0; i < unitList.size(); i++) {
-                    searchList.add(unitList.get(i).getUnitName());
+                searchList.clear();
+                for (int i = 0; i < myUnitList.size(); i++) {
+                    searchList.add(myUnitList.get(i).getUnitName());
                 }
                 break;
             default:
                 break;
         }
+        searchListAdapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, searchList);
+        atvSearch.setThreshold(1); // will start working from first character
+        atvSearch.setAdapter(searchListAdapter);
     }
 
     // spinner selection event handler
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
-        filterVal = "Chat";
+        searchList.clear();
     }
 
     // initialize default factory values for the Unit model (one time use)
@@ -148,9 +138,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
             final Unit newUnit = new Unit(propId, tenantId, unitName);
 
-            Log.v(TAG, (i + 1) + ": Unit = " + newUnit);
-
-            myDatabaseRef.child("units").child(unitName).setValue(newUnit);
+            DatabaseReference postsRef = myDatabaseRef.child("units");
+            DatabaseReference newPostRef = postsRef.push();
+            newPostRef.setValue(newUnit);
         }
     }
 }

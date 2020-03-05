@@ -69,6 +69,7 @@ public class FirebaseDataseHelper {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
 
             }
         });

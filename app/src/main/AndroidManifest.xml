@@ -9,8 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".LessorHomeActivity"></activity>
         <activity android:name=".SearchActivity"></activity>
-        <activity android:name=".AddPropertyActivity" />
+        <activity
+            android:name=".AddPropertyActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PropertyHomeActivity" />
         <activity android:name=".utils.Validate2FaActivity" />
         <activity android:name=".utils.Enable2FaActivity" />

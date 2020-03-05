@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,7 +50,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         myUnitList = new ArrayList<>();
         searchList = new ArrayList<>();
         propId = 1;
-//        propId = getIntent().getStringExtra("propId");
+
+        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+//        propId = myPref.getString("propId", "0");
 
         // set spinner
         setFilterSpinner();
@@ -82,7 +85,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                         String tenantId = myUnitList.get(i).getTenantId();
                         String unitName = myUnitList.get(i).getUnitName();
 
-                        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+                        Intent intent = new Intent(SearchActivity.this, ChatActivity.class);
                         intent.putExtra("propId", propId);
                         intent.putExtra("tenantId", tenantId);
                         intent.putExtra("unitName", unitName);

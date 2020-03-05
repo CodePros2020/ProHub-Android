@@ -43,21 +43,9 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
         // Button for top toolbar
         // NEEDS TO BE CHANGED
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goPage(v);
-            }
-        });
 
         // buttons going back to Main Activity
         // NEEDS TO BE CHANGED
-        chatButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goPage(v);
-            }
-        });
         newsroomButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +71,12 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     // CHANGE THIS TO THE ACTUAL PAGE LATER
     public void goPage(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, SearchActivity.class);
+        this.startActivity(intent);
+    }
+
+    public void goChat(View view) {
+        Intent intent = new Intent(this, ChatActivity.class);
         this.startActivity(intent);
     }
 }

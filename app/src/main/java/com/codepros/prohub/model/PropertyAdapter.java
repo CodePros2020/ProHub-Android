@@ -59,7 +59,7 @@ public class PropertyAdapter extends BaseAdapter {
         final Button propertyDetailButton = convertView.findViewById(R.id.btnPropertyDetail);
 
         propertyNameTextView.setText(property.getName());
-        propertyAddressTextView.setText(property.getStreetLine1()+", "+property.getCity());
+        propertyAddressTextView.setText(property.getStreetLine1()+", "+property.getCity()+", "+property.getProvince());
 
         propertyDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override

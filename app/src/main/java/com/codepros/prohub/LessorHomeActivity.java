@@ -21,8 +21,10 @@ public class LessorHomeActivity extends AppCompatActivity {
     private TextView textWeclomeLessor;
     private Button btnCreateProp;
     private ListView list_property;
+    private String userPhoneNum;
 
     // list of properties
+    List<Property> allProperties = new ArrayList<>();
     List<Property> myProperties = new ArrayList<>();
 
     @Override
@@ -38,14 +40,19 @@ public class LessorHomeActivity extends AppCompatActivity {
         // set the weclome message
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         String username = myPref.getString("username", "");
+        userPhoneNum = myPref.getString("phoneNum", "");
         textWeclomeLessor.setText("Weclome "+username);
 
         // read the list of property from firebase
         new FirebaseDataseHelper().readProperty(new FirebaseDataseHelper.PropDataStatus() {
             @Override
             public void DataIsLoad(List<Property> properties, List<String> keys) {
-                // TODO: need to filter out the properties belongs to this user
-                myProperties = properties;
+                allProperties = properties;
+                for(int i = 0; i<allProperties.size(); i++){
+                    if(allProperties.get(i).getPhone().equals(userPhoneNum)){
+                        myProperties.add(allProperties.get(i));
+                    }
+                }
                 setAdpater();
             }
         });

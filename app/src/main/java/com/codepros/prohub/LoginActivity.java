@@ -69,10 +69,17 @@ public class LoginActivity extends AppCompatActivity {
                             return;
                         }
                         else{
-                            // TODO: intent to the home page based on role
-                            Intent intent = new Intent(this, PropertyHomeActivity.class);
-                            this.startActivity(intent);
-                            return;
+                            if(user.getRole().equals("Tenant")){
+                                Intent intent = new Intent(this, PropertyHomeActivity.class);
+                                this.startActivity(intent);
+                                return;
+                            }
+                            else{
+                                Intent intent = new Intent(this, LessorHomeActivity.class);
+                                //Intent intent = new Intent(this, AddPropertyActivity.class);
+                                this.startActivity(intent);
+                                return;
+                            }
                         }
                     }
                     Toast.makeText(getApplicationContext(), "sorry, incorrect password!", Toast.LENGTH_LONG).show();

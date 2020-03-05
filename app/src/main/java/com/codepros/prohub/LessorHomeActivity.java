@@ -63,7 +63,7 @@ public class LessorHomeActivity extends AppCompatActivity {
 
     private void addNewProperty(){
         // TODO: going to the create property page
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, AddPropertyActivity.class);
         startActivity(intent);
     }
 }

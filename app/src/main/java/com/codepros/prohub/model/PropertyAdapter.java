@@ -38,7 +38,7 @@ public class PropertyAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return this.properties.get(position).getPropID();
+        return 0;
     }
 
     // set the view for each item in item list
@@ -56,13 +56,13 @@ public class PropertyAdapter extends BaseAdapter {
         final Button propertyDetailButton = convertView.findViewById(R.id.btnPropertyDetail);
 
         propertyNameTextView.setText(property.getName());
-        propertyAddressTextView.setText(property.getAddress());
+        propertyAddressTextView.setText(property.getStreetLine1()+", "+property.getCity());
 
         propertyDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO: need link to the property Home page with property ID
-                Toast.makeText(mContext, "redirect to peoperty: "+property.getPropID(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "redirect to selected peoperty", Toast.LENGTH_LONG).show();
             }
         });
 

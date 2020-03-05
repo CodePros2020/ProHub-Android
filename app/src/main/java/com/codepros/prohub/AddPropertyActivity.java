@@ -127,7 +127,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             myPropertyRef.child("properties").setValue(newProperty);
             Toast.makeText(getApplicationContext(), "property saved!", Toast.LENGTH_LONG).show();
             // intent to next page
-           Intent intent = new Intent(this, MainActivity.class);
+           Intent intent = new Intent(this, LessorHomeActivity.class);
             //intent.putExtra("phoneNumber", phoneNumber);
             this.startActivity(intent);
         }

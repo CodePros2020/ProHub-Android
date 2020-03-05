@@ -3,6 +3,7 @@ package com.codepros.prohub;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     String[] provinces;
     ArrayAdapter<String>  provinceAdapter;
     Spinner spProvince;
+    private String userPhoneNum;
 
     // firebase database objects
     private DatabaseReference myPropertyRef;
@@ -41,7 +43,10 @@ public class AddPropertyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_property);
 
-    myPropertyRef = FirebaseDatabase.getInstance().getReference();
+        myPropertyRef = FirebaseDatabase.getInstance().getReference();
+
+        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        userPhoneNum = myPref.getString("phoneNum", "");
 
         // reference
         etName = findViewById(R.id.etName);
@@ -55,6 +60,22 @@ public class AddPropertyActivity extends AppCompatActivity {
         SetCityAdapter();
         Button btnSaveProperty = findViewById(R.id.btnSaveProperty);
 
+        myPropertyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                HashMap<String, Property> map = (HashMap<String, Property>) dataSnapshot.getValue();
+                Log.d(TAG, "Value is" + map);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
 
         btnSaveProperty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,11 +116,12 @@ public class AddPropertyActivity extends AppCompatActivity {
             String message = "Sorry, street address cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
+        /*
         else if(streetLine2.isEmpty()){
             // show error message
             String message = "Sorry, street line 2 cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
+        }*/
         else if(city.isEmpty()){
             // show error message
             String message = "Sorry, city cannot be empty!";
@@ -123,8 +145,9 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
         else{
             Property newProperty = new Property(name, streetLine1, streetLine2, city,province,postalCode);
+            newProperty.setPhone(userPhoneNum);
             // need to save to firebase
-            myPropertyRef.child("properties").setValue(newProperty);
+            myPropertyRef.child("properties").child(newProperty.getName()).setValue(newProperty);
             Toast.makeText(getApplicationContext(), "property saved!", Toast.LENGTH_LONG).show();
             // intent to next page
            Intent intent = new Intent(this, LessorHomeActivity.class);

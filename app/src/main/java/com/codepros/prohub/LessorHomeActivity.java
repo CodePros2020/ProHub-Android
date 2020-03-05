@@ -46,11 +46,9 @@ public class LessorHomeActivity extends AppCompatActivity {
             public void DataIsLoad(List<Property> properties, List<String> keys) {
                 // TODO: need to filter out the properties belongs to this user
                 myProperties = properties;
+                setAdpater();
             }
         });
-        // set the property adapter to the list view
-        PropertyAdapter propertyAdapter = new PropertyAdapter(this, myProperties);
-        list_property.setAdapter(propertyAdapter);
 
         // set the onClick event
         btnCreateProp.setOnClickListener(new View.OnClickListener() {
@@ -65,5 +63,11 @@ public class LessorHomeActivity extends AppCompatActivity {
         // TODO: going to the create property page
         Intent intent = new Intent(this, AddPropertyActivity.class);
         startActivity(intent);
+    }
+
+    private void setAdpater(){
+        // set the property adapter to the list view
+        PropertyAdapter propertyAdapter = new PropertyAdapter(this, myProperties);
+        list_property.setAdapter(propertyAdapter);
     }
 }

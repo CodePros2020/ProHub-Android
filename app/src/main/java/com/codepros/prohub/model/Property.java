@@ -17,7 +17,15 @@ public class Property {
 
     public Property(String name, String streetLine1, String streetLine2, String city, String province, String postalCode) {
         ++propID;
+        this.name = name;
+        this.streetLine1 = streetLine1;
+        this.streetLine2 = streetLine2;
+        this.city = city;
+        this.province = province;
+        this.postalCode = postalCode;
     }
+
+    public int getPropID(){return propID;}
 
     public String getPhone() {
         return phone;

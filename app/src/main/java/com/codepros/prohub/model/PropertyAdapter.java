@@ -1,6 +1,7 @@
 package com.codepros.prohub.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepros.prohub.MainActivity;
+import com.codepros.prohub.PropertyHomeActivity;
 import com.codepros.prohub.R;
 
 
@@ -63,6 +66,8 @@ public class PropertyAdapter extends BaseAdapter {
             public void onClick(View v) {
                 // TODO: need link to the property Home page with property ID
                 Toast.makeText(mContext, "redirect to selected peoperty", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(mContext, PropertyHomeActivity.class);
+                mContext.startActivity(intent);
             }
         });
 

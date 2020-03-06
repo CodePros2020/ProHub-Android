@@ -15,16 +15,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-/*
+
     public void goRegistration(View view) {
         Intent intent = new Intent(this, RegistrationActivity.class);
         this.startActivity(intent);
-    }*/
-    public void goRegistration(View view) {
-        Intent intent = new Intent(this, PropertyHomeActivity.class);
-        this.startActivity(intent);
     }
-
 
     public void goLogin(View view) {
         Intent intent = new Intent(this, LoginActivity.class);

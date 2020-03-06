@@ -20,7 +20,7 @@ public class Chat {
         this.imageUrl = imageUrl;
     }
 
-    public String getId() {
+    public String getId() { 
         return id;
     }
 

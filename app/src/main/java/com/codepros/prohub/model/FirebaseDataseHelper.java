@@ -12,14 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FirebaseDataseHelper {
-    // firebase database related info
     private FirebaseDatabase myDatabase;
     private DatabaseReference myUserRef;
     private DatabaseReference myPropRef;
+    private DatabaseReference myUnitRef;
 
     // list of data
     private List<User> users = new ArrayList<>();
     private List<Property> properties = new ArrayList<>();
+    private List<Unit> units = new ArrayList<>();
 
     // interface to load User database
     public interface UserDataStatus{
@@ -31,10 +32,16 @@ public class FirebaseDataseHelper {
         void DataIsLoad(List<Property> properties, List<String> keys);
     }
 
+    // interface to load Unit database
+    public interface UnitDataStatus{
+        void DataIsLoad(List<Unit> units, List<String> keys);
+    }
+
     public FirebaseDataseHelper(){
         myDatabase = FirebaseDatabase.getInstance();
         myUserRef = myDatabase.getReference("users");
         myPropRef = myDatabase.getReference("properties");
+        myUnitRef = myDatabase.getReference("units");
     }
 
     public void readUsers(final UserDataStatus dataStatus){
@@ -53,7 +60,7 @@ public class FirebaseDataseHelper {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
     }
@@ -75,7 +82,28 @@ public class FirebaseDataseHelper {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
 
+    public void readUnits(final UnitDataStatus unitDataStatus){
+        myUnitRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                units.clear();
+                List<String> keys = new ArrayList<>();
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    keys.add(keyNode.getKey());
+                    Unit unit = keyNode.getValue(Unit.class);
+                    units.add(unit);
+                }
+                unitDataStatus.DataIsLoad(units, keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
     }

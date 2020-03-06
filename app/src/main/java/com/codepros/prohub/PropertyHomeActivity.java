@@ -71,7 +71,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     // CHANGE THIS TO THE ACTUAL PAGE LATER
     public void goPage(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, SearchActivity.class);
         this.startActivity(intent);
     }
 

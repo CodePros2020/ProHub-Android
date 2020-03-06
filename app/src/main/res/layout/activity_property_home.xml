@@ -4,52 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PropertyHomeActivity">
+    tools:context=".PropertyHomeActivity"
+    android:theme="@style/AppTheme.NoBar">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <include layout="@layout/toolbar_layout"/>
+
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
 
-        <ImageView
-            android:id="@+id/logoImage"
-            android:layout_width="56dp"
-            android:layout_height="64dp"
-            android:translationX="10dp"
-            android:translationY="5dp"
-            app:srcCompat="@drawable/logo_medium" />
+        android:translationY="150sp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="61dp">
-
-            <Button
-                android:id="@+id/chatButton"
-                android:layout_width="107dp"
-                android:layout_height="match_parent"
-                android:text="Chat" />
-
-            <Button
-                android:id="@+id/newsroomButton"
-                android:layout_width="105dp"
-                android:layout_height="match_parent"
-                android:text="News" />
-
-            <Button
-                android:id="@+id/formsButton"
-                android:layout_width="98dp"
-                android:layout_height="match_parent"
-                android:text="Forms" />
-
-            <Button
-                android:id="@+id/settingsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="61dp"
-                android:layout_weight="1"
-                android:text="Settings" />
-
-        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -139,6 +106,7 @@
                 android:textSize="20sp"
                 android:translationX="160dp"
                 android:translationY="340dp" />
+
         </FrameLayout>
 
     </LinearLayout>

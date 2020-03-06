@@ -12,11 +12,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
-
+/*
     public void goRegistration(View view) {
         Intent intent = new Intent(this, RegistrationActivity.class);
+        this.startActivity(intent);
+    }*/
+    public void goRegistration(View view) {
+        Intent intent = new Intent(this, PropertyHomeActivity.class);
         this.startActivity(intent);
     }
 

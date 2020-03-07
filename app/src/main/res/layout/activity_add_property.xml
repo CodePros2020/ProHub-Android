@@ -5,9 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".AddPropertyActivity"
-    android:scrollbars="vertical"
-    android:padding="10dp">
-
+    android:scrollbars="vertical">
+    <include layout="@layout/layout_simple_toolbar"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.codepros.prohub.model.Property;
 import com.google.firebase.database.DatabaseReference;
@@ -15,10 +16,11 @@ import java.util.HashMap;
 
 public class PropertyHomeActivity extends AppCompatActivity {
 
-    private Button chatButton, chatButton2;
-    private Button newsroomButton, newsroomButton2;
-    private Button formsButton, formsButton2;
-    private Button settingsButton, settingsButton2;
+    private Button toolbarBtnChat, chatButton;
+    private Button toolbarBtnNews, newsroomButton;
+    private Button toolbarBtnForms, formsButton;
+    private Button toolbarBtnSettings, settingsButton;
+    private ImageButton toolbarBtnHome, toolbarBtnSearch;
 
     // Firebase database objects
     private static final String TAG = "PropertyHomeActivity";
@@ -33,40 +35,50 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
         // references to the buttons on view
         chatButton = findViewById(R.id.chatButton);
-        chatButton2 = findViewById(R.id.chatButton2);
         newsroomButton = findViewById(R.id.newsroomButton);
-        newsroomButton2 = findViewById(R.id.newsroomButton2);
         formsButton = findViewById(R.id.formsButton);
-        formsButton2 = findViewById(R.id.formsButton2);
         settingsButton = findViewById(R.id.settingsButton);
-        settingsButton2 = findViewById(R.id.settingsButton2);
 
         // Button for top toolbar
+        toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
+        toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
+        toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
+        toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
+        toolbarBtnHome = findViewById(R.id.ImageButtonHome);
+        toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
+
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goChat(v);
+            }
+        });
+        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goChat(v);
+            }
+        });
+
         // NEEDS TO BE CHANGED
-
-        // buttons going back to Main Activity
-        // NEEDS TO BE CHANGED
-        newsroomButton2.setOnClickListener(new View.OnClickListener() {
+        newsroomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goPage(v);
             }
         });
-        formsButton2.setOnClickListener(new View.OnClickListener() {
+        formsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goPage(v);
             }
         });
-        settingsButton2.setOnClickListener(new View.OnClickListener() {
+        settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goPage(v);
             }
         });
-
-
-
     }
 
     // CHANGE THIS TO THE ACTUAL PAGE LATER

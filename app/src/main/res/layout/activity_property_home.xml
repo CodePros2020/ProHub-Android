@@ -4,19 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PropertyHomeActivity"
-    android:theme="@style/AppTheme.NoBar">
+    tools:context=".PropertyHomeActivity">
 
-
-    <include layout="@layout/toolbar_layout"/>
+    <include layout="@layout/layout_toolbar"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:translationY="150sp">
-
+        android:translationY="135sp">
 
         <FrameLayout
             android:layout_width="match_parent"

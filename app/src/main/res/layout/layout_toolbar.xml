@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="150sp"
-    android:background="@null"
-
-    android:minHeight="?attr/actionBarSize"
-    android:orientation="horizontal"
-    android:theme="?attr/actionBarTheme"
+    android:layout_height="wrap_content"
     app:contentInsetStart="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70sp"
+            android:background="@color/colorPrimary"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -32,19 +26,28 @@
                 android:background="@drawable/logo_dark"
                 android:translationX="15sp" />
 
+            <TextView
+                android:id="@+id/AppNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ProHub"
+                android:textSize="25dp"
+                android:textColor="@color/colorWhite"
+                android:translationX="30sp"/>
+
             <ImageButton
                 android:id="@+id/ImageButtonSearch"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:background="@drawable/search"
-                android:translationX="235sp" />
+                android:translationX="165sp" />
 
             <ImageButton
                 android:id="@+id/ImageButtonMenu"
                 android:layout_width="40sp"
                 android:layout_height="50sp"
                 android:background="@drawable/menu_three"
-                android:translationX="250sp" />
+                android:translationX="170sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -54,38 +57,34 @@
 
             <Button
                 android:id="@+id/btnChat"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:background="#3F51B5"
-                android:backgroundTint="#00FFFFFF"
+                android:background="@drawable/toolbar_button_background"
                 android:text="CHAT" />
 
             <Button
                 android:id="@+id/btnNews"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:background="#3F51B5"
-                android:backgroundTint="#00FFFFFF"
+                android:background="@drawable/toolbar_button_background"
                 android:text="NEWS" />
 
             <Button
                 android:id="@+id/btnForms"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:background="#3F51B5"
-                android:backgroundTint="#00FFFFFF"
+                android:background="@drawable/toolbar_button_background"
                 android:text="FORMS" />
 
             <Button
                 android:id="@+id/btnSettings"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:background="#3F51B5"
-                android:backgroundTint="#00FFFFFF"
+                android:background="@drawable/toolbar_button_background"
                 android:text="SETTINGS" />
 
         </LinearLayout>

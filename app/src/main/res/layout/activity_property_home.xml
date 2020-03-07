@@ -6,11 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".PropertyHomeActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="exportChatHistory"
+            android:text="Export Chat History" />
 
         <ImageView
             android:id="@+id/logoImage"

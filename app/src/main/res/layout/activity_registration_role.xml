@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".RegistrationRoleActivity"
     android:orientation="vertical">
-
+    <include layout="@layout/layout_simple_toolbar"/>
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="120dp"

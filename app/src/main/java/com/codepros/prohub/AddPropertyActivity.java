@@ -147,7 +147,9 @@ public class AddPropertyActivity extends AppCompatActivity {
             Property newProperty = new Property(name, streetLine1, streetLine2, city,province,postalCode);
             newProperty.setPhone(userPhoneNum);
             // need to save to firebase
-            myPropertyRef.child("properties").child(newProperty.getName()).setValue(newProperty);
+            DatabaseReference postsRef = myPropertyRef.child("properties");
+            DatabaseReference newPostRef = postsRef.push();
+            newPostRef.setValue(newProperty);
             Toast.makeText(getApplicationContext(), "property saved!", Toast.LENGTH_LONG).show();
             // intent to next page
            Intent intent = new Intent(this, LessorHomeActivity.class);

@@ -16,11 +16,13 @@ public class FirebaseDataseHelper {
     private DatabaseReference myUserRef;
     private DatabaseReference myPropRef;
     private DatabaseReference myUnitRef;
+    private DatabaseReference myChatMessageRef;
 
     // list of data
     private List<User> users = new ArrayList<>();
     private List<Property> properties = new ArrayList<>();
     private List<Unit> units = new ArrayList<>();
+    private List<ChatMessage> chatMessages = new ArrayList<>();
 
     // interface to load User database
     public interface UserDataStatus{
@@ -37,11 +39,17 @@ public class FirebaseDataseHelper {
         void DataIsLoad(List<Unit> units, List<String> keys);
     }
 
+    // interface to load ChatMessage database
+    public interface ChatMessageDataStatus{
+        void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys);
+    }
+
     public FirebaseDataseHelper(){
         myDatabase = FirebaseDatabase.getInstance();
         myUserRef = myDatabase.getReference("users");
         myPropRef = myDatabase.getReference("properties");
         myUnitRef = myDatabase.getReference("units");
+        myChatMessageRef = myDatabase.getReference("chatMessages");
     }
 
     public void readUsers(final UserDataStatus dataStatus){
@@ -99,6 +107,27 @@ public class FirebaseDataseHelper {
                     units.add(unit);
                 }
                 unitDataStatus.DataIsLoad(units, keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    public void readChatMessages(final ChatMessageDataStatus chatMessageDataStatus){
+        myChatMessageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chatMessages.clear();
+                List<String> keys = new ArrayList<>();
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    keys.add(keyNode.getKey());
+                    ChatMessage chatMessage = keyNode.getValue(ChatMessage.class);
+                    chatMessages.add(chatMessage);
+                }
+                chatMessageDataStatus.DataIsLoad(chatMessages, keys);
             }
 
             @Override

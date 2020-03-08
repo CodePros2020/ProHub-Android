@@ -67,6 +67,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
         });
 
         // NEEDS TO BE CHANGED
+        /*
         newsroomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +86,8 @@ public class PropertyHomeActivity extends AppCompatActivity {
                 goPage(v);
             }
         });
+        */
+
     }
 
     // CHANGE THIS TO THE ACTUAL PAGE LATER

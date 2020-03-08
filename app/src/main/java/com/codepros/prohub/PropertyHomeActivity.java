@@ -1,5 +1,6 @@
 package com.codepros.prohub;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -7,9 +8,6 @@ import androidx.core.content.ContextCompat;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
-import android.graphics.pdf.PdfDocument;
-import android.graphics.pdf.PdfDocument.*;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,21 +17,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.codepros.prohub.model.Property;
+import com.codepros.prohub.model.Chat;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.itextpdf.text.BaseColor;
+import com.google.firebase.database.ValueEventListener;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,6 +49,15 @@ public class PropertyHomeActivity extends AppCompatActivity {
     // Firebase database objects
     private static final String TAG = "PropertyHomeActivity";
     private DatabaseReference myPropRef;
+
+    // Chat database ref for export chat history
+    private DatabaseReference myChatRef;
+    public static final String CHAT_CHILD = "chat";
+
+    // Export chat History
+    private static final int PERMISSION_REQUEST_CODE = 100;
+    private String EXPORT_FILENAME;
+    private JSONObject jsonData = new JSONObject(); // tentative output
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,27 @@ public class PropertyHomeActivity extends AppCompatActivity {
         });
 
 
+        // get reference to Chat database
+        myChatRef = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference myChatRef = this.myChatRef.child(CHAT_CHILD);
+
+        myChatRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                HashMap<String, Chat> value = (HashMap<String, Chat>) dataSnapshot.getValue();
+
+                // tentative output
+                jsonData = new JSONObject(value);
+
+                System.out.println(jsonData);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
 
     }
 
@@ -109,17 +136,14 @@ public class PropertyHomeActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    ///////////
     // resource:
-    // generate PDF
+    // export PDF
     // https://github.com/rakesh2gnit/export-print-pdf-android
-    // pdf viewer:
-    // need to build in Android App and install into emulator
+    // NOTE:
+    // PDF Viewer need to be installed in the device
+    // Need to build below the project and install into the emulator
     // https://github.com/barteksc/AndroidPdfViewer
-    // export chat history function tentatively put here
-    private static final int PERMISSION_REQUEST_CODE = 100;
-    private String FILENAME;
-
+    // export chat history function tentatively put in PropertyHomeActivity
     public void exportChatHistory(View view){
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkPermission()) {
@@ -130,12 +154,11 @@ public class PropertyHomeActivity extends AppCompatActivity {
         } else {
             printPdf();
         }
-
     }
 
     public void printPdf(){
         // get storage directory path
-        FILENAME = Environment.getExternalStorageDirectory().toString() + "/PDF/" + "Name.pdf";
+        EXPORT_FILENAME = Environment.getExternalStorageDirectory().toString() + "/PDF/" + "Name.pdf";
 
         // Create New Blank Document
         Document document = new Document(PageSize.A4);
@@ -149,12 +172,10 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
         // create new document via PDF Writer
         try {
-            PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(FILENAME));
+            PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(EXPORT_FILENAME));
 
             document.open();
 
-            // User Define Method
-            addMetaData(document);
             addTitlePage(document, pdfWriter);
         } catch(FileNotFoundException e) {
             e.printStackTrace();
@@ -166,14 +187,14 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
         document.close();
 
-        Toast.makeText(this, "PDF File created! : " + FILENAME, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "PDF File created! : " + EXPORT_FILENAME, Toast.LENGTH_LONG).show();
 
-        openGeneratedPDF();
-
+        // open default PDF viewer
+//        openGeneratedPDF();
     }
 
     private void openGeneratedPDF() {
-        File file = new File(FILENAME);
+        File file = new File(EXPORT_FILENAME);
         if(file.exists()) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Uri uri = Uri.fromFile(file);
@@ -187,86 +208,16 @@ public class PropertyHomeActivity extends AppCompatActivity {
         }
     }
 
-    // Set PDF document Properties
-    public void addMetaData(Document document) {
-        document.addTitle("RESUME");
-        document.addSubject("Person Info");
-        document.addKeywords("Personal,	Education, Skills");
-        document.addAuthor("TAG");
-        document.addCreator("TAG");
-    }
-
-    ///////////////////////////
-
-
     public void addTitlePage(Document document, PdfWriter pdfWriter) throws DocumentException, IOException {
-        // Font Style for Document
-        Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-        Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 22, Font.BOLD
-                | Font.UNDERLINE, BaseColor.GRAY);
-        Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-        Font normal = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
 
-        // Start New Paragraph
+        // create paragraph
         Paragraph prHead = new Paragraph();
-        // Set Font in this Paragraph
-        prHead.setFont(titleFont);
-        // Add item into Paragraph
-        prHead.add("RESUME – Name\n");
 
-        // Create Table into Document with 1 Row
-        PdfPTable myTable = new PdfPTable(1);
-        // 100.0f mean width of table is same as Document size
-        myTable.setWidthPercentage(100.0f);
+        // add a string to the paragraph
+        prHead.add(jsonData.toString());
 
-        // Create New Cell into Table
-        PdfPCell myCell = new PdfPCell(new Paragraph(""));
-        myCell.setBorder(Rectangle.BOTTOM);
-
-        // Add Cell into Table
-        myTable.addCell(myCell);
-
-        prHead.setFont(catFont);
-        prHead.add("\nName1 Name2\n");
-        prHead.setAlignment(Element.ALIGN_CENTER);
-
-        // Add all above details into Document
+        // add the paragraph to the document
         document.add(prHead);
-        document.add(myTable);
-
-        document.add(myTable);
-
-        // Now Start another New Paragraph
-        Paragraph prPersinalInfo = new Paragraph();
-        prPersinalInfo.setFont(smallBold);
-        prPersinalInfo.add("Address 1\n");
-        prPersinalInfo.add("Address 2\n");
-        prPersinalInfo.add("City: SanFran. State: CA\n");
-        prPersinalInfo.add("Country: USA Zip Code: 000001\n");
-        prPersinalInfo
-                .add("Mobile: 9999999999 Fax: 1111111 Email: john_pit@gmail.com \n");
-
-        prPersinalInfo.setAlignment(Element.ALIGN_CENTER);
-
-        document.add(prPersinalInfo);
-        document.add(myTable);
-
-        document.add(myTable);
-
-        Paragraph prProfile = new Paragraph();
-        prProfile.setFont(smallBold);
-        prProfile.add("\n \n Profile : \n ");
-        prProfile.setFont(normal);
-        prProfile
-                .add("\nI am Mr. XYZ. I am Android Application Developer at TAG.");
-
-        prProfile.setFont(smallBold);
-        document.add(prProfile);
-
-        String s = "<pre>this is <em>obviously</em> for <span style=\"text-decoration: underline;\">members</span> <strong>just</strong> <span style=\"background-color: #ff0000;\">going</span> to talk about 5 <span style=\"color: #ff0000;\">minutes </span>spontaneously you need to write down the text of what I say when</pre>";
-
-        XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
-        worker.parseXHtml(pdfWriter, document, new StringReader(s));
 
         // Create new Page in PDF
         document.newPage();

@@ -158,6 +158,9 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     public void printPdf(){
         // get storage directory path
+        // PDF Filepath:
+        // Settings > Storage&USB > Internal Storage
+        // Others > PDF > Name.pdf
         EXPORT_FILENAME = Environment.getExternalStorageDirectory().toString() + "/PDF/" + "Name.pdf";
 
         // Create New Blank Document

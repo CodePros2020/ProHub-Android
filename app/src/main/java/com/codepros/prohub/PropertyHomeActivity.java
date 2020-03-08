@@ -59,6 +59,12 @@ public class PropertyHomeActivity extends AppCompatActivity {
                 goChat(v);
             }
         });
+        toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSearch(v);
+            }
+        });
 
         // NEEDS TO BE CHANGED
         newsroomButton.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +95,11 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     public void goChat(View view) {
         Intent intent = new Intent(this, ChatActivity.class);
+        this.startActivity(intent);
+    }
+
+    public void goSearch(View view) {
+        Intent intent = new Intent(this, SearchActivity.class);
         this.startActivity(intent);
     }
 }

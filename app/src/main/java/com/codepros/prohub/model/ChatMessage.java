@@ -4,26 +4,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatMessage {
-    private String chatId;
-    private List<Chat> messages = new ArrayList<>();
 
-    public ChatMessage(String chatId) {
-        this.chatId = chatId;
+    private String chatMessageId;
+    private String receiverNumber;
+    private String senderNumber;
+    private String senderName;
+
+    public ChatMessage() {
     }
 
-    public String getChatId() {
-        return chatId;
+    public ChatMessage(String chatMessageId, String receiverNumber, String senderNumber, String senderName) {
+        this.chatMessageId = chatMessageId;
+        this.receiverNumber = receiverNumber;
+        this.senderNumber = senderNumber;
+        this.senderName = senderName;
     }
 
-    public void setChatId(String chatId) {
-        this.chatId = chatId;
+    public String getChatMessageId() {
+        return chatMessageId;
     }
 
-    public List<Chat> getMessages() {
-        return messages;
+    public void setChatMessageId(String chatMessageId) {
+        this.chatMessageId = chatMessageId;
     }
 
-    public void setMessages(List<Chat> messages) {
-        this.messages = messages;
+    public String getReceiverNumber() {
+        return receiverNumber;
+    }
+
+    public void setReceiverNumber(String receiverNumber) {
+        this.receiverNumber = receiverNumber;
+    }
+
+    public String getSenderNumber() {
+        return senderNumber;
+    }
+
+    public void setSenderNumber(String senderNumber) {
+        this.senderNumber = senderNumber;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 }

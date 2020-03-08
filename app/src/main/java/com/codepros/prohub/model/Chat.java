@@ -1,39 +1,61 @@
 package com.codepros.prohub.model;
 
+import java.text.DateFormat;
+
 public class Chat {
 
-    private String id;
-    private String phoneNumber;
-    private String message;
+//    private String id;
+//    private String phoneNumber;
+//    private String message;
+//    private String fullName;
+//    private String photoUrl;
+//    private String imageUrl;
+
+    private String chatId;
+    private String chatMessageId;
     private String fullName;
+    private String message;
+    private String phoneNumber;
     private String photoUrl;
     private String imageUrl;
+    private String timestamp;
 
     public Chat() {
     }
 
-    public Chat(String phoneNumber, String message, String fullName, String photoUrl, String imageUrl) {
-        this.phoneNumber = phoneNumber;
-        this.message = message;
+    public Chat(String chatMessageId, String fullName, String message, String phoneNumber,
+                String photoUrl, String imageUrl, String timestamp) {
+        this.chatMessageId = chatMessageId;
         this.fullName = fullName;
+        this.message = message;
+        this.phoneNumber = phoneNumber;
         this.photoUrl = photoUrl;
         this.imageUrl = imageUrl;
+        this.timestamp = timestamp;
     }
 
-    public String getId() { 
-        return id;
+    public String getChatId() {
+        return chatId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getChatMessageId() {
+        return chatMessageId;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setChatMessageId(String chatMessageId) {
+        this.chatMessageId = chatMessageId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getMessage() {
@@ -44,12 +66,12 @@ public class Chat {
         this.message = message;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getPhotoUrl() {
@@ -67,4 +89,68 @@ public class Chat {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    //    public Chat(String phoneNumber, String message, String fullName, String photoUrl, String imageUrl) {
+//        this.phoneNumber = phoneNumber;
+//        this.message = message;
+//        this.fullName = fullName;
+//        this.photoUrl = photoUrl;
+//        this.imageUrl = imageUrl;
+//    }
+//
+//    public String getId() {
+//        return id;
+//    }
+//
+//    public void setId(String id) {
+//        this.id = id;
+//    }
+//
+//    public String getPhoneNumber() {
+//        return phoneNumber;
+//    }
+//
+//    public void setPhoneNumber(String phoneNumber) {
+//        this.phoneNumber = phoneNumber;
+//    }
+//
+//    public String getMessage() {
+//        return message;
+//    }
+//
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
+//
+//    public String getFullName() {
+//        return fullName;
+//    }
+//
+//    public void setFullName(String fullName) {
+//        this.fullName = fullName;
+//    }
+//
+//    public String getPhotoUrl() {
+//        return photoUrl;
+//    }
+//
+//    public void setPhotoUrl(String photoUrl) {
+//        this.photoUrl = photoUrl;
+//    }
+//
+//    public String getImageUrl() {
+//        return imageUrl;
+//    }
+//
+//    public void setImageUrl(String imageUrl) {
+//        this.imageUrl = imageUrl;
+//    }
 }

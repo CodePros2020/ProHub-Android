@@ -16,7 +16,7 @@ public class FirebaseDataseHelper {
     private DatabaseReference myUserRef;
     private DatabaseReference myPropRef;
     private DatabaseReference myUnitRef;
-    private DatabaseReference myChatRef;
+    private DatabaseReference myChatMessageRef;
 
     // list of data
     private List<User> users = new ArrayList<>();
@@ -39,9 +39,9 @@ public class FirebaseDataseHelper {
         void DataIsLoad(List<Unit> units, List<String> keys);
     }
 
-    // interface to load Chat database
+    // interface to load ChatMessage database
     public interface ChatMessageDataStatus{
-        void DataIsLoad(List<ChatMessage> chats, List<String> keys);
+        void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys);
     }
 
     public FirebaseDataseHelper(){
@@ -49,7 +49,7 @@ public class FirebaseDataseHelper {
         myUserRef = myDatabase.getReference("users");
         myPropRef = myDatabase.getReference("properties");
         myUnitRef = myDatabase.getReference("units");
-        myChatRef = myDatabase.getReference("chat");
+        myChatMessageRef = myDatabase.getReference("chatMessages");
     }
 
     public void readUsers(final UserDataStatus dataStatus){
@@ -116,8 +116,8 @@ public class FirebaseDataseHelper {
         });
     }
 
-    public void readChats(final ChatMessageDataStatus chatMessageDataStatus){
-        myChatRef.addValueEventListener(new ValueEventListener() {
+    public void readChatMessages(final ChatMessageDataStatus chatMessageDataStatus){
+        myChatMessageRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatMessages.clear();

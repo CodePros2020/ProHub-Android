@@ -76,7 +76,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     }
 
     public void goChat(View view) {
-        Intent intent = new Intent(this, ChatActivity.class);
+        Intent intent = new Intent(this, ChatList.class);
         this.startActivity(intent);
     }
 }

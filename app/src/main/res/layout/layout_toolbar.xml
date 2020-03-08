@@ -47,6 +47,7 @@
                 android:layout_width="40sp"
                 android:layout_height="50sp"
                 android:background="@drawable/menu_three"
+                android:onClick="exportChatHistory"
                 android:translationX="170sp" />
         </LinearLayout>
 

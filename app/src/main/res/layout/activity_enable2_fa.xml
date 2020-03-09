@@ -6,6 +6,8 @@
     android:gravity="center_horizontal"
     android:background="#FFFFFF"
     android:paddingBottom="20dp">
+    <include layout="@layout/layout_simple_toolbar"/>
+
     <LinearLayout
         android:layout_width="630dp"
         android:layout_height="wrap_content"

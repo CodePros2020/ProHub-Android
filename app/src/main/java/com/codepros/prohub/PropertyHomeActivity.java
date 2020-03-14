@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -46,8 +47,6 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private static final String TAG = "PropertyHomeActivity";
     private DatabaseReference myPropRef;
 
-
-
     // Chat database ref for export chat history
     private DatabaseReference myChatRef;
     public static final String CHAT_CHILD = "chat";
@@ -57,11 +56,20 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private String EXPORT_FILENAME;
     private JSONObject jsonData = new JSONObject(); // tentative output
 
+    // property ID
+    private String propId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_home);
+
+        // get propId from intent, save to shared preference
+        propId = getIntent().getStringExtra("propId");
+        SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = myPreference.edit();
+        prefEditor.putString("propId", propId);
+        prefEditor.apply();
 
         myPropRef = FirebaseDatabase.getInstance().getReference();
 
@@ -79,16 +87,18 @@ public class PropertyHomeActivity extends AppCompatActivity {
         toolbarBtnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
 
-        chatButton.setOnClickListener(new View.OnClickListener() {
+        // define the actions for each button
+
+        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goChat(v);
             }
         });
-        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
+        toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goChat(v);
+                goNews(v);
             }
         });
         toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
@@ -98,14 +108,19 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
-        // NEEDS TO BE CHANGED
-        /*
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goChat(v);
+            }
+        });
         newsroomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goPage(v);
+                goNews(v);
             }
         });
+        /*
         formsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,9 +137,8 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     }
 
-    // CHANGE THIS TO THE ACTUAL PAGE LATER
-    public void goPage(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
+    public void goNews(View view) {
+        Intent intent = new Intent(this, AddNewsActivity.class);
         this.startActivity(intent);
     }
 

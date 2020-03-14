@@ -1,7 +1,11 @@
-package com.codepros.prohub.model;
+package com.codepros.prohub.utils;
 
 import androidx.annotation.NonNull;
 
+import com.codepros.prohub.model.ChatMessage;
+import com.codepros.prohub.model.Property;
+import com.codepros.prohub.model.Unit;
+import com.codepros.prohub.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.codepros.prohub.model.FirebaseDataseHelper;
+import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.model.Property;
-import com.codepros.prohub.model.PropertyAdapter;
+import com.codepros.prohub.utils.PropertyAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

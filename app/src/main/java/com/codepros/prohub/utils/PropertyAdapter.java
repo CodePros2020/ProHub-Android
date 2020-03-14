@@ -1,4 +1,4 @@
-package com.codepros.prohub.model;
+package com.codepros.prohub.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.codepros.prohub.MainActivity;
 import com.codepros.prohub.PropertyHomeActivity;
 import com.codepros.prohub.R;
+import com.codepros.prohub.model.Property;
 
 
 import java.util.ArrayList;

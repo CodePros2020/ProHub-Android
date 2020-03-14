@@ -25,6 +25,7 @@ public class LessorHomeActivity extends AppCompatActivity {
 
     // list of properties
     List<Property> allProperties = new ArrayList<>();
+    List<String> myKeys = new ArrayList<>();
     List<Property> myProperties = new ArrayList<>();
 
     @Override
@@ -48,6 +49,7 @@ public class LessorHomeActivity extends AppCompatActivity {
             @Override
             public void DataIsLoad(List<Property> properties, List<String> keys) {
                 allProperties = properties;
+                myKeys = keys;
                 for(int i = 0; i<allProperties.size(); i++){
                     if(allProperties.get(i).getPhone().equals(userPhoneNum)){
                         myProperties.add(allProperties.get(i));
@@ -67,14 +69,13 @@ public class LessorHomeActivity extends AppCompatActivity {
     }
 
     private void addNewProperty(){
-        // TODO: going to the create property page
         Intent intent = new Intent(this, AddPropertyActivity.class);
         startActivity(intent);
     }
 
     private void setAdpater(){
         // set the property adapter to the list view
-        PropertyAdapter propertyAdapter = new PropertyAdapter(this, myProperties);
+        PropertyAdapter propertyAdapter = new PropertyAdapter(this, myProperties, myKeys);
         list_property.setAdapter(propertyAdapter);
     }
 }

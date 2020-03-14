@@ -31,7 +31,6 @@
     <string name="you_typed_a_wrong_code_please_double_check">You typed a wrong code! Please double check!</string>
     <string name="validate">Validate</string>
     <string name="cancel">Cancel</string>
-    <string name="cancel">Cancel</string>
     <string name="post">Post</string>
     <string name="news_title">News Title</string>
     <string name="enter_title_here">Enter Title Here</string>
@@ -40,8 +39,6 @@
     <string name="target_viewer">Target Viewer</string>
     <string name="everyone">Everyone</string>
     <string name="managements_only">Managements Only</string>
-    <string name="true">True</string>
-    <string name="false">False</string>
     <string name="hideTrue">True</string>
     <string name="hideFalse">False</string>
     <string name="hide">Hide</string>

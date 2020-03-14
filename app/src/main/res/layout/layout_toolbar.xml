@@ -30,7 +30,7 @@
                 android:id="@+id/AppNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ProHub"
+                android:text="@string/prohub_toolbar"
                 android:textSize="25dp"
                 android:textColor="@color/colorWhite"
                 android:translationX="30sp"/>
@@ -62,7 +62,7 @@
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:background="@drawable/toolbar_button_background"
-                android:text="CHAT" />
+                android:text="@string/chat_toolbar" />
 
             <Button
                 android:id="@+id/toolbarBtnNews"
@@ -70,7 +70,7 @@
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:background="@drawable/toolbar_button_background"
-                android:text="NEWS" />
+                android:text="@string/news_toolbar" />
 
             <Button
                 android:id="@+id/toolbarBtnForms"
@@ -78,7 +78,7 @@
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:background="@drawable/toolbar_button_background"
-                android:text="FORMS" />
+                android:text="@string/forms_toolbar" />
 
             <Button
                 android:id="@+id/toolbarBtnSettings"
@@ -86,7 +86,7 @@
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:background="@drawable/toolbar_button_background"
-                android:text="SETTINGS" />
+                android:text="@string/settings_toolbar" />
 
         </LinearLayout>
 

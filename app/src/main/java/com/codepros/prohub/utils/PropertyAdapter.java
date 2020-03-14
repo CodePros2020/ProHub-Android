@@ -2,6 +2,7 @@ package com.codepros.prohub.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,13 @@ public class PropertyAdapter extends BaseAdapter {
 
     private final Context mContext;
     private final List<Property> properties;
+    private final List<String> keys;
 
-    public PropertyAdapter(Context mContext, List<Property> properties)
+    public PropertyAdapter(Context mContext, List<Property> properties, List<String> keys)
     {
         this.mContext = mContext;
         this.properties = properties;
+        this.keys = keys;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class PropertyAdapter extends BaseAdapter {
 
     // set the view for each item in item list
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final Property property = this.properties.get(position);
 
         if(convertView == null){
@@ -65,13 +68,14 @@ public class PropertyAdapter extends BaseAdapter {
         propertyDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: need link to the property Home page with property ID
                 Toast.makeText(mContext, "redirect to selected peoperty", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(mContext, PropertyHomeActivity.class);
+                intent.putExtra("propId", keys.get(position));
                 mContext.startActivity(intent);
             }
         });
 
         return convertView;
     }
+
 }

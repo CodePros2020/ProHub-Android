@@ -12,11 +12,9 @@ public class Property {
     private String postalCode;// Postal code (need validation)
 
     public Property(){
-        ++propID;
     }
 
     public Property(String name, String streetLine1, String streetLine2, String city, String province, String postalCode) {
-        ++propID;
         this.name = name;
         this.streetLine1 = streetLine1;
         this.streetLine2 = streetLine2;

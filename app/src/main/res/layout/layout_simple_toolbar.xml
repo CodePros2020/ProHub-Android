@@ -25,7 +25,7 @@
             android:id="@+id/AppNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ProHub"
+            android:text="@string/prohub_toolbar"
             android:textSize="25dp"
             android:textColor="@color/colorWhite"
             android:translationX="30sp"/>

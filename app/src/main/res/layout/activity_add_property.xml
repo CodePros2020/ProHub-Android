@@ -55,13 +55,13 @@
 
             <EditText
                 android:id="@+id/etName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="Property Name.."/>
+                android:hint="@string/property_name"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -88,13 +88,13 @@
 
             <EditText
                 android:id="@+id/etStreetLine1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="e.g. 123 street abc.."/>
+                android:hint="@string/e_g_123_street_abc"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -121,13 +121,13 @@
 
             <EditText
                 android:id="@+id/etStreetLine2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="e.g. suite 1001.."/>
+                android:hint="@string/e_g_suite_1001"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -154,13 +154,13 @@
 
             <EditText
                 android:id="@+id/etCity"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="e.g. Toronto"/>
+                android:hint="@string/e_g_toronto"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -187,7 +187,7 @@
 
             <Spinner
                 android:id="@+id/spProvince"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
@@ -218,13 +218,13 @@
 
             <EditText
                 android:id="@+id/etPostalCode"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="e.g. A0A 0A0"/>
+                android:hint="@string/e_g_a0a_0a0"/>
 
         </LinearLayout>
     </LinearLayout>

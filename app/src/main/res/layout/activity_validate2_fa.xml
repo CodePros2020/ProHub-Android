@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#3f3f3f"
-                android:text="Enter code"
+                android:text="@string/enter_code"
                 android:textSize="10pt" />
 
             <TextView
@@ -32,13 +32,13 @@
                 android:layout_height="wrap_content"
                 android:textColor="#7e7e7e"
                 android:layout_marginTop="5dp"
-                android:text="Enter the 6-digit code that we sent to your phone number"
+                android:text="@string/enter_the_6_digit_code_that_we_sent_to_your_phone_number"
                 android:textSize="6.5pt" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#7e7e7e"
-                android:text="to finish setting up two-factor authentication."
+                android:text="@string/to_finish_setting_up_two_factor_authentication"
                 android:textSize="6.5pt" />
         </LinearLayout>
 
@@ -64,14 +64,13 @@
                 android:id="@+id/codeEdtx"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:inputType="number"
                 android:paddingTop="10dp"
                 android:paddingRight="15dp"
                 android:paddingLeft="15dp"
                 android:paddingBottom="10dp"
                 android:gravity="center_horizontal"
-                android:hint="Confirmation code"
+                android:hint="@string/confirmation_code"
                 android:textSize="7pt"
                 android:background="@drawable/editextborder" />
             <TextView
@@ -81,7 +80,7 @@
                 android:layout_marginTop="5dp"
                 android:textColor="#CD0000"
                 android:visibility="gone"
-                android:text="You typed a wrong code! Please double check!"/>
+                android:text="@string/you_typed_a_wrong_code_please_double_check"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,23 +95,19 @@
                     android:gravity="center_horizontal"
                     android:textSize="8pt"
                     android:textColor="#2a2a2a"
-                    android:layout_below="@id/codeEdtx"
-                    android:layout_centerHorizontal="true"
                     android:background="@drawable/button_background"
-                    android:text="Validate" />
+                    android:text="@string/validate" />
                 <TextView
                     android:id="@+id/cancelBtn"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:padding="10dp"
                     android:gravity="center_horizontal"
                     android:textSize="8pt"
                     android:textColor="#2a2a2a"
-                    android:layout_below="@+id/codeEdtx"
-                    android:layout_toRightOf="@id/validateBtn"
                     android:background="@drawable/button_background"
-                    android:text="Cancel" />
+                    android:text="@string/cancel" />
             </LinearLayout>
         </LinearLayout>
 

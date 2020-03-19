@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.codepros.prohub.model.FirebaseDataseHelper;
+import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.model.User;
 import com.codepros.prohub.utils.Enable2FaActivity;
 
@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                             // intent to next page which make the 2-factor
                             Intent intent = new Intent(this, Enable2FaActivity.class);
                             intent.putExtra("phoneNumber", phoneNumber);
+                            intent.putExtra("userRole", user.getRole());
                             this.startActivity(intent);
                             return;
                         }

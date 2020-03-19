@@ -26,7 +26,7 @@
 
             <TextView
                 android:id="@+id/messageTextView"
-                android:text="Test Message"
+                android:text="@string/test_message"
                 android:maxWidth="240dp"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
             <TextView
                 android:id="@+id/messengerTextView"
                 android:layout_width="wrap_content"
-                android:text="John Doe"
+                android:text="@string/john_doe"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"/>

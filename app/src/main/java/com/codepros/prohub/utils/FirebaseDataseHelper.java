@@ -1,7 +1,12 @@
-package com.codepros.prohub.model;
+package com.codepros.prohub.utils;
 
 import androidx.annotation.NonNull;
 
+import com.codepros.prohub.model.ChatMessage;
+import com.codepros.prohub.model.News;
+import com.codepros.prohub.model.Property;
+import com.codepros.prohub.model.Unit;
+import com.codepros.prohub.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,6 +21,7 @@ public class FirebaseDataseHelper {
     private DatabaseReference myUserRef;
     private DatabaseReference myPropRef;
     private DatabaseReference myUnitRef;
+    private DatabaseReference myNewsRef;
     private DatabaseReference myChatMessageRef;
 
     // list of data
@@ -23,6 +29,7 @@ public class FirebaseDataseHelper {
     private List<Property> properties = new ArrayList<>();
     private List<Unit> units = new ArrayList<>();
     private List<ChatMessage> chatMessages = new ArrayList<>();
+    private List<News> newsList = new ArrayList<>();
 
     // interface to load User database
     public interface UserDataStatus{
@@ -44,11 +51,17 @@ public class FirebaseDataseHelper {
         void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys);
     }
 
+    // interface to load News database
+    public interface NewsDataStatus{
+        void DataIsLoad(List<News> newsList, List<String> keys);
+    }
+
     public FirebaseDataseHelper(){
         myDatabase = FirebaseDatabase.getInstance();
         myUserRef = myDatabase.getReference("users");
         myPropRef = myDatabase.getReference("properties");
         myUnitRef = myDatabase.getReference("units");
+        myNewsRef = myDatabase.getReference("news");
         myChatMessageRef = myDatabase.getReference("chatMessages");
     }
 
@@ -107,6 +120,27 @@ public class FirebaseDataseHelper {
                     units.add(unit);
                 }
                 unitDataStatus.DataIsLoad(units, keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    public void readNews(final NewsDataStatus newsDataStatus){
+        myNewsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                newsList.clear();
+                List<String> keys = new ArrayList<>();
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    keys.add(keyNode.getKey());
+                    News news = keyNode.getValue(News.class);
+                    newsList.add(news);
+                }
+                newsDataStatus.DataIsLoad(newsList, keys);
             }
 
             @Override

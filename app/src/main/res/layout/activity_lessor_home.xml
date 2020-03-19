@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="36sp"
-        android:text="Welcome" />
+        android:text="@string/welcome_lessor_home" />
 
     <TextView
         android:id="@+id/textView5"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="36sp"
-        android:text="List of Your Properties" />
+        android:text="@string/list_of_your_properties" />
 
     <ListView
         android:id="@+id/list_property"
@@ -36,6 +36,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:translationX="120dp"
-        android:text="Create New Property" />
+        android:text="@string/create_new_property" />
 
 </LinearLayout>

@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.codepros.prohub.model.FirebaseDataseHelper;
+import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.model.Unit;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

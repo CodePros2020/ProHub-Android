@@ -2,8 +2,8 @@ package com.codepros.prohub.model;
 
 public class News {
 
-    int newsId;
-    int propId;
+    String propId;
+    String creatorPhoneNumber;
     String newsTitle;
     String content;
     String imageUrl;
@@ -12,10 +12,10 @@ public class News {
     Boolean hideFlag;
 
 
-    public News(){++newsId;}
-    public News(int propId, String newsTitle, String content, String imageUrl, String createTime, String targetViewer, Boolean hideFlag) {
-        ++newsId;
+    public News(){}
+    public News(String propId, String creatorPhoneNumber, String newsTitle, String content, String imageUrl, String createTime, String targetViewer, Boolean hideFlag) {
         this.propId = propId;
+        this.creatorPhoneNumber = creatorPhoneNumber;
         this.newsTitle = newsTitle;
         this.content = content;
         this.imageUrl = imageUrl;
@@ -24,21 +24,20 @@ public class News {
         this.hideFlag = hideFlag;
     }
 
-
-    public int getNewsId() {
-        return newsId;
-    }
-
-    public void setNewsId(int newsId) {
-        this.newsId = newsId;
-    }
-
-    public int getPropId() {
+    public String getPropId() {
         return propId;
     }
 
-    public void setPropId(int propId) {
+    public void setPropId(String propId) {
         this.propId = propId;
+    }
+
+    public String getCreatorPhoneNumber() {
+        return creatorPhoneNumber;
+    }
+
+    public void setCreatorPhoneNumber(String creatorPhoneNumber) {
+        this.creatorPhoneNumber = creatorPhoneNumber;
     }
 
     public String getNewsTitle() {

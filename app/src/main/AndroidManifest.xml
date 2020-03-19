@@ -11,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddNewsActivity"></activity>
+        <activity
+            android:name=".utils.ViewNewsActivity"
+            android:label="@string/title_activity_view_news"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".AddNewsActivity" />
         <activity android:name=".ChatList" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".LessorHomeActivity" />

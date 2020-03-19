@@ -103,7 +103,7 @@ public class AddNewsActivity extends AppCompatActivity {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 if (!task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "something wrong when uploading image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "something went wrong when uploading image", Toast.LENGTH_LONG).show();
                     throw task.getException();
                 }
                 Toast.makeText(getApplicationContext(), "Image uploaded successfully", Toast.LENGTH_LONG).show();

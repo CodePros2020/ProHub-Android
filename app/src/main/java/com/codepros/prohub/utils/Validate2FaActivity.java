@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.codepros.prohub.LessorHomeActivity;
 import com.codepros.prohub.PropertyHomeActivity;
 import com.codepros.prohub.R;
 import com.google.firebase.database.DatabaseReference;
@@ -41,12 +42,24 @@ public class Validate2FaActivity extends AppCompatActivity {
             // need to set the user's is2FA property to true
             SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
             String userPhone = myPref.getString("phoneNum", "");
+            String userRole = myPref.getString("userRole", "");
             myUserRef = FirebaseDatabase.getInstance().getReference();
             myUserRef.child("users").child(userPhone).child("is2FA").setValue(true);
 
-            // go to next page
-            this.startActivity(new Intent(this, PropertyHomeActivity.class));
             Toast.makeText(this, "successfully passed the 2FA!", Toast.LENGTH_LONG).show();
+
+            // go to next page
+            if(userRole.equals("Tenant")){
+                Intent intent = new Intent(this, PropertyHomeActivity.class);
+                this.startActivity(intent);
+                return;
+            }
+            else{
+                Intent intent = new Intent(this, LessorHomeActivity.class);
+                //Intent intent = new Intent(this, AddPropertyActivity.class);
+                this.startActivity(intent);
+                return;
+            }
         }
         else {
             Toast.makeText(this, "incorrect code!", Toast.LENGTH_LONG).show();

@@ -38,11 +38,11 @@
             android:layout_marginTop="20dp">
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="Sign Up"
+                android:text="@string/sign_up_reg"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Login" />
+                android:text="@string/login_reg" />
         </LinearLayout>
 
         <EditText
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.10"
-            android:hint="First Name"
+            android:hint="@string/first_name_reg"
             android:inputType="textPersonName"
             android:maxLines="1"
             android:singleLine="true"
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.10"
-            android:hint="Last Name"
+            android:hint="@string/last_name_reg"
             android:inputType="textPersonName"
             android:maxLines="1"
             android:singleLine="true"
@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.10"
-            android:hint="Phone"
+            android:hint="@string/phone_reg"
             android:inputType="phone"
             android:maxLines="1"
             android:singleLine="true"
@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.10"
-            android:hint="Password"
+            android:hint="@string/password_reg"
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"
@@ -108,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.10"
-            android:hint="Confirm Password"
+            android:hint="@string/confirm_password_reg"
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"
@@ -121,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Confirm" />
+            android:text="@string/confirm_gre" />
 
     </LinearLayout>
 

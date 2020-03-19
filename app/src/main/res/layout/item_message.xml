@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/layoutReceiver">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +26,7 @@
 
             <TextView
                 android:id="@+id/messageTextView"
-                android:text="Test Message"
+                android:text="@string/test_message"
                 android:maxWidth="240dp"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
@@ -47,7 +48,7 @@
             <TextView
                 android:id="@+id/messengerTextView"
                 android:layout_width="wrap_content"
-                android:text="John Doe"
+                android:text="@string/john_doe"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"/>

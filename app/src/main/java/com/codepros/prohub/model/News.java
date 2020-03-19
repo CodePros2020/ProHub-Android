@@ -2,8 +2,6 @@ package com.codepros.prohub.model;
 
 public class News {
 
-
-
     int newsId;
     int propId;
     String newsTitle;

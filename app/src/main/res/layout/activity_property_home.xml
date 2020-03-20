@@ -98,6 +98,15 @@
             android:textSize="20sp"
             android:translationX="160dp"
             android:translationY="340dp" />
+
+        <Button
+            android:id="@+id/btnAddUnit"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:translationX="350dp"
+            android:translationY="460dp"
+            android:textSize="30sp"
+            android:text="+" />
     </FrameLayout>
 
 

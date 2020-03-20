@@ -41,6 +41,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private Button toolbarBtnNews, newsroomButton;
     private Button toolbarBtnForms, formsButton;
     private Button toolbarBtnSettings, settingsButton;
+    private Button btnAddUnit;
     private ImageButton toolbarBtnHome, toolbarBtnSearch;
 
     // Firebase database objects
@@ -78,6 +79,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
         newsroomButton = findViewById(R.id.newsroomButton);
         formsButton = findViewById(R.id.formsButton);
         settingsButton = findViewById(R.id.settingsButton);
+        btnAddUnit = findViewById(R.id.btnAddUnit);
 
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
@@ -120,6 +122,14 @@ public class PropertyHomeActivity extends AppCompatActivity {
                 goNews(v);
             }
         });
+
+        btnAddUnit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goUnit(v);
+            }
+        });
+
         /*
         formsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +144,6 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
         */
-
     }
 
     public void goNews(View view) {
@@ -149,6 +158,13 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     public void goSearch(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
+        this.startActivity(intent);
+    }
+
+    private void goUnit(View view) {
+        // intent to next page
+        Intent intent = new Intent(this, AddUnitActivity.class);
+        intent.putExtra("propId", propId);
         this.startActivity(intent);
     }
 

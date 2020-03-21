@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -26,6 +29,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 
 public class AddNewsActivity extends AppCompatActivity {
@@ -95,29 +100,44 @@ public class AddNewsActivity extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
-    private void FileUploader(){
+    private void FileUploader() {
         final StorageReference ref = myStorageRef.child(System.currentTimeMillis()+"."+getExtension(imguri));
-        UploadTask uploadTask = ref.putFile(imguri);
+        try{
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imguri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            if(bitmap.getByteCount() > 100000){
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            }
+            else{
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            }
 
-        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "something went wrong when uploading image", Toast.LENGTH_LONG).show();
-                    throw task.getException();
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = ref.putBytes(data);
+
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "something went wrong when uploading image", Toast.LENGTH_LONG).show();
+                        throw task.getException();
+                    }
+                    Toast.makeText(getApplicationContext(), "Image uploaded successfully", Toast.LENGTH_LONG).show();
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
                 }
-                Toast.makeText(getApplicationContext(), "Image uploaded successfully", Toast.LENGTH_LONG).show();
-                // Continue with the task to get the download URL
-                return ref.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    imageUrl = task.getResult().toString();
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        imageUrl = task.getResult().toString();
+                    }
                 }
-            }
-        });
+            });
+        }catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
     }
 
     private void fileChooser(){

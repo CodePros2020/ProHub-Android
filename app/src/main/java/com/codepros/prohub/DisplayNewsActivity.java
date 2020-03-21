@@ -43,8 +43,7 @@ public class DisplayNewsActivity extends AppCompatActivity {
             Picasso.get().load(imgUrl).into(this.imgView);
         }
         else{
-
+            Picasso.get().load(imgUrl).placeholder(R.drawable.ic_menu_report_image).into(this.imgView);
         }
-
     }
 }

@@ -22,11 +22,12 @@ public class DisplayNewsActivity extends AppCompatActivity {
 
         //
         Intent displayIntent = getIntent();
+        Bundle bundle=displayIntent.getExtras();
         //
-         title = displayIntent.getStringExtra("title");
-         description =  displayIntent.getStringExtra("description");
-         date = displayIntent.getStringExtra("date");
-         imgUrl =  displayIntent.getStringExtra("imgUrl");
+         title = bundle.getString("title");
+         description = bundle.getString("description");
+         date =bundle.getString("date");
+         imgUrl =  bundle.getString("imgUrl");
 
         Uri uri=Uri.parse(imgUrl);
         String imgUrl= "\"" +uri + "\"";

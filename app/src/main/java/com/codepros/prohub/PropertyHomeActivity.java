@@ -41,6 +41,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private Button toolbarBtnNews, newsroomButton;
     private Button toolbarBtnForms, formsButton;
     private Button toolbarBtnSettings, settingsButton;
+    private Button btnDashboard;
     private ImageButton toolbarBtnHome, toolbarBtnSearch;
 
     // Firebase database objects
@@ -78,6 +79,9 @@ public class PropertyHomeActivity extends AppCompatActivity {
         newsroomButton = findViewById(R.id.newsroomButton);
         formsButton = findViewById(R.id.formsButton);
         settingsButton = findViewById(R.id.settingsButton);
+        btnDashboard=findViewById(R.id.btnDashboard);
+        // Set the name of the Logged in person
+        btnDashboard.setText("PROHUB");
 
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);

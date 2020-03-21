@@ -3,6 +3,8 @@ package com.codepros.prohub.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +32,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
     public String title;
     public String des;
     public String date;
-    public String imageUrl;
+    public Uri imageUri;
     public NewsAdapter(List<News> newsList,Context context){
         this.listItems=newsList;
         this.context=context;
@@ -48,22 +50,32 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
 
         final News news=listItems.get(position);
          title=news.getNewsTitle();
-        des=news.getContent();
+        des=news.getShortDes(news.getContent());
         date=news.getCreateTime();
-        imageUrl=news.getImageUrl();
-        //Uri imgURI=Uri.parse(imageUrl);
+        //Log.d("Image Url in Adapter", "onBindViewHolder: Before "+news.getImageUrl());
+        try{
+            imageUri=news.getImageUri(news.getImageUrl());
+            holder.imgNews.setImageURI(imageUri);
+        }
+        catch(NullPointerException e) {
+            holder.imgNews.setImageResource(R.drawable.noimg);
+        }
+
+        //Log.d("Image Url in Adapter", "onBindViewHolder: "+imageUri);
         holder.tvTitle.setText(title);
         holder.tvDescription.setText(des);
         holder.tvDate.setText(date);
-       //holder.imgNews.setImageURI(imgURI);
+
         holder.relativeLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                Bundle b = new Bundle();
                 Intent newIntent=new Intent(context, DisplayNewsActivity.class);
-                newIntent.putExtra("title",title);
-                newIntent.putExtra("description",des);
-                newIntent.putExtra("date",date);
-                newIntent.putExtra("imgUrl",imageUrl);
+                b.putString("title",title);
+                b.putString("description",news.getContent());
+                b.putString("date",date);
+                b.putString("imgUrl",imageUri.toString());
+                newIntent.putExtras(b);
                 context.startActivity(newIntent);
             }
         });

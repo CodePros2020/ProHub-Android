@@ -1,5 +1,7 @@
 package com.codepros.prohub.model;
 
+import android.net.Uri;
+
 public class News {
 
     String propId;
@@ -89,4 +91,18 @@ public class News {
     }
 
 
+    public Uri getImageUri(String imgPath){
+        Uri imgUri=Uri.parse(imgPath);
+        return imgUri;
+    }
+    public String getShortDes(String desc){
+        String shortDes;
+        if(desc.length() > 150 ){
+            shortDes=desc.substring(0,150) + "...";
+        }
+        else{
+            shortDes=desc;
+        }
+        return shortDes;
+    }
 }

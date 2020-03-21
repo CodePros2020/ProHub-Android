@@ -39,11 +39,6 @@ public class DisplayNewsActivity extends AppCompatActivity {
         tvDes.setText(description);
         tvDate.setText(date);
 
-        if(!imgUrl.isEmpty()){
-            Picasso.get().load(imgUrl).into(this.imgView);
-        }
-        else{
-            Picasso.get().load(imgUrl).placeholder(R.drawable.ic_menu_report_image).into(this.imgView);
-        }
+        Picasso.get().load(imgUrl).placeholder(R.drawable.ic_menu_report_image).into(this.imgView);
     }
 }

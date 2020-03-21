@@ -30,7 +30,7 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
     private List<News> listItems;
     private Context context;
-    public String title, des, date, imageUrl;
+    private String title, des, date, imageUrl;
     public NewsAdapter(List<News> newsList,Context context){
         this.listItems=newsList;
         this.context=context;
@@ -98,15 +98,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         return listItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvTitle;
-        public TextView tvDescription;
-        public TextView tvMenuOptions;
-        public TextView tvDate;
-        public ImageView imgNews;
-        public RelativeLayout relativeLayout;
+    static class ViewHolder extends RecyclerView.ViewHolder{
+        TextView tvTitle;
+        TextView tvDescription;
+        TextView tvMenuOptions;
+        TextView tvDate;
+        ImageView imgNews;
+        RelativeLayout relativeLayout;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle= itemView.findViewById(R.id.tvHeadingNews);
             tvDescription=itemView.findViewById(R.id.tvBodyNews);

@@ -42,6 +42,9 @@ public class DisplayNewsActivity extends AppCompatActivity {
         if(!imgUrl.isEmpty()){
             Picasso.get().load(imgUrl).into(this.imgView);
         }
+        else{
+
+        }
 
     }
 }

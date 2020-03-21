@@ -11,17 +11,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DisplayNewsActivity" android:parentActivityName=".NewsViewActivity"/>
-        <activity android:name=".EditNewsActivity" android:parentActivityName=".NewsViewActivity"/>
-        <activity android:name=".NewsViewActivity" android:parentActivityName=".PropertyHomeActivity"/>
-        <activity android:name=".AddNewsActivity" android:parentActivityName=".NewsViewActivity"/>
+        <activity android:name=".FormActivity"></activity>
+        <activity
+            android:name=".DisplayNewsActivity"
+            android:parentActivityName=".NewsViewActivity" />
+        <activity
+            android:name=".EditNewsActivity"
+            android:parentActivityName=".NewsViewActivity" />
+        <activity
+            android:name=".NewsViewActivity"
+            android:parentActivityName=".PropertyHomeActivity" />
+        <activity
+            android:name=".AddNewsActivity"
+            android:parentActivityName=".NewsViewActivity" />
         <activity android:name=".ChatList" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".LessorHomeActivity" />
         <activity android:name=".SearchActivity" />
         <activity
             android:name=".AddPropertyActivity"
-            android:windowSoftInputMode="adjustPan" android:parentActivityName=".PropertyHomeActivity"/>
+            android:parentActivityName=".PropertyHomeActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PropertyHomeActivity" />
         <activity android:name=".utils.Validate2FaActivity" />
         <activity android:name=".utils.Enable2FaActivity" />

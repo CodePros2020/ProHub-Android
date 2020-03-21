@@ -53,21 +53,12 @@ public class NewsViewActivity extends AppCompatActivity {
         new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
             @Override
             public void DataIsLoad(List<News> listNews, List<String> keys) {
-                Log.d("List Length", "DataIsLoad: "+listNews.size());
-
 
                 for(int i=0;i<listNews.size();i++){
                     if(!listNews.get(i).getHideFlag()){
-                        Log.d("news List", "DataIsLoad: "+listNews.get(i));
                         newsList.add(listNews.get(i));
-                        Log.d("news List", "DataIsLoad: "+newsList.size());
                     }
                 }
-//              for(News news:listNews) {
-//                  if (!news.getHideFlag()) {
-//                      newsList.add(news);
-//                  }
-//              }
                 setNewsAdapter();
             }
         });

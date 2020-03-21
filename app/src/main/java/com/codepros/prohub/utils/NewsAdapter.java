@@ -22,6 +22,7 @@ import com.codepros.prohub.DisplayNewsActivity;
 import com.codepros.prohub.EditNewsActivity;
 import com.codepros.prohub.R;
 import com.codepros.prohub.model.News;
+import com.squareup.picasso.Picasso;
 
 import java.net.URI;
 import java.util.List;
@@ -29,10 +30,7 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
     private List<News> listItems;
     private Context context;
-    public String title;
-    public String des;
-    public String date;
-    public Uri imageUri;
+    public String title, des, date, imageUrl;
     public NewsAdapter(List<News> newsList,Context context){
         this.listItems=newsList;
         this.context=context;
@@ -46,25 +44,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         final News news=listItems.get(position);
-         title=news.getNewsTitle();
+        title=news.getNewsTitle();
         des=news.getShortDes(news.getContent());
         date=news.getCreateTime();
-        //Log.d("Image Url in Adapter", "onBindViewHolder: Before "+news.getImageUrl());
-        try{
-            imageUri=news.getImageUri(news.getImageUrl());
-            holder.imgNews.setImageURI(imageUri);
-        }
-        catch(NullPointerException e) {
-            holder.imgNews.setImageResource(R.drawable.noimg);
-        }
+        imageUrl=news.getImageUrl();
 
         //Log.d("Image Url in Adapter", "onBindViewHolder: "+imageUri);
         holder.tvTitle.setText(title);
         holder.tvDescription.setText(des);
         holder.tvDate.setText(date);
+        Picasso.get().load(imageUrl).placeholder(R.drawable.ic_menu_report_image).into(holder.imgNews);
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -74,7 +66,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
                 b.putString("title",title);
                 b.putString("description",news.getContent());
                 b.putString("date",date);
-                b.putString("imgUrl",imageUri.toString());
+                b.putString("imgUrl",imageUrl);
                 newIntent.putExtras(b);
                 context.startActivity(newIntent);
             }
@@ -90,6 +82,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getItemId()==R.id.menu_item_edit){
                             Intent newIntent = new Intent(context, EditNewsActivity.class);
+                            newIntent.putExtra("newsPosition", position);
                             context.startActivity(newIntent);
                         }
                         return false;

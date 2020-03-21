@@ -77,7 +77,7 @@ public class AddNewsActivity extends AppCompatActivity {
         addNewsCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goBack(v);
+                goBack();
             }
         });
 
@@ -138,8 +138,8 @@ public class AddNewsActivity extends AppCompatActivity {
         }
     }
 
-    private void goBack(View v){
-        Intent intent = new Intent(this, PropertyHomeActivity.class);
+    private void goBack(){
+        Intent intent = new Intent(this, NewsViewActivity.class);
         this.startActivity(intent);
     }
 
@@ -174,9 +174,8 @@ public class AddNewsActivity extends AppCompatActivity {
             newPostRef.setValue(mNews);
             Toast.makeText(getApplicationContext(), "News saved!", Toast.LENGTH_LONG).show();
 
-            // TODO: redirect to news room
-            Intent intent = new Intent(this, PropertyHomeActivity.class);
-            this.startActivity(intent);
+            // redirect to news room
+            goBack();
         }
     }
 }

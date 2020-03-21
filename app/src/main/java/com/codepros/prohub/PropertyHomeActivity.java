@@ -138,7 +138,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     }
 
     public void goNews(View view) {
-        Intent intent = new Intent(this, AddNewsActivity.class);
+        Intent intent = new Intent(this, NewsViewActivity.class);
         this.startActivity(intent);
     }
 

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/layout_toolbar"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".DisplayNewsActivity"
+        android:orientation="vertical"
+        android:layout_below="@+id/toolbar"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="outsideOverlay">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDisplay_title"
+                android:textSize="20dp"
+                android:layout_gravity="left"
+                android:text="Test Heading"/>
+            <TextView
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDisplay_date"
+                android:textSize="14dp"
+                android:layout_gravity="right"
+                android:layout_marginLeft="10dp"
+                android:text="2020-03-20, 11:44pm"/>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/ivNews"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:src="@drawable/img"/>
+        <TextView
+            android:id="@+id/tvDisplay_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This is test description"
+            android:padding="10dp"
+            android:textSize="16dp"/>
+
+
+    </LinearLayout>
+</RelativeLayout>

@@ -79,6 +79,7 @@
             android:backgroundTint="#008577"
             android:drawableTop="@drawable/clipboard"
             android:elevation="4dp"
+            android:onClick="goForms"
             android:padding="24dp"
             android:text="@string/forms_property_home"
             android:textColor="#FFFFFF"

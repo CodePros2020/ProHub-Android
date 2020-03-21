@@ -124,13 +124,13 @@ public class PropertyHomeActivity extends AppCompatActivity {
                 goNews(v);
             }
         });
-        /*
         formsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goPage(v);
+                goForms(v);
             }
         });
+        /*
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +148,11 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     public void goChat(View view) {
         Intent intent = new Intent(this, ChatList.class);
+        this.startActivity(intent);
+    }
+
+    public void goForms(View view) {
+        Intent intent = new Intent(this, FormsActivity.class);
         this.startActivity(intent);
     }
 

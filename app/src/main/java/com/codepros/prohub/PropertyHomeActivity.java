@@ -13,12 +13,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.codepros.prohub.model.Property;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.itextpdf.text.Document;
@@ -43,6 +48,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private Button btnDashboard;
     private ImageButton toolbarBtnHome, toolbarBtnSearch;
     private FloatingActionButton btnAddUnit;
+    private ImageButton toolbarBtnMenu; // menu
 
     // Firebase database objects
     private static final String TAG = "PropertyHomeActivity";
@@ -97,6 +103,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
         toolbarBtnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
+        toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
         // define the actions for each button
 
@@ -125,6 +132,40 @@ public class PropertyHomeActivity extends AppCompatActivity {
                 goChat(v);
             }
         });
+        final PopupMenu dropDownMenu = new PopupMenu(PropertyHomeActivity.this, toolbarBtnMenu);
+        final Menu menu = dropDownMenu.getMenu();
+        // list of items for menu:
+        menu.add(0, 0, 0, "Logout");
+
+        // logout item
+        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case 0:
+                        // item ID 0 was clicked
+                        Intent i = new Intent(PropertyHomeActivity.this, MainActivity.class);
+                        i.putExtra("finish", true);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
+                        startActivity(i);
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        // Menu button click
+        toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dropDownMenu.show();
+            }
+        });
+
+        // NEEDS TO BE CHANGED
+        /*
         newsroomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

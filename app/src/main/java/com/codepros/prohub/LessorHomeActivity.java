@@ -13,13 +13,14 @@ import android.widget.TextView;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.model.Property;
 import com.codepros.prohub.utils.PropertyAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LessorHomeActivity extends AppCompatActivity {
     private TextView textWeclomeLessor;
-    private Button btnCreateProp;
+    private FloatingActionButton btnCreateProp;
     private ListView list_property;
     private String userPhoneNum;
 

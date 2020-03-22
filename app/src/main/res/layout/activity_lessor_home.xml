@@ -31,11 +31,23 @@
         android:layout_height="wrap_content" >
     </ListView>
 
-    <Button
+<!--    <Button-->
+<!--        android:id="@+id/btnCreateProp"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:translationX="120dp"-->
+<!--        android:text="@string/create_new_property" />-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnCreateProp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:translationX="120dp"
-        android:text="@string/create_new_property" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@drawable/plus"
+        app:rippleColor="@color/colorWhite" />
 
 </LinearLayout>

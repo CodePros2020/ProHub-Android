@@ -20,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.codepros.prohub.model.News;
+import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,21 +29,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-public class AddNewsActivity extends AppCompatActivity {
+public class EditNewsActivity extends AppCompatActivity {
 
     private ImageView addNewsbtn, addNewsImageView;
     private EditText newsTitleInput, newsContentInput;
     private RadioButton radioBtnAll, radioBtnManage, radioBtnTrue, radioBtnFalse;
     private Button addNewsCancelBtn, addNewsPostBtn;
 
-    private String userPhoneNum, propId, imageUrl;
+    private String userPhoneNum, propId, imageUrl, newsTitle, newsContent;
     private Uri imguri;
+
+    private int newsPosition;
+    private String newsKey;
+    private News selectedNews = new News();
+    private List<News> mNewsList = new ArrayList<>();
+    private List<String> mKeys = new ArrayList<>();
+
     private static final int REQUEST_IMAGE = 2;
     private static final String TAG = "AddNewsActivity";
 
@@ -53,7 +63,7 @@ public class AddNewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_news);
+        setContentView(R.layout.activity_edit_news);
 
         myNewsRef = FirebaseDatabase.getInstance().getReference();
         myStorageRef = FirebaseStorage.getInstance().getReference("Images");
@@ -61,6 +71,30 @@ public class AddNewsActivity extends AppCompatActivity {
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         userPhoneNum = myPref.getString("phoneNum", "");
         propId = myPref.getString("propId", "");
+
+        newsPosition = getIntent().getIntExtra("newsPosition", -1);
+        new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
+            @Override
+            public void DataIsLoad(List<News> newsList, List<String> keys) {
+                for(int i=0;i<newsList.size();i++){
+                    if(!newsList.get(i).getHideFlag()){
+                        mNewsList.add(newsList.get(i));
+                        mKeys.add(keys.get(i));
+                    }
+                }
+                if(newsPosition > -1 && mNewsList.size() > 0){
+                    selectedNews = mNewsList.get(newsPosition);
+                    newsKey = mKeys.get(newsPosition);
+
+                    if(!selectedNews.getPropId().isEmpty()){
+                        fillUpInformation();
+                    }
+                }
+                else{
+                    goBack();
+                }
+            }
+        });
 
         addNewsbtn = findViewById(R.id.addNewsbtn);
         addNewsImageView = findViewById(R.id.addNewsImageView);
@@ -95,13 +129,34 @@ public class AddNewsActivity extends AppCompatActivity {
         });
     }
 
+    private void fillUpInformation(){
+        // fill in the information to variable
+        newsTitle = selectedNews.getNewsTitle();
+        newsContent = selectedNews.getContent();
+        imageUrl = selectedNews.getImageUrl();
+        // load the input fields
+        this.newsTitleInput.setText(newsTitle);
+        this.newsContentInput.setText(newsContent);
+        // load the radio buttons
+        if(selectedNews.getHideFlag()){
+            radioBtnTrue.setChecked(true);
+        }
+        if(selectedNews.getTargetViewer().equals("all")){
+            radioBtnAll.setChecked(true);
+        }
+        // load the images
+        if(!imageUrl.isEmpty()){
+            Picasso.get().load(imageUrl).into(this.addNewsImageView);
+        }
+    }
+
     private String getExtension(Uri uri){
         ContentResolver cr = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
-    private void FileUploader() {
+    private void FileUploader(){
         final StorageReference ref = myStorageRef.child(System.currentTimeMillis()+"."+getExtension(imguri));
         try{
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imguri);
@@ -185,15 +240,14 @@ public class AddNewsActivity extends AppCompatActivity {
             if(radioBtnTrue.isChecked() && !radioBtnFalse.isChecked()){
                 hide = true;
             }
+
             SimpleDateFormat format1 = new SimpleDateFormat("MMM dd, yyyy, KK:mm a");
             String createTime = format1.format(Calendar.getInstance().getTime());
 
-            News mNews = new News(propId, userPhoneNum, title, content,imageUrl, createTime, target, hide);
+            News mNews = new News(propId, userPhoneNum, title, content, imageUrl, createTime, target, hide);
 
             // need to save to firebase
-            DatabaseReference postsRef = myNewsRef.child("news");
-            DatabaseReference newPostRef = postsRef.push();
-            newPostRef.setValue(mNews);
+            myNewsRef.child("news").child(newsKey).setValue(mNews);
             Toast.makeText(getApplicationContext(), "News saved!", Toast.LENGTH_LONG).show();
 
             // redirect to news room

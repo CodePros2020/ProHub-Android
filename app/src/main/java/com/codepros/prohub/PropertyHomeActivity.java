@@ -41,7 +41,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private Button toolbarBtnNews, newsroomButton;
     private Button toolbarBtnForms, formsButton;
     private Button toolbarBtnSettings, settingsButton;
-    private Button btnAddUnit;
+    private Button btnDashboard;
     private ImageButton toolbarBtnHome, toolbarBtnSearch;
 
     // Firebase database objects
@@ -79,7 +79,9 @@ public class PropertyHomeActivity extends AppCompatActivity {
         newsroomButton = findViewById(R.id.newsroomButton);
         formsButton = findViewById(R.id.formsButton);
         settingsButton = findViewById(R.id.settingsButton);
-        btnAddUnit = findViewById(R.id.btnAddUnit);
+        btnDashboard=findViewById(R.id.btnDashboard);
+        // Set the name of the Logged in person
+        btnDashboard.setText("PROHUB");
 
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
@@ -122,32 +124,25 @@ public class PropertyHomeActivity extends AppCompatActivity {
                 goNews(v);
             }
         });
-
-        btnAddUnit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goUnit(v);
-            }
-        });
-
         /*
         formsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goPage(v);
             }
-        });
+        }); */
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goPage(v);
+                goAddUnit(v);
             }
         });
-        */
+
+
     }
 
     public void goNews(View view) {
-        Intent intent = new Intent(this, AddNewsActivity.class);
+        Intent intent = new Intent(this, NewsViewActivity.class);
         this.startActivity(intent);
     }
 
@@ -161,8 +156,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    private void goUnit(View view) {
-        // intent to next page
+    public void goAddUnit(View view) {
         Intent intent = new Intent(this, AddUnitActivity.class);
         intent.putExtra("propId", propId);
         this.startActivity(intent);

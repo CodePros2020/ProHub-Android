@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="4dp"
+        android:orientation="vertical"
+        android:id="@+id/rootView">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:id="@+id/layout_Relative">
+
+            <TextView
+                android:id="@+id/tvHeadingNews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Testing Heading"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:padding="5dp"/>
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                android:text="2020-03-20, 5:54pm"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:layout_below="@id/tvHeadingNews"
+                android:padding="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="&#8942;"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:id="@+id/tvOptionDigit"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:padding="10dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_below="@id/tvDate"
+                android:id="@+id/layout"
+                android:layout_marginTop="10dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/news_img"
+                             android:layout_width="150dp"
+                          android:layout_height="150dp"
+                             android:layout_marginStart="10dp"
+                             android:src="@drawable/img"
+                            app:civ_border_color="#FF000000"
+                             app:civ_border_width="1dp" />
+
+                <TextView
+                    android:id="@+id/tvBodyNews"
+                    android:layout_width="205dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="this is long test Testing Description "
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:padding="10dp"
+                    />
+
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

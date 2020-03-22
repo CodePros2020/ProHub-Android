@@ -9,105 +9,97 @@
 
     <include layout="@layout/layout_toolbar"/>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/dashboardTextView"
+        <Button
+            android:id="@+id/btnDashboard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/dashboard"
+            android:layout_height="150dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="#ffffff"
+            android:drawableLeft="@drawable/dashboard"
+            android:clickable="false"
+            android:padding="24dp"
+            android:text="DashboardTest"
             android:textAlignment="center"
-            android:textSize="36sp"
-            android:translationY="20dp" />
-
-        <ImageView
-            android:id="@+id/mailImageView"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:translationX="50dp"
-            android:translationY="100dp"
-            app:srcCompat="@drawable/mail" />
-
-        <ImageView
-            android:id="@+id/newsImageView"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:translationX="50dp"
-            android:translationY="180dp"
-            app:srcCompat="@drawable/news" />
-
-        <ImageView
-            android:id="@+id/formsImageView"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:translationX="50dp"
-            android:translationY="260dp"
-            app:srcCompat="@drawable/forms" />
-
-        <ImageView
-            android:id="@+id/settingsImageView"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:translationX="50dp"
-            android:translationY="340dp"
-            app:srcCompat="@drawable/settings" />
+            android:textColor="#008577"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/chatButton"
-            android:layout_width="200dp"
-            android:layout_height="70dp"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="172dp"
+            android:layout_marginEnd="207dp"
             android:backgroundTint="#008577"
+            android:drawableTop="@drawable/question"
+            android:onClick="goChat"
+            android:padding="24dp"
             android:text="@string/chat_property_home"
+            android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
-            android:translationX="160dp"
-            android:translationY="100dp"
-            android:onClick="goChat"/>
+            android:elevation="4dp"/>
 
         <Button
             android:id="@+id/newsroomButton"
-            android:layout_width="200dp"
-            android:layout_height="70dp"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="172dp"
+            android:layout_marginEnd="29dp"
             android:backgroundTint="#008577"
+            android:drawableTop="@drawable/news"
+            android:padding="24dp"
             android:text="@string/news_property_home"
+            android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
-            android:translationX="160dp"
-            android:translationY="180dp" />
+            android:elevation="4dp"/>
 
         <Button
             android:id="@+id/formsButton"
-            android:layout_width="200dp"
-            android:layout_height="70dp"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chatButton"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="38dp"
+            android:layout_marginEnd="207dp"
             android:backgroundTint="#008577"
+            android:drawableTop="@drawable/clipboard"
+            android:elevation="4dp"
+            android:padding="24dp"
             android:text="@string/forms_property_home"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:translationX="160dp"
-            android:translationY="260dp" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/settingsButton"
-            android:layout_width="200dp"
-            android:layout_height="70dp"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/newsroomButton"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="38dp"
+            android:layout_marginEnd="27dp"
             android:backgroundTint="#008577"
+            android:drawableTop="@drawable/wheel"
+            android:elevation="4dp"
+            android:padding="24dp"
             android:text="@string/settings_property_home"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:translationX="160dp"
-            android:translationY="340dp" />
-
-        <Button
-            android:id="@+id/btnAddUnit"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:translationX="350dp"
-            android:translationY="460dp"
-            android:textSize="30sp"
-            android:text="+" />
-    </FrameLayout>
+            android:textSize="20sp" />
+    </RelativeLayout>
 
 
 

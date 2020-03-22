@@ -24,7 +24,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     private Spinner spFilter;
     private String[] filter;
     private String filterVal;
-    private int propId;
+    private String propId;
     private AppCompatAutoCompleteTextView atvSearch;
 
     private ArrayAdapter<String> searchListAdapter;
@@ -49,10 +49,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         allUnitList = new ArrayList<>();
         myUnitList = new ArrayList<>();
         searchList = new ArrayList<>();
-        propId = 1;
 
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-//        propId = myPref.getString("propId", "0");
+        propId = myPref.getString("propId", "");
 
         // set spinner
         setFilterSpinner();
@@ -81,7 +80,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
                 for (int i = 0; i < myUnitList.size(); i++) {
                     if (myUnitList.get(i).getUnitName() == selection) {
-                        String propId = Integer.toString(myUnitList.get(i).getPropId());
+                        String propId = myUnitList.get(i).getPropId();
                         String tenantId = myUnitList.get(i).getTenantId();
                         String unitName = myUnitList.get(i).getUnitName();
 
@@ -130,20 +129,5 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
         searchList.clear();
-    }
-
-    // initialize default factory values for the Unit model (one time use)
-    public void Init() {
-        for (int i = 0; i < 5; i++) {
-            int propId = i;
-            String tenantId = Integer.toString(i);
-            String unitName = "Unit " + i;
-
-            final Unit newUnit = new Unit(propId, tenantId, unitName);
-
-            DatabaseReference postsRef = myDatabaseRef.child("units");
-            DatabaseReference newPostRef = postsRef.push();
-            newPostRef.setValue(newUnit);
-        }
     }
 }

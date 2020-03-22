@@ -47,11 +47,8 @@ public class EditNewsActivity extends AppCompatActivity {
     private String userPhoneNum, propId, imageUrl, newsTitle, newsContent;
     private Uri imguri;
 
-    private int newsPosition;
     private String newsKey;
     private News selectedNews = new News();
-    private List<News> mNewsList = new ArrayList<>();
-    private List<String> mKeys = new ArrayList<>();
 
     private static final int REQUEST_IMAGE = 2;
     private static final String TAG = "AddNewsActivity";
@@ -72,23 +69,14 @@ public class EditNewsActivity extends AppCompatActivity {
         userPhoneNum = myPref.getString("phoneNum", "");
         propId = myPref.getString("propId", "");
 
-        newsPosition = getIntent().getIntExtra("newsPosition", -1);
+        newsKey = getIntent().getStringExtra("newsKey");
         new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
             @Override
             public void DataIsLoad(List<News> newsList, List<String> keys) {
-                for(int i=0;i<newsList.size();i++){
-                    if(!newsList.get(i).getHideFlag()){
-                        mNewsList.add(newsList.get(i));
-                        mKeys.add(keys.get(i));
-                    }
-                }
-                if(newsPosition > -1 && mNewsList.size() > 0){
-                    selectedNews = mNewsList.get(newsPosition);
-                    newsKey = mKeys.get(newsPosition);
-
-                    if(!selectedNews.getPropId().isEmpty()){
-                        fillUpInformation();
-                    }
+                if(!newsKey.isEmpty()){
+                    int position = keys.indexOf(newsKey);
+                    selectedNews = newsList.get(position);
+                    fillUpInformation();
                 }
                 else{
                     goBack();
@@ -140,12 +128,16 @@ public class EditNewsActivity extends AppCompatActivity {
         // load the radio buttons
         if(selectedNews.getHideFlag()){
             radioBtnTrue.setChecked(true);
+        }else{
+            radioBtnFalse.setChecked(true);
         }
         if(selectedNews.getTargetViewer().equals("all")){
             radioBtnAll.setChecked(true);
+        }else{
+            radioBtnManage.setChecked(true);
         }
         // load the images
-        if(!imageUrl.isEmpty()){
+        if(imageUrl!= null && !imageUrl.isEmpty()){
             Picasso.get().load(imageUrl).into(this.addNewsImageView);
         }
     }

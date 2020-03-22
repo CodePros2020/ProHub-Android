@@ -29,10 +29,13 @@ import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
     private List<News> listItems;
+    private List<String> listItemKeys;
     private Context context;
-    private String title, des, date, imageUrl;
-    public NewsAdapter(List<News> newsList,Context context){
+    private String title, des, date, imageUrl, myRole;
+    public NewsAdapter(List<News> newsList,List<String> listItemKeys,String myRole,Context context){
         this.listItems=newsList;
+        this.listItemKeys = listItemKeys;
+        this.myRole = myRole;
         this.context=context;
     }
 
@@ -74,21 +77,26 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
         holder.tvMenuOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Display options menu
-                PopupMenu popupMenu=new PopupMenu(context,holder.tvMenuOptions);
-                popupMenu.inflate(R.menu.options_menu);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId()==R.id.menu_item_edit){
-                            Intent newIntent = new Intent(context, EditNewsActivity.class);
-                            newIntent.putExtra("newsPosition", position);
-                            context.startActivity(newIntent);
+                if(myRole.equals("Tenant")){
+                    Toast.makeText(context,"Sorry! You do not have permission to edit news.",Toast.LENGTH_LONG).show();
+                }else{
+                    //Display options menu
+                    PopupMenu popupMenu=new PopupMenu(context,holder.tvMenuOptions);
+                    popupMenu.inflate(R.menu.options_menu);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if(item.getItemId()==R.id.menu_item_edit){
+                                Intent newIntent = new Intent(context, EditNewsActivity.class);
+                                newIntent.putExtra("newsKey", listItemKeys.get(position));
+                                context.startActivity(newIntent);
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-                popupMenu.show();
+                    });
+                    popupMenu.show();
+                }
+
             }
         });
     }

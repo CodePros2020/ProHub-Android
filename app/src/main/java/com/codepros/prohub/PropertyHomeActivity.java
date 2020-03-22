@@ -165,13 +165,14 @@ public class PropertyHomeActivity extends AppCompatActivity {
         });
 
         // NEEDS TO BE CHANGED
-        /*
+
         newsroomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goNews(v);
             }
         });
+        /*
         formsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

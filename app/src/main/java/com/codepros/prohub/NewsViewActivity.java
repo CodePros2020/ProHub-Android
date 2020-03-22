@@ -30,13 +30,12 @@ public class NewsViewActivity extends AppCompatActivity {
 
     public RecyclerView newsRecyclerView;
     public NewsAdapter newsAdapter;
-    public List<News> newsList=new ArrayList<News>();
-    private List<User> myUsers = new ArrayList<>();
+    public List<News> newsList=new ArrayList<>();
+    public List<String> newsKeyList = new ArrayList<>();
     public FloatingActionButton btn_add;
     private DatabaseReference myPropRef;
     // user role
     private String myRole;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +44,10 @@ public class NewsViewActivity extends AppCompatActivity {
 
         //Shared pref
         SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
-         myRole= sharedPreferences.getString("myRole", "");
+        myRole= sharedPreferences.getString("myRole", "");
         Log.d("Role in preference: ", "onCreate: "+myRole);
         //
         myPropRef = FirebaseDatabase.getInstance().getReference();
-
-        new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
-            @Override
-            public void DataIsLoad(List<User> users, List<String> keys) {
-                myUsers = users;
-            }
-        });
-        //
 
         btn_add=findViewById(R.id.btn_add_news);
         switch(myRole){
@@ -76,7 +67,6 @@ public class NewsViewActivity extends AppCompatActivity {
                         Toast.makeText(getBaseContext(),"Sorry! You do not have permission to create news.",Toast.LENGTH_LONG).show();
                     }
                 });
-
         }
 
 
@@ -86,20 +76,24 @@ public class NewsViewActivity extends AppCompatActivity {
 
         //Read News from database
         // read the list of News from Firebase
-
         new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
             @Override
             public void DataIsLoad(List<News> listNews, List<String> keys) {
-
+                // filter the target viewer
                 for(int i=0;i<listNews.size();i++){
-                    if((myRole.equals("Tenant")) && (listNews.get(i).getTargetViewer().equals("all"))){
-
+                    if(!listNews.get(i).getHideFlag()){
+                        if((myRole.equals("Tenant"))){
+                            if((listNews.get(i).getTargetViewer().equals("all"))){
+                                newsList.add(listNews.get(i));
+                                newsKeyList.add(keys.get(i));
+                            }
+                        }
+                        else{
                             newsList.add(listNews.get(i));
+                            newsKeyList.add(keys.get(i));
+                        }
                     }
-                    else if((myRole.equals("Landlord")) && (listNews.get(i).getTargetViewer().equals("management only"))){
 
-                            newsList.add(listNews.get(i));
-                    }
                 }
                 setNewsAdapter();
             }
@@ -107,7 +101,7 @@ public class NewsViewActivity extends AppCompatActivity {
 
     }
     private void setNewsAdapter() {
-        newsAdapter = new NewsAdapter( newsList,this);
+        newsAdapter = new NewsAdapter( newsList, newsKeyList, myRole,this);
         newsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         newsRecyclerView.setAdapter(newsAdapter);
     }

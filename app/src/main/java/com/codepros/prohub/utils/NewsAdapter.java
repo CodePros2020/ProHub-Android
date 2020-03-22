@@ -63,10 +63,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder>{
             public void onClick(View view){
                 Bundle b = new Bundle();
                 Intent newIntent=new Intent(context, DisplayNewsActivity.class);
-                b.putString("title",title);
+                b.putString("title",news.getNewsTitle());
                 b.putString("description",news.getContent());
-                b.putString("date",date);
-                b.putString("imgUrl",imageUrl);
+                b.putString("date",news.getCreateTime());
+                b.putString("imgUrl",news.getImageUrl());
                 newIntent.putExtras(b);
                 context.startActivity(newIntent);
             }

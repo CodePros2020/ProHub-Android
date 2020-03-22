@@ -31,6 +31,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddNewsActivity extends AppCompatActivity {
@@ -184,7 +185,8 @@ public class AddNewsActivity extends AppCompatActivity {
             if(radioBtnTrue.isChecked() && !radioBtnFalse.isChecked()){
                 hide = true;
             }
-            String createTime = Calendar.getInstance().getTime().toString();
+            SimpleDateFormat format1 = new SimpleDateFormat("MMM dd, yyyy, KK:mm a");
+            String createTime = format1.format(Calendar.getInstance().getTime());
 
             News mNews = new News(propId, userPhoneNum, title, content,imageUrl, createTime, target, hide);
 

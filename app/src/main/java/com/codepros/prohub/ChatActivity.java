@@ -77,6 +77,8 @@ public class ChatActivity extends AppCompatActivity {
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
     public static final String ANONYMOUS = "anonymous";
     private String mUsername;
+    private String mSenderName;
+    private String mReceiverName;
     private String mPhoneNumber;
     private String mPhotoUrl;
     private SharedPreferences mSharedPreferences;
@@ -98,16 +100,16 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
 
-    private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private static final int VIEW_TYPE_MESSAGE_RECEIVED = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        mUsername = myPref.getString("username", ANONYMOUS);
-        mPhoneNumber = myPref.getString("phoneNum","0123456789");
+        mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        mUsername = mSharedPreferences.getString("username", ANONYMOUS);
+        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
         chatMessageId = getIntent().getStringExtra("Chat_ID");
         timestamp = "2020-03-08 12:11 AM";
         //mFirebaseUser = mUsername;
@@ -128,6 +130,7 @@ public class ChatActivity extends AppCompatActivity {
                 Chat chat = snapshot.getValue(Chat.class);
                 if (chat != null) {
                     chat.setChatId(snapshot.getKey());
+                    //mUsername = chat.getFullName();
                 }
                 return chat;
             }

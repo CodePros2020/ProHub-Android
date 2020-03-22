@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.codepros.prohub.model.Property;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.itextpdf.text.Document;
@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class PropertyHomeActivity extends AppCompatActivity {
 
@@ -43,6 +42,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private Button toolbarBtnSettings, settingsButton;
     private Button btnDashboard;
     private ImageButton toolbarBtnHome, toolbarBtnSearch;
+    private FloatingActionButton btnAddUnit;
 
     // Firebase database objects
     private static final String TAG = "PropertyHomeActivity";
@@ -60,6 +60,9 @@ public class PropertyHomeActivity extends AppCompatActivity {
     // property ID
     private String propId;
 
+    // user role
+    private String myRole;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +77,16 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
         myPropRef = FirebaseDatabase.getInstance().getReference();
 
+        myRole = myPreference.getString("myRole", "");
+
         // references to the buttons on view
         chatButton = findViewById(R.id.chatButton);
         newsroomButton = findViewById(R.id.newsroomButton);
         formsButton = findViewById(R.id.formsButton);
         settingsButton = findViewById(R.id.settingsButton);
         btnDashboard=findViewById(R.id.btnDashboard);
+        btnAddUnit = findViewById(R.id.btnAddUnit);
+
         // Set the name of the Logged in person
         btnDashboard.setText("PROHUB");
 
@@ -134,11 +141,21 @@ public class PropertyHomeActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goPage(v);
+                goAddUnit(v);
             }
         });
         */
 
+        btnAddUnit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myRole.equals("Landlord")) {
+                    goAddUnit(v);
+                } else {
+                    Toast.makeText(PropertyHomeActivity.this, "You cannot add property as you are not a landlord!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void goNews(View view) {
@@ -158,6 +175,12 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     public void goSearch(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
+        this.startActivity(intent);
+    }
+
+    public void goAddUnit(View view) {
+        Intent intent = new Intent(this, AddUnitActivity.class);
+        intent.putExtra("propId", propId);
         this.startActivity(intent);
     }
 

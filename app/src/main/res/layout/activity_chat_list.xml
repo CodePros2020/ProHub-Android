@@ -8,15 +8,9 @@
     tools:context=".ChatList">
     <include layout="@layout/layout_toolbar"/>
 
-    <TextView
+     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/fullName"
-        android:id="@+id/txtTest"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"

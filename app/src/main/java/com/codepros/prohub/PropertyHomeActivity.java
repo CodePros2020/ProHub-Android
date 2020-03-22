@@ -41,6 +41,7 @@ import java.io.IOException;
 
 public class PropertyHomeActivity extends AppCompatActivity {
 
+    // Toolbar items
     private Button toolbarBtnChat, chatButton;
     private Button toolbarBtnNews, newsroomButton;
     private Button toolbarBtnForms, formsButton;
@@ -107,18 +108,31 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
         // define the actions for each button
 
+        // click CHAT button on toolbar
         toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goChat(v);
             }
         });
+
+        // click NEWS button on toolbar
         toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goNews(v);
             }
         });
+
+        // click FORMS button on toolbar
+        toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goForms(v);
+            }
+        });
+
+        // click SEARCH icon on toolbar
         toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,12 +140,8 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goChat(v);
-            }
-        });
+
+        // Menu drop down
         final PopupMenu dropDownMenu = new PopupMenu(PropertyHomeActivity.this, toolbarBtnMenu);
         final Menu menu = dropDownMenu.getMenu();
         // list of items for menu:
@@ -164,21 +174,32 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
-        // NEEDS TO BE CHANGED
 
+        // click CHAT on dashboard
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goChat(v);
+            }
+        });
+
+        // click NEWS on dashboard
         newsroomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goNews(v);
             }
         });
-        /*
+
+        // click FORMS on dashboard
         formsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goForms(v);
             }
         });
+
+
         /*
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override

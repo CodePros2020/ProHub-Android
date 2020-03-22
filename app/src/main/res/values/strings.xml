@@ -103,6 +103,7 @@
     </string-array>
     <!--Search Filter Spinner-->
     <string-array name="search_filter">
+        <item>Please select the section</item>
         <item>Chat</item>
         <item>Newsroom</item>
     </string-array>

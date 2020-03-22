@@ -20,15 +20,14 @@
 
             <TextView
                 android:id="@+id/formFileNameView"
-                android:text="@string/test_message"
-                android:maxWidth="240dp"
-                android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:textColor="#ffffff"
                 android:layout_marginTop="4dp"
-                />
+                android:layout_weight="0"
+                android:maxWidth="240dp"
+                android:padding="8dp"
+                android:text="@string/test_message"
+                android:textColor="#ffffff" />
         </LinearLayout>
 
     </LinearLayout>

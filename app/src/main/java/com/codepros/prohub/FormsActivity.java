@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -84,24 +85,6 @@ public class FormsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forms);
 
-        // upload button
-        Button btnUpload =  (Button)findViewById(R.id.btnUpload);
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Select image for image message on click.
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                // open image or pdf
-                String[] mimeTypes = {"image/*","application/pdf"};
-                intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-
-                startActivityForResult(intent, REQUEST_IMAGE);
-
-            }
-        });
-
         // get prop id from shared preference
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         mPropId = myPref.getString("propId", ANONYMOUS);
@@ -136,15 +119,14 @@ public class FormsActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull final FormViewHolder holder, int position, @NonNull Form model) {
-                holder.formFileNameView.setText("MMMMMMM");
-                Log.d("TAG", "!!!!!??????????????");
-
+                holder.formFileNameView.setText(model.getFormTitle());
+                holder.formFileNameView.setVisibility(TextView.VISIBLE);
+                holder.formFileNameView.setTextColor(Color.BLACK);
             }
 
             @NonNull
             @Override
             public FormsActivity.FormViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                Log.d("TAG", "QQQQQQQ");
 
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_form, parent, false);
@@ -164,9 +146,6 @@ public class FormsActivity extends AppCompatActivity {
                 super.onItemRangeInserted(positionStart, itemCount);
                 int chatCount = mFirebaseAdapter.getItemCount();
                 int lastVisiblePosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
-                // If the recycler view is initially being loaded or the
-                // user is at the bottom of the list, scroll to the bottom
-                // of the list to show the newly added message.
                 if (lastVisiblePosition == -1 ||
                         (positionStart >= (chatCount - 1) &&
                                 lastVisiblePosition == (positionStart - 1))) {
@@ -178,6 +157,27 @@ public class FormsActivity extends AppCompatActivity {
         Log.d("TAG", "!!!" + mFirebaseAdapter.getItemCount());
 
         mFormListRecyclerView.setAdapter(mFirebaseAdapter);
+
+
+
+        // upload button
+        Button btnUpload =  (Button)findViewById(R.id.btnUpload);
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Select image for image message on click.
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                // open image or pdf
+                String[] mimeTypes = {"image/*","application/pdf"};
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+
+                startActivityForResult(intent, REQUEST_IMAGE);
+
+            }
+        });
+
     }
 
     @Override

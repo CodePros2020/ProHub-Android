@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,8 +21,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:backgroundTint="#ffffff"
-            android:drawableLeft="@drawable/dashboard"
             android:clickable="false"
+            android:drawableLeft="@drawable/dashboard"
             android:padding="24dp"
             android:text="DashboardTest"
             android:textAlignment="center"
@@ -41,13 +41,13 @@
             android:layout_marginEnd="207dp"
             android:backgroundTint="#008577"
             android:drawableTop="@drawable/question"
+            android:elevation="4dp"
             android:onClick="goChat"
             android:padding="24dp"
             android:text="@string/chat_property_home"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:elevation="4dp"/>
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/newsroomButton"
@@ -59,12 +59,12 @@
             android:layout_marginEnd="29dp"
             android:backgroundTint="#008577"
             android:drawableTop="@drawable/news"
+            android:elevation="4dp"
             android:padding="24dp"
             android:text="@string/news_property_home"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:elevation="4dp"/>
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/formsButton"
@@ -99,8 +99,20 @@
             android:text="@string/settings_property_home"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
-    </RelativeLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/plus"
+            app:rippleColor="@color/colorWhite" />
+    </RelativeLayout>
 
 
 </LinearLayout>

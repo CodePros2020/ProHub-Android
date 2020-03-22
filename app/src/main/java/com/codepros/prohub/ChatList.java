@@ -27,7 +27,7 @@ public class ChatList extends AppCompatActivity {
         setContentView(R.layout.activity_chat_list);
 
         chatRecycler = (RecyclerView) findViewById(R.id.recyclerChatList);
-        TextView test = findViewById(R.id.txtTest);
+//        TextView test = findViewById(R.id.txtTest);
 
         // read the list of ChatMessages from Firebase
 

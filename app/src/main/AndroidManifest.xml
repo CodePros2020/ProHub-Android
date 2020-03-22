@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".FormActivity"></activity>
+        <activity android:name=".AddUnitActivity"
+            android:parentActivityName=".PropertyHomeActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".DisplayNewsActivity"
             android:parentActivityName=".NewsViewActivity" />

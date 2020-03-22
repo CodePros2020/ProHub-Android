@@ -1,23 +1,23 @@
 package com.codepros.prohub.model;
 
 public class Unit {
-    private int propId; // unique ID for property
+    private String propId; // unique ID for property
     private String tenantId; // unique ID for tenant user
     private String unitName; // building address
 
     public Unit(){ }
 
-    public Unit(int propId, String tenantId, String unitName) {
+    public Unit(String propId, String tenantId, String unitName) {
         this.propId = propId;
         this.tenantId = tenantId;
         this.unitName = unitName;
     }
 
-    public int getPropId() {
+    public String getPropId() {
         return propId;
     }
 
-    public void setPropId(int propId) {
+    public void setPropId(String propId) {
         this.propId = propId;
     }
 

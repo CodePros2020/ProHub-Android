@@ -83,7 +83,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
         toolbarBtnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
-        toolbarBtnMenu = findViewById(R.id.ImageButtonMenu); // menu
+        toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +118,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
                         // item ID 0 was clicked
                         Intent i = new Intent(PropertyHomeActivity.this, MainActivity.class);
                         i.putExtra("finish", true);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
                         startActivity(i);
                         FirebaseAuth.getInstance().signOut();
                         finish();
@@ -128,6 +128,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
+        // Menu button click
         toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

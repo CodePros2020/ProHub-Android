@@ -49,6 +49,9 @@ public class NewsViewActivity extends AppCompatActivity {
         Log.d("Role in preference: ", "onCreate: "+myRole);
         //
         myPropRef = FirebaseDatabase.getInstance().getReference();
+
+//        myRole = myPreference.getString("myRole", "");
+
         //
         new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
             @Override

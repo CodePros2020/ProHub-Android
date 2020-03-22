@@ -45,7 +45,7 @@ public class NewsViewActivity extends AppCompatActivity {
         //
         myPropRef = FirebaseDatabase.getInstance().getReference();
 
-        myRole = myPreference.getString("myRole", "");
+//        myRole = myPreference.getString("myRole", "");
 
         //
 

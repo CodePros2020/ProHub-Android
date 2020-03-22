@@ -50,9 +50,6 @@ public class NewsViewActivity extends AppCompatActivity {
         //
         myPropRef = FirebaseDatabase.getInstance().getReference();
 
-//        myRole = myPreference.getString("myRole", "");
-
-        //
         new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
             @Override
             public void DataIsLoad(List<User> users, List<String> keys) {

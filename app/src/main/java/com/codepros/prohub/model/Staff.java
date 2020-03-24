@@ -1,7 +1,7 @@
 package com.codepros.prohub.model;
 
 public class Staff {
-    private int staffId;
+    private String staffId;
     private String propId;
     private String name;
     private String phoneNum;
@@ -13,8 +13,8 @@ public class Staff {
     private String ImgUrl;
 
 public Staff(){}
-    public Staff( String propId, String name, String phoneNum, String address, String postalCode, String city, String email, String role, String imgUrl) {
-       ++staffId;
+    public Staff( String staffId,String propId, String name, String phoneNum, String address, String postalCode, String city, String email, String role, String imgUrl) {
+        this.staffId=staffId;
         this.propId = propId;
         this.name = name;
         this.phoneNum = phoneNum;
@@ -60,10 +60,12 @@ public Staff(){}
         this.city = city;
     }
 
-    public int getStaffId() {
+    public String getStaffId() {
         return staffId;
     }
-
+    public void setStaffId(String staffId) {
+        this.staffId=staffId;
+    }
 
     public String getPhoneNum() {
         return phoneNum;

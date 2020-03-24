@@ -48,9 +48,6 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_staff,parent,false);
         return new ViewHolder(view);
     }
-    public void deleteItem(int position){
-       // getSnapshots.getSnapshot(position).getReference().detele();
-    }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {

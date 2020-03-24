@@ -27,8 +27,11 @@ import com.codepros.prohub.utils.NewsAdapter;
 import com.codepros.prohub.utils.StaffAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +51,7 @@ public class ViewStaffActivity extends AppCompatActivity {
     public List<String> staffKeyList = new ArrayList<>();
     public FloatingActionButton btn_add;
     private DatabaseReference myStaffRef;
+    DatabaseReference drStaff;
 
     String propId;
     // user role
@@ -151,7 +155,7 @@ public class ViewStaffActivity extends AppCompatActivity {
         myRole= sharedPreferences.getString("myRole", "");
         Log.d("Role in preference: ", "onCreate: "+myRole);
         //
-        myStaffRef = FirebaseDatabase.getInstance().getReference("staff");
+        myStaffRef = FirebaseDatabase.getInstance().getReference();
         //Add button functionality
         btn_add=findViewById(R.id.btn_add_staff);
 
@@ -181,6 +185,7 @@ public class ViewStaffActivity extends AppCompatActivity {
         });
 
     }
+
     private void setNewsAdapter() {
         staffAdapter = new StaffAdapter( staffList,staffKeyList, myRole,this);
         staffRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -221,10 +226,17 @@ public class ViewStaffActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            Log.d("Item Postion", "onSwiped iTE POSITION: "+viewHolder.getItemId());
+
+            Log.d("Item Postion", "onSwiped Position: "+viewHolder.getAdapterPosition());
+
+            Staff staff=staffList.get(viewHolder.getAdapterPosition());
             staffList.remove(viewHolder.getAdapterPosition());
-           // myStaffRef.child(viewHolder.getAdapterPosition());
-            staffAdapter.notifyDataSetChanged();
+            drStaff=FirebaseDatabase.getInstance().getReference("staff").child(staff.getStaffId());
+            Log.d("Item Postion", "onSwiped Staff id: "+staff.getStaffId());
+            Log.d("Item Postion1", "onSwiped dr Staff: "+drStaff);
+            drStaff.removeValue();
+            staffAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+           // staffAdapter.notifyDataSetChanged();
             Toast.makeText(getBaseContext(),"Staff deleted successfully",Toast.LENGTH_LONG).show();
         }
     };

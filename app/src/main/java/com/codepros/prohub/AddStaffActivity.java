@@ -62,7 +62,7 @@ public class AddStaffActivity extends AppCompatActivity {
         Intent intent=getIntent();
         propId=intent.getStringExtra("propId");
         //
-        myStaffRef = FirebaseDatabase.getInstance().getReference();
+        myStaffRef = FirebaseDatabase.getInstance().getReference("staff");
         myStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
@@ -216,15 +216,20 @@ public class AddStaffActivity extends AppCompatActivity {
             String message = "Sorry, role cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-
+        else if(imageUrl.isEmpty()){
+            String message = "Please choose an image!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
         else{
             Log.d("Imahe Url", "addStaff: Image Url"+imageUrl);
-            Staff staff = new Staff(propId,name,phone,address,postal,city,email,role,imageUrl);
-
+            String staffId = myStaffRef.push().getKey();
+            Staff staff = new Staff(staffId,propId,name,phone,address,postal,city,email,role,imageUrl);
             // need to save to firebase
-            DatabaseReference postsRef = myStaffRef.child("staff");
-            DatabaseReference newPostRef = postsRef.push();
-            newPostRef.setValue(staff);
+            myStaffRef.child(staffId).setValue(staff);
+
+//            DatabaseReference postsRef = myStaffRef.child("staff");
+//            DatabaseReference newPostRef = postsRef.push();
+//            newPostRef.setValue(staff);
             Toast.makeText(getApplicationContext(), staff.getName()+" is saved!", Toast.LENGTH_LONG).show();
 
             // redirect to Staff list View

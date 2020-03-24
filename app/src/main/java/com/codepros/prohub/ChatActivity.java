@@ -46,6 +46,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
@@ -62,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
         TextView messageTextView;
         ImageView messageImageView;
         TextView messengerTextView;
+        TextView timeTextView;
         CircleImageView messengerImageView;
         LinearLayout layoutSender;
         LinearLayout layoutReceiver;
@@ -75,12 +81,14 @@ public class ChatActivity extends AppCompatActivity {
                 messageImageView = (ImageView) itemView.findViewById(R.id.messageImageView);
                 messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
                 messengerImageView = (CircleImageView) itemView.findViewById(R.id.messengerImageView);
+                timeTextView = (TextView) itemView.findViewById(R.id.text_message_time);
             } else {
                 //layoutReceiver = (LinearLayout) itemView.findViewById(R.id.layoutReceiver);
                 messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
                 messageImageView = (ImageView) itemView.findViewById(R.id.messageImageView);
                 messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
                 messengerImageView = (CircleImageView) itemView.findViewById(R.id.messengerImageView);
+                timeTextView = (TextView) itemView.findViewById(R.id.text_message_time);
             }
         }
     }
@@ -205,11 +213,13 @@ public class ChatActivity extends AppCompatActivity {
         mUsername = mSharedPreferences.getString("username", ANONYMOUS);
         mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
         chatMessageId = getIntent().getStringExtra("Chat_ID");
-        timestamp = "2020-03-08 12:11 AM";
-        //mFirebaseUser = mUsername;
+
+        DateFormat dateFormat = new SimpleDateFormat("MMM dd, hh:mm a");
+        Date now = Calendar.getInstance().getTime();
+        timestamp = dateFormat.format(now);
 
         // Initialize ProgressBar and RecyclerView.
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
@@ -231,7 +241,7 @@ public class ChatActivity extends AppCompatActivity {
         };
 
 //        DatabaseReference chatRef = mFirebaseDatabaseReference.child(CHAT_CHILD).equalTo(chatMessageId);
-        Query chatRef = mFirebaseDatabaseReference.child(CHAT_CHILD).orderByChild("chatMessageId").equalTo(chatMessageId);;
+        Query chatRef = mFirebaseDatabaseReference.child(CHAT_CHILD).orderByChild("chatMessageId").equalTo(chatMessageId);
 
         final FirebaseRecyclerOptions<Chat> options =
                 new FirebaseRecyclerOptions.Builder<Chat>()
@@ -261,9 +271,10 @@ public class ChatActivity extends AppCompatActivity {
                 {
                     case 0:
                     {
-                        mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                         if (model.getMessage() != null) {
                             holder.messageTextView.setText(model.getMessage());
+                            holder.timeTextView.setText(model.getTimestamp());
                             holder.messageTextView.setVisibility(TextView.VISIBLE);
                             holder.messageImageView.setVisibility(ImageView.GONE);
                         } else if (model.getImageUrl() != null) {
@@ -308,11 +319,12 @@ public class ChatActivity extends AppCompatActivity {
                     break;
                     case 1:
                     {
-                        mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                        //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                         if (model.getMessage() != null) {
                             holder.messageTextView.setText(model.getMessage());
                             holder.messageTextView.setVisibility(TextView.VISIBLE);
                             holder.messageImageView.setVisibility(ImageView.GONE);
+                            holder.timeTextView.setText(model.getTimestamp());
                         } else if (model.getImageUrl() != null) {
                             String imageUrl = model.getImageUrl();
                             if (imageUrl.startsWith("gs://")) {

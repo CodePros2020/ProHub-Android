@@ -3,6 +3,7 @@ package com.codepros.prohub.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +17,30 @@ import com.codepros.prohub.ChatActivity;
 import com.codepros.prohub.R;
 import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.ChatMessage;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
     List<ChatMessage> chatList;
     Context context;
+    private DatabaseReference myDataRef;
+    private List<Chat> latestChat;
+    String theLastMessage;
+    String theLastTimeStamp;
 
     public ChatAdapter(Context context, List<ChatMessage> chats)
     {
         this.chatList = chats;
         this.context = context;
+        //this.latestChat = latestChat;
     }
 
     @NonNull
@@ -45,15 +58,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ChatHolder holder, int position)
     {
-        ChatMessage chat = chatList.get(position);
+        final ChatMessage chat = chatList.get(position);
+
         holder.txtSenderFullName.setText(chat.getSenderName());
 
-        String lastMessage = chat.getSenderNumber();
-        if (lastMessage.length() > 20) {
-            lastMessage = lastMessage.substring(0,20);
-    }
-        holder.txtLastMessage.setText(lastMessage);
-        holder.txtTimeDateSent.setText(chat.getChatMessageId());
+        lastMessage(chat.getChatMessageId(), holder.txtLastMessage, holder.txtTimeDateSent);
+
         holder.onChatClickListener = new OnChatClickListener() {
             @Override
             public void onChatClick(View v, int position) {
@@ -98,5 +108,48 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
                 }
             });
         }
+    }
+
+    private void lastMessage(final String chatMessageId, final TextView last_msg, final TextView last_timestamp) {
+        theLastMessage = "default";
+        theLastTimeStamp = "defaultTimeStamp";
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("chat");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getChatMessageId().equals(chatMessageId)) {
+                        theLastMessage = chat.getMessage();
+                        theLastTimeStamp = chat.getTimestamp();
+                    }
+                }
+
+                if (theLastMessage.length() > 20) {
+                    theLastMessage = theLastMessage.substring(0,20);
+                }
+
+                switch (theLastMessage) {
+                    case "default":
+                        last_msg.setText("No message");
+                        last_timestamp.setText(" ");
+                        break;
+
+                    default:
+                        last_msg.setText(theLastMessage + "...");
+                        last_timestamp.setText(theLastTimeStamp);
+                        break;
+                }
+
+                theLastMessage = "default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

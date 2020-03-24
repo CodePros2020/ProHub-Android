@@ -118,4 +118,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_news_list">NewsListActivity</string>
     <string name="update_news">Update News</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="e_g_superintendent">e.g Superintendent</string>
 </resources>

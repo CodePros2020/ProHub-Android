@@ -1,10 +1,13 @@
 package com.codepros.prohub.utils;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.model.Property;
+import com.codepros.prohub.model.Staff;
 import com.codepros.prohub.model.Unit;
 import com.codepros.prohub.model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +25,7 @@ public class FirebaseDataseHelper {
     private DatabaseReference myPropRef;
     private DatabaseReference myUnitRef;
     private DatabaseReference myNewsRef;
+    private DatabaseReference myStaffRef;
     private DatabaseReference myChatMessageRef;
 
     // list of data
@@ -30,6 +34,7 @@ public class FirebaseDataseHelper {
     private List<Unit> units = new ArrayList<>();
     private List<ChatMessage> chatMessages = new ArrayList<>();
     private List<News> newsList = new ArrayList<>();
+    private List<Staff> staffList = new ArrayList<>();
 
     // interface to load User database
     public interface UserDataStatus{
@@ -55,6 +60,10 @@ public class FirebaseDataseHelper {
     public interface NewsDataStatus{
         void DataIsLoad(List<News> newsList, List<String> keys);
     }
+    // interface to load Staff database
+    public interface StaffDataStatus{
+        void DataIsLoad(List<Staff> staffList, List<String> keys);
+    }
 
     public FirebaseDataseHelper(){
         myDatabase = FirebaseDatabase.getInstance();
@@ -63,6 +72,7 @@ public class FirebaseDataseHelper {
         myUnitRef = myDatabase.getReference("units");
         myNewsRef = myDatabase.getReference("news");
         myChatMessageRef = myDatabase.getReference("chatMessages");
+        myStaffRef = myDatabase.getReference("staff");
     }
 
     public void readUsers(final UserDataStatus dataStatus){
@@ -170,4 +180,25 @@ public class FirebaseDataseHelper {
             }
         });
     }
+    public void readStaff(final StaffDataStatus staffDataStatus){
+        myStaffRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                staffList.clear();
+                List<String> keys = new ArrayList<>();
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    keys.add(keyNode.getKey());
+                   Staff staff = keyNode.getValue(Staff.class);
+                    staffList.add(staff);
+                }
+                staffDataStatus.DataIsLoad(staffList, keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
 }

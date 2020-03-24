@@ -56,44 +56,44 @@ public class AddNewsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_news);
 
         myNewsRef = FirebaseDatabase.getInstance().getReference();
-        myStorageRef = FirebaseStorage.getInstance().getReference("Images");
+    myStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
-        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        userPhoneNum = myPref.getString("phoneNum", "");
-        propId = myPref.getString("propId", "");
+    SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+    userPhoneNum = myPref.getString("phoneNum", "");
+    propId = myPref.getString("propId", "");
 
-        addNewsbtn = findViewById(R.id.addNewsbtn);
-        addNewsImageView = findViewById(R.id.addNewsImageView);
-        newsTitleInput = findViewById(R.id.newsTitleInput);
-        newsContentInput = findViewById(R.id.newsContentInput);
-        radioBtnAll = findViewById(R.id.radioBtnAll);
-        radioBtnManage = findViewById(R.id.radioBtnManage);
-        radioBtnTrue = findViewById(R.id.radioBtnTrue);
-        radioBtnFalse = findViewById(R.id.radioBtnFalse);
-        addNewsCancelBtn = findViewById(R.id.addNewsCancelBtn);
-        addNewsPostBtn = findViewById(R.id.addNewsPostBtn);
+    addNewsbtn = findViewById(R.id.addNewsbtn);
+    addNewsImageView = findViewById(R.id.addNewsImageView);
+    newsTitleInput = findViewById(R.id.newsTitleInput);
+    newsContentInput = findViewById(R.id.newsContentInput);
+    radioBtnAll = findViewById(R.id.radioBtnAll);
+    radioBtnManage = findViewById(R.id.radioBtnManage);
+    radioBtnTrue = findViewById(R.id.radioBtnTrue);
+    radioBtnFalse = findViewById(R.id.radioBtnFalse);
+    addNewsCancelBtn = findViewById(R.id.addNewsCancelBtn);
+    addNewsPostBtn = findViewById(R.id.addNewsPostBtn);
 
         addNewsbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fileChooser();
-            }
-        });
+        @Override
+        public void onClick(View v) {
+            fileChooser();
+        }
+    });
 
         addNewsCancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goBack();
-            }
-        });
+        @Override
+        public void onClick(View v) {
+            goBack();
+        }
+    });
 
         addNewsPostBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNews(v);
-            }
-        });
-    }
+        @Override
+        public void onClick(View v) {
+            addNews(v);
+        }
+    });
+}
 
     private String getExtension(Uri uri){
         ContentResolver cr = getContentResolver();

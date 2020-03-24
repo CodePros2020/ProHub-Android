@@ -11,8 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FormsActivity"></activity>
-        <activity android:name=".AddUnitActivity"
+        <activity android:name=".AddStaffActivity"></activity>
+        <activity android:name=".UpdateStaffActivity" />
+        <activity android:name=".DisplayStaffActivity" />
+        <activity android:name=".ViewStaffActivity" />
+        <activity android:name=".FormsActivity" />
+        <activity
+            android:name=".AddUnitActivity"
             android:parentActivityName=".PropertyHomeActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity

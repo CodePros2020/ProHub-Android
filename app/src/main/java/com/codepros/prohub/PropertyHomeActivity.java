@@ -140,6 +140,14 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
+        // click Settings icon on toolbar
+        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSettings(v);
+            }
+        });
+
 
         // Menu drop down
         final PopupMenu dropDownMenu = new PopupMenu(PropertyHomeActivity.this, toolbarBtnMenu);
@@ -200,14 +208,14 @@ public class PropertyHomeActivity extends AppCompatActivity {
         });
 
 
-        /*
+
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goAddUnit(v);
+                goSettings(v);
             }
         });
-        */
+
 
         btnAddUnit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,6 +251,11 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
     public void goAddUnit(View view) {
         Intent intent = new Intent(this, AddUnitActivity.class);
+        intent.putExtra("propId", propId);
+        this.startActivity(intent);
+    }
+    public void goSettings(View view) {
+        Intent intent = new Intent(this, ViewStaffActivity.class);
         intent.putExtra("propId", propId);
         this.startActivity(intent);
     }

@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textSize="36sp"
+        android:textSize="32sp"
         android:text="@string/list_of_your_properties" />
 
     <ListView

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.model.Unit;
 import com.codepros.prohub.model.User;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
@@ -24,9 +25,12 @@ public class AddUnitActivity extends AppCompatActivity {
     private static final String TAG = "AddUnitActivity";
     // user interaction objects
     private EditText etUnitName, etTenantNumber;
-    private String propId, unitName, tenantNumber;
+    private String propId, unitName, tenantNumber, tenantName, landlordName, landlordPhoneNumber;
+    private String chatMessageId;
     private Button btnSaveUnit;
     private List<User> userList;
+    public static final String ANONYMOUS = "anonymous";
+    SharedPreferences myPref;
 
     // firebase database objects
     private DatabaseReference myDataRef;
@@ -37,8 +41,10 @@ public class AddUnitActivity extends AppCompatActivity {
 
         myDataRef = FirebaseDatabase.getInstance().getReference();
 
-        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         propId = myPref.getString("propId", "");
+        landlordName = myPref.getString("username", ANONYMOUS);
+        landlordPhoneNumber = myPref.getString("phoneNum","0123456789");
 
         etUnitName = findViewById(R.id.etUnitName);
         etTenantNumber = findViewById(R.id.etTenantNumber);
@@ -73,6 +79,8 @@ public class AddUnitActivity extends AppCompatActivity {
                 tenantExist = true;
                 if (u.getRole().equals("Tenant")) {
                     isTenant = true;
+                    tenantName = u.getFirstname() + " " + u.getLastname();
+                    chatMessageId = landlordPhoneNumber + "_" + tenantNumber;
                 }
             }
         }
@@ -100,6 +108,14 @@ public class AddUnitActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         } else {
             Unit newUnit = new Unit(propId, tenantNumber, unitName);
+            ChatMessage newChatMessage1 = new ChatMessage(chatMessageId, tenantNumber, landlordPhoneNumber, landlordName);
+            ChatMessage newChatMessage2 = new ChatMessage(chatMessageId, landlordPhoneNumber, tenantNumber, tenantName);
+
+            DatabaseReference chatRef = myDataRef.child("chatMessages");
+            DatabaseReference newChatRef1 = chatRef.push();
+            DatabaseReference newChatRef2 = chatRef.push();
+            newChatRef1.setValue(newChatMessage1);
+            newChatRef2.setValue(newChatMessage2);
 
             DatabaseReference postsRef = myDataRef.child("units");
             DatabaseReference newPostRef = postsRef.push();

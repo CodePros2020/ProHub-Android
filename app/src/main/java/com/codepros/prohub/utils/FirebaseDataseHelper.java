@@ -2,6 +2,7 @@ package com.codepros.prohub.utils;
 
 import androidx.annotation.NonNull;
 
+import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.model.Property;
@@ -11,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class FirebaseDataseHelper {
     private DatabaseReference myUnitRef;
     private DatabaseReference myNewsRef;
     private DatabaseReference myChatMessageRef;
+    private DatabaseReference myChatRef;
 
     // list of data
     private List<User> users = new ArrayList<>();
@@ -30,6 +33,7 @@ public class FirebaseDataseHelper {
     private List<Unit> units = new ArrayList<>();
     private List<ChatMessage> chatMessages = new ArrayList<>();
     private List<News> newsList = new ArrayList<>();
+    private List<Chat> chats = new ArrayList<>();
 
     // interface to load User database
     public interface UserDataStatus{
@@ -51,6 +55,11 @@ public class FirebaseDataseHelper {
         void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys);
     }
 
+    // interface to load Chat database
+    public interface ChatDataStatus{
+        void DataIsLoad(List<Chat> chats, List<String> keys);
+    }
+
     // interface to load News database
     public interface NewsDataStatus{
         void DataIsLoad(List<News> newsList, List<String> keys);
@@ -63,6 +72,7 @@ public class FirebaseDataseHelper {
         myUnitRef = myDatabase.getReference("units");
         myNewsRef = myDatabase.getReference("news");
         myChatMessageRef = myDatabase.getReference("chatMessages");
+        myChatRef = myDatabase.getReference("chat");
     }
 
     public void readUsers(final UserDataStatus dataStatus){
@@ -162,6 +172,27 @@ public class FirebaseDataseHelper {
                     chatMessages.add(chatMessage);
                 }
                 chatMessageDataStatus.DataIsLoad(chatMessages, keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    public void readChats(final ChatDataStatus chatDataStatus){
+        myChatRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chats.clear();
+                List<String> keys = new ArrayList<>();
+                for(DataSnapshot keyNode : dataSnapshot.getChildren()){
+                    keys.add(keyNode.getKey());
+                    Chat chat = keyNode.getValue(Chat.class);
+                    chats.add(chat);
+                }
+                chatDataStatus.DataIsLoad(chats, keys);
             }
 
             @Override

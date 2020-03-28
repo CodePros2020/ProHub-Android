@@ -16,7 +16,7 @@
         android:text="@string/create_news"
         android:textAlignment="center"
         android:paddingBottom="10dp"
-        android:textSize="30sp" />
+        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,17 +48,26 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="80dp"
             android:paddingLeft="10dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
 
             <ImageView
                 android:id="@+id/addNewsbtn"
-                android:layout_width="0dp"
+                android:layout_width="125dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/uploadimg" />
+                android:layout_gravity="center"
+                android:autofillHints="Upload Image"
+                app:srcCompat="@drawable/uploadimg"  />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textDim"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="Wait few seconds for image to be uploaded."/>
 
         </LinearLayout>
 
@@ -99,44 +108,44 @@
             </RadioGroup>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:orientation="horizontal">-->
 
-            <TextView
-                android:id="@+id/newsHideTextView"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:padding="10dp"
-                android:text="@string/hide_news"
-                android:textAlignment="textEnd"
-                android:textSize="20sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/newsHideTextView"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:padding="10dp"-->
+<!--                android:text="@string/hide_news"-->
+<!--                android:textAlignment="textEnd"-->
+<!--                android:textSize="20sp" />-->
 
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+<!--            <RadioGroup-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="horizontal">-->
 
-                <RadioButton
-                    android:id="@+id/radioBtnTrue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="@string/hideTrue" />
+<!--                <RadioButton-->
+<!--                    android:id="@+id/radioBtnTrue"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/hideTrue" />-->
 
-                <RadioButton
-                    android:id="@+id/radioBtnFalse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:text="@string/hideFalse" />
-            </RadioGroup>
-        </LinearLayout>
+<!--                <RadioButton-->
+<!--                    android:id="@+id/radioBtnFalse"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:checked="true"-->
+<!--                    android:text="@string/hideFalse" />-->
+<!--            </RadioGroup>-->
+<!--        </LinearLayout>-->
     </LinearLayout>
 
     <LinearLayout
@@ -144,6 +153,7 @@
         android:layout_height="0dp"
         android:orientation="horizontal"
         android:layout_weight="1"
+        android:layout_margin="10dp"
         tools:context=".AddPropertyActivity">
 
         <Button
@@ -163,6 +173,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:textColor="#fff"
+            android:layout_marginStart="5dp"
             android:background="@drawable/button_background"
             android:text="@string/post" />
 

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.model.Staff;
+import com.codepros.prohub.model.Unit;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.utils.NewsAdapter;
 import com.codepros.prohub.utils.StaffAdapter;
@@ -138,6 +139,7 @@ public class ViewStaffActivity extends AppCompatActivity {
                         else{
                             Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
                             startActivity(intent);
+                            finish();
                             return true;
                         }
                     case 1:
@@ -147,6 +149,7 @@ public class ViewStaffActivity extends AppCompatActivity {
                         else{
                             Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
                             startActivity(intent);
+                            finish();
                             return true;
                         }
 
@@ -188,16 +191,22 @@ public class ViewStaffActivity extends AppCompatActivity {
         myStaffRef = FirebaseDatabase.getInstance().getReference();
         //Add button functionality
         Log.d("Prop: ", "Property Id"+propId);
-        btn_add=findViewById(R.id.btn_add_staff);
+        if(myRole.equals("Tenant")){
+            Toast.makeText(getApplicationContext(),"Sorry! You do not have permission to edit staff.",Toast.LENGTH_LONG).show();
+        }
+        else{
+            btn_add=findViewById(R.id.btn_add_staff);
 
-                btn_add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent addIntent=new Intent(getBaseContext(),AddStaffActivity.class);
-                        addIntent.putExtra("propId",propId);
-                        startActivity(addIntent);
-                    }
-                });
+            btn_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent addIntent=new Intent(getBaseContext(),AddStaffActivity.class);
+                    addIntent.putExtra("propId",propId);
+                    startActivity(addIntent);
+                }
+            });
+        }
+
         // Staff recycler view
         staffRecyclerView =findViewById(R.id.staffRecyclerView);
         staffRecyclerView.setHasFixedSize(true);
@@ -208,14 +217,22 @@ public class ViewStaffActivity extends AppCompatActivity {
         new FirebaseDataseHelper().readStaff(new FirebaseDataseHelper.StaffDataStatus() {
             @Override
             public void DataIsLoad(List<Staff> listStaff, List<String> keys) {
+                staffList.clear();
+                for (Staff staff : listStaff) {
+                    if (staff.getPropId().equals(propId)) {
+                        staffList.add(staff);
+                    }
+                }
                 // filter the target viewer
-                staffList=listStaff;
-                staffKeyList=keys;
+                //
+                staffKeyList = keys;
                 setNewsAdapter();
             }
-        });
 
-    }
+                });
+        }
+
+
 
     private void setNewsAdapter() {
         staffAdapter = new StaffAdapter( staffList,staffKeyList, myRole,this);
@@ -248,7 +265,6 @@ public class ViewStaffActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback=new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -257,16 +273,19 @@ public class ViewStaffActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            if(myRole.equals("Tenant")){
+                Toast.makeText(getApplicationContext(),"Sorry! You do not have permission to delete staff.",Toast.LENGTH_LONG).show();
+            }
+            else{
+                Staff staff=staffList.get(viewHolder.getAdapterPosition());
+                staffList.remove(viewHolder.getAdapterPosition());
+                drStaff=FirebaseDatabase.getInstance().getReference("staff").child(staff.getStaffId());
+                drStaff.removeValue();
+                staffAdapter.notifyDataSetChanged();
 
-            Log.d("Item Postion", "onSwiped Position: "+viewHolder.getAdapterPosition());
+                Toast.makeText(getBaseContext(),"Staff deleted successfully",Toast.LENGTH_LONG).show();
+            }
 
-            Staff staff=staffList.get(viewHolder.getAdapterPosition());
-            staffList.remove(viewHolder.getAdapterPosition());
-            drStaff=FirebaseDatabase.getInstance().getReference("staff").child(staff.getStaffId());
-            drStaff.removeValue();
-            staffAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
-           // staffAdapter.notifyDataSetChanged();
-            Toast.makeText(getBaseContext(),"Staff deleted successfully",Toast.LENGTH_LONG).show();
         }
     };
 }

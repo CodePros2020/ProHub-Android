@@ -107,9 +107,7 @@
          android:id="@+id/spProvince"
          android:layout_width="match_parent"
          android:layout_height="50dp"
-         android:layout_marginStart="10dp"
          android:layout_weight="1"
-
          />
     <EditText
         android:id="@+id/etRole"
@@ -124,17 +122,25 @@
         android:typeface="sans" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="80dp"
         android:paddingLeft="10dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/addStaffbtn"
-            android:layout_width="0dp"
+            android:layout_width="125dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:srcCompat="@drawable/uploadimg"
-            android:autofillHints="Upload Image"/>
+            android:layout_gravity="center"
+            android:autofillHints="Upload Image"
+            app:srcCompat="@drawable/uploadimg" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textDim"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="Wait few seconds for image to be uploaded."/>
     </LinearLayout>
     </LinearLayout>
 
@@ -145,18 +151,40 @@
         android:layout_weight="1"
         tools:context=".AddStaffActivity">
 
+<!--        <Button-->
+<!--            android:id="@+id/addStaffCancelBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:textColor="@color/colorWhite"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:background="@color/colorPrimary"-->
+<!--            android:text="@string/cancel"-->
+<!--            android:textSize="16sp"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/addStaffPostBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:textColor="@color/colorWhite"-->
+<!--            android:background="@color/colorPrimary"-->
+<!--            android:text="Add"-->
+<!--            android:textSize="16sp"/>-->
         <Button
             android:id="@+id/addStaffCancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:textColor="@color/colorWhite"
             android:layout_weight="1"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/cancel"
-            android:textSize="16sp"/>
+            android:textColor="#fff"
+            android:background="@drawable/button_background"
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/addStaffPostBtn"
@@ -164,12 +192,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorPrimary"
-            android:text="Add"
-            android:textSize="16sp"/>
+            android:textColor="#fff"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/button_background"
+            android:text="@string/post" />
 
     </LinearLayout>
 

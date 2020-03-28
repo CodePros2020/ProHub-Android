@@ -113,6 +113,7 @@ public class UpdateUnitActivity extends AppCompatActivity {
                         else{
                             Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
                             startActivity(intent);
+                            finish();
                             return true;
                         }
                     case 1:
@@ -122,6 +123,7 @@ public class UpdateUnitActivity extends AppCompatActivity {
                         else{
                             Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
                             startActivity(intent);
+                            finish();
                             return true;
                         }
 

@@ -79,9 +79,9 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
         holder.tvMenuOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(myRole.equals("Tenant")){
-//                    Toast.makeText(context,"Sorry! You do not have permission to edit news.",Toast.LENGTH_LONG).show();
-//                }else{
+                if(myRole.equals("Tenant")){
+                    Toast.makeText(context,"Sorry! You do not have permission to edit staff.",Toast.LENGTH_LONG).show();
+                }else{
                     //Display options menu
                     PopupMenu popupMenu=new PopupMenu(context,holder.tvMenuOptions);
                     popupMenu.inflate(R.menu.staff_options_menu);
@@ -98,7 +98,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
                     popupMenu.show();
                 }
 
-//            }
+           }
         });
     }
 

@@ -146,6 +146,7 @@ public class ViewUnitsActivity extends AppCompatActivity {
                         else{
                             Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
                             startActivity(intent);
+                            finish();
                             return true;
                         }
                     case 1:
@@ -155,6 +156,7 @@ public class ViewUnitsActivity extends AppCompatActivity {
                         else{
                             Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
                             startActivity(intent);
+                            finish();
                             return true;
                         }
 
@@ -179,13 +181,19 @@ public class ViewUnitsActivity extends AppCompatActivity {
                 dropDownMenu.show();
             }
         });
-        btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), AddUnitActivity.class);
-                startActivity(intent);
-            }
-        });
+        if(myRole.equals("Tenant")){
+            Toast.makeText(getApplicationContext(),"Sorry! You do not have permission to add unit.",Toast.LENGTH_LONG).show();
+        }
+        else{
+            btn_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getBaseContext(), AddUnitActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
         //////////////////////////////////////////////
 
         tvTitleUnit=findViewById(R.id.tvTitleUnit);
@@ -203,10 +211,17 @@ public class ViewUnitsActivity extends AppCompatActivity {
         //Read News from database
         // read the list of News from Firebase
         new FirebaseDataseHelper().readUnits(new FirebaseDataseHelper.UnitDataStatus() {
+
             @Override
             public void DataIsLoad(List<Unit> listUnits, List<String> keys) {
+                unitList.clear();
+                for(Unit unit:listUnits){
+                    if(unit.getPropId().equals(propId)){
+                        unitList.add(unit);
+                    }
+                }
                 // filter the target viewer
-                unitList=listUnits;
+                //unitList=listUnits;
                 unitKeyList=keys;
                 setUnitsAdapter();
             }
@@ -256,15 +271,20 @@ public class ViewUnitsActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
-            Log.d("Item Postion", "onSwiped Position: "+viewHolder.getAdapterPosition());
+            if(myRole.equals("Tenant")){
+                Toast.makeText(getApplicationContext(),"Sorry! You do not have permission to delete unit.",Toast.LENGTH_LONG).show();
+            }
+            else{
+                Unit unit=unitList.get(viewHolder.getAdapterPosition());
+                unitList.remove(viewHolder.getAdapterPosition());
+                drUnits=FirebaseDatabase.getInstance().getReference("units").child(unit.getUnitId());
+                drUnits.removeValue();
+                unitAdapter.notifyDataSetChanged();
 
-            Unit unit=unitList.get(viewHolder.getAdapterPosition());
-            unitList.remove(viewHolder.getAdapterPosition());
-            drUnits=FirebaseDatabase.getInstance().getReference("units").child(unit.getUnitId());
-           // drUnits.removeValue();
-            unitAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
-            // staffAdapter.notifyDataSetChanged();
-            Toast.makeText(getBaseContext(),"Unit deleted successfully",Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(),"Unit deleted successfully",Toast.LENGTH_LONG).show();
+            }
+
+
         }
     };
 }

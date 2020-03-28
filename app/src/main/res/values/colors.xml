@@ -6,4 +6,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorButtonProperty"> #586f7c</color>
     <color name="normalBackground">#FAFAFA</color>
+    <color name="btnBackground">#b8dbd9</color>
 </resources>

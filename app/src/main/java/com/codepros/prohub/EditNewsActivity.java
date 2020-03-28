@@ -44,20 +44,16 @@ import java.util.List;
 
 public class EditNewsActivity extends AppCompatActivity {
 
-    // Toolbar items
-    private Button toolbarBtnChat;
-    private Button toolbarBtnNews;
-    private Button toolbarBtnForms;
-    private Button toolbarBtnSettings;
-    private ImageButton toolbarBtnHome, toolbarBtnSearch;
-    private ImageButton toolbarBtnMenu;
-
+    //Toolbar
+    private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
+    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
+    //
     private ImageView addNewsbtn, addNewsImageView;
     private EditText newsTitleInput, newsContentInput;
     private RadioButton radioBtnAll, radioBtnManage, radioBtnTrue, radioBtnFalse;
     private Button addNewsCancelBtn, addNewsPostBtn;
 
-    private String userPhoneNum, propId, imageUrl, newsTitle, newsContent;
+    private String userPhoneNum, propId, imageUrl, newsTitle, newsContent,myRole;
     private Uri imguri;
 
     private String newsKey;
@@ -74,19 +70,24 @@ public class EditNewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_news);
+        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        userPhoneNum = myPref.getString("phoneNum", "");
+        propId = myPref.getString("propId", "");
+        myRole = myPref.getString("myRole", "");
+        //////////////////////////////////////////////
+        // declaring the buttons
 
-        ////////////////////////////////////////////////////////////////////
-        // TOOLBAR
+        // define the actions for each button
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
         toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
         toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
-        toolbarBtnHome = findViewById(R.id.ImageButtonHome);
+        btnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
-        // click CHAT button on toolbar
+        //click CHAT button on toolbar
         toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +103,7 @@ public class EditNewsActivity extends AppCompatActivity {
             }
         });
 
-        // click FORMS button on toolbar
+        //click FORMS button on toolbar
         toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,12 +119,29 @@ public class EditNewsActivity extends AppCompatActivity {
             }
         });
 
+        // click Settings icon on toolbar
+        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSettings(v);
+            }
+        });
+        //click to go to Property page
+//        btnHome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(EditNewsActivity.this, toolbarBtnMenu);
+        final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);
         final Menu menu = dropDownMenu.getMenu();
         // list of items for menu:
-        menu.add(0, 0, 0, "Logout");
+        menu.add(0, 0, 0, "Manage Unit");
+        menu.add(1, 1, 1, "Manage Staff");
+        menu.add(2, 2, 2, "Logout");
 
         // logout item
         dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -131,8 +149,27 @@ public class EditNewsActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case 0:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+                    case 1:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+
+                    case 2:
                         // item ID 0 was clicked
-                        Intent i = new Intent(EditNewsActivity.this, MainActivity.class);
+                        Intent i = new Intent(getBaseContext(), MainActivity.class);
                         i.putExtra("finish", true);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
                         startActivity(i);
@@ -151,16 +188,10 @@ public class EditNewsActivity extends AppCompatActivity {
                 dropDownMenu.show();
             }
         });
-
-
-        //////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////
 
         myNewsRef = FirebaseDatabase.getInstance().getReference();
         myStorageRef = FirebaseStorage.getInstance().getReference("Images");
-
-        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        userPhoneNum = myPref.getString("phoneNum", "");
-        propId = myPref.getString("propId", "");
 
         newsKey = getIntent().getStringExtra("newsKey");
         new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
@@ -356,6 +387,11 @@ public class EditNewsActivity extends AppCompatActivity {
 
     public void goSearch(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
+        this.startActivity(intent);
+    }
+
+    public void goSettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
         this.startActivity(intent);
     }
 }

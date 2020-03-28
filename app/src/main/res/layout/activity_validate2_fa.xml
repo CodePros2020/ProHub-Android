@@ -94,7 +94,7 @@
                     android:padding="10dp"
                     android:gravity="center_horizontal"
                     android:textSize="8pt"
-                    android:textColor="#2a2a2a"
+                    android:textColor="#fff"
                     android:background="@drawable/button_background"
                     android:text="@string/validate" />
                 <TextView
@@ -105,7 +105,7 @@
                     android:padding="10dp"
                     android:gravity="center_horizontal"
                     android:textSize="8pt"
-                    android:textColor="#2a2a2a"
+                    android:textColor="#fff"
                     android:background="@drawable/button_background"
                     android:text="@string/cancel" />
             </LinearLayout>

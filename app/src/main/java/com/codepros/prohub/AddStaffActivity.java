@@ -7,16 +7,26 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepros.prohub.model.News;
@@ -24,6 +34,7 @@ import com.codepros.prohub.model.Staff;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -37,13 +48,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddStaffActivity extends AppCompatActivity {
-
-    private ImageView addStaffBtn, addStaffImageView;
+    //Toolbar
+    private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
+    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
+    //Activity Items
+    private ImageView addStaffBtn;
     private EditText etName, etEmail,etPhone,etAddress,etPostal,etCity,etRole;
+    private Spinner spProvince;
+    ArrayAdapter<String>  provinceAdapter;
+    String[] provinces;
 //    private RadioButton radioBtnAll, radioBtnManage, radioBtnTrue, radioBtnFalse;
     private Button addStaffCancelBtn, addStaffPostBtn;
 
-    private String userPhoneNum, propId, imageUrl;
+    private String userPhoneNum, propId, imageUrl,province,myRole;
     private Uri imguri;
     private static final int REQUEST_IMAGE = 2;
     private static final String TAG = "AddStaffActivity";
@@ -58,19 +75,132 @@ public class AddStaffActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff);
 
-        //
-        Intent intent=getIntent();
-        propId=intent.getStringExtra("propId");
-        //
+        //Shared Preferences
         myStaffRef = FirebaseDatabase.getInstance().getReference("staff");
         myStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         userPhoneNum = myPref.getString("phoneNum", "");
-        //propId = myPref.getString("propId", "");
+        propId = myPref.getString("propId", "");
+        myRole= myPref.getString("myRole", "");
+        /////////////////////////////////////////////////////
+        // declaring the buttons
+
+        // define the actions for each button
+        // Button for top toolbar
+        toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
+        toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
+        toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
+        toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
+        btnHome = findViewById(R.id.ImageButtonHome);
+        toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
+        toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
+
+        //click CHAT button on toolbar
+        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goChat(v);
+            }
+        });
+
+        // click NEWS button on toolbar
+        toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goNews(v);
+            }
+        });
+
+        //click FORMS button on toolbar
+        toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goForms(v);
+            }
+        });
+
+        // click SEARCH icon on toolbar
+        toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSearch(v);
+            }
+        });
+
+        // click Settings icon on toolbar
+        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSettings(v);
+            }
+        });
+        //click to go to Property page
+//        btnHome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+        // Menu drop down
+        final PopupMenu dropDownMenu = new PopupMenu(getApplicationContext(), toolbarBtnMenu);
+        final Menu menu = dropDownMenu.getMenu();
+        // list of items for menu:
+        menu.add(0, 0, 0, "Manage Unit");
+        menu.add(1, 1, 1, "Manage Staff");
+        menu.add(2, 2, 2, "Logout");
+
+        // logout item
+        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case 0:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+                    case 1:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+
+                    case 2:
+                        // item ID 0 was clicked
+                        Intent i = new Intent(getBaseContext(), MainActivity.class);
+                        i.putExtra("finish", true);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
+                        startActivity(i);
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        // Menu button click
+        toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dropDownMenu.show();
+            }
+        });
+
+        /////////////////////////////////////////////
 
         addStaffBtn = findViewById(R.id.addStaffbtn);
-        addStaffImageView = findViewById(R.id.addStaffImageView);
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
@@ -78,6 +208,7 @@ public class AddStaffActivity extends AppCompatActivity {
         etPostal = findViewById(R.id.etPostalCode);
         etCity = findViewById(R.id.etCity);
         etRole = findViewById(R.id.etRole);
+        spProvince=findViewById(R.id.spProvince);
         addStaffCancelBtn = findViewById(R.id.addStaffCancelBtn);
         addStaffPostBtn = findViewById(R.id.addStaffPostBtn);
 
@@ -94,7 +225,9 @@ public class AddStaffActivity extends AppCompatActivity {
                 goBack();
             }
         });
-
+        //Province Spinner
+        provinces= provinces=getResources().getStringArray(R.array.provinces);
+        SetProvinceAdapter();
         addStaffPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +235,62 @@ public class AddStaffActivity extends AppCompatActivity {
             }
         });
     }
+    // Setting list View adapter
+    public void SetProvinceAdapter() {
+        provinceAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, provinces){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
 
+
+        provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spProvince.setAdapter(provinceAdapter);
+        spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                // If user change the default selection
+                // First item is disable and it is used for hint
+                if(position > 0){
+                    // Notify the selected item text
+                    province=spProvince.getSelectedItem().toString();
+                    Toast.makeText
+                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
     private String getExtension(Uri uri){
         ContentResolver cr = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
@@ -161,7 +349,7 @@ public class AddStaffActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null){
             imguri = data.getData();
-            addStaffImageView.setImageURI(imguri);
+            addStaffBtn.setImageURI(imguri);
             // upload the image to firebase storage
             FileUploader();
         }
@@ -221,20 +409,42 @@ public class AddStaffActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
         else{
-            Log.d("Imahe Url", "addStaff: Image Url"+imageUrl);
+
             String staffId = myStaffRef.push().getKey();
-            Staff staff = new Staff(staffId,propId,name,phone,address,postal,city,email,role,imageUrl);
+            Staff staff = new Staff(staffId,propId,name,phone,address,postal,city,province,email,role,imageUrl);
             // need to save to firebase
             myStaffRef.child(staffId).setValue(staff);
-
-//            DatabaseReference postsRef = myStaffRef.child("staff");
-//            DatabaseReference newPostRef = postsRef.push();
-//            newPostRef.setValue(staff);
             Toast.makeText(getApplicationContext(), staff.getName()+" is saved!", Toast.LENGTH_LONG).show();
-
             // redirect to Staff list View
             goBack();
         }
     }
+
+
+    public void goNews(View view) {
+        Intent intent = new Intent(this, NewsViewActivity.class);
+        this.startActivity(intent);
     }
+
+    public void goChat(View view) {
+        Intent intent = new Intent(this, ChatList.class);
+        this.startActivity(intent);
+    }
+
+    public void goForms(View view) {
+        Intent intent = new Intent(this, FormsActivity.class);
+        this.startActivity(intent);
+    }
+
+    public void goSearch(View view) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        this.startActivity(intent);
+    }
+
+    public void goSettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        this.startActivity(intent);
+    }
+
+}
 

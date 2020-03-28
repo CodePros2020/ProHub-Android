@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class UpdateStaffActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
     //Toolbar
     private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
     private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
@@ -25,7 +25,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_staff);
+        setContentView(R.layout.activity_settings);
 
         SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
         myRole= sharedPreferences.getString("myRole", "");
@@ -42,6 +42,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
         btnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
+        toolbarBtnSettings.setBackgroundColor(getResources().getColor(R.color.btnBackground));
 
         //click CHAT button on toolbar
         toolbarBtnChat.setOnClickListener(new View.OnClickListener() {

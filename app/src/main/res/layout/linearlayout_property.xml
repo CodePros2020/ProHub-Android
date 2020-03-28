@@ -3,32 +3,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+   >
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/txtVPropertyName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:text="test"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
 
-        <TextView
+            <TextView
             android:id="@+id/txtVPropertyAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:text="test"
+            android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/tvPostalCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A0A 1A1"
+                android:textSize="20sp" />
+
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnPropertyDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/go_property" />
+<!--    <Button-->
+<!--        android:id="@+id/btnPropertyDetail"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/go_property"-->
+<!--        android:layout_gravity="center_vertical"-->
+<!--        android:padding="10dp"-->
+<!--        android:layout_margin="10dp"/>-->
 
 </LinearLayout>

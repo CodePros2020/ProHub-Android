@@ -2,7 +2,6 @@ package com.codepros.prohub;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,26 +9,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class UpdateStaffActivity extends AppCompatActivity {
+public class DisplayUnitActivity extends AppCompatActivity {
+
     //Toolbar
     private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
     private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
     //
-    String myRole;
+
+    String unitName,unitId,tenantNum,myRole;
+    EditText etUnitName,etUnitId,etTenantNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_staff);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
-        myRole= sharedPreferences.getString("myRole", "");
-
+        setContentView(R.layout.activity_display_unit);
+        SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        myRole=myPreference.getString("myRole","");
+        //
         //////////////////////////////////////////////
         // declaring the buttons
 
@@ -145,6 +148,19 @@ public class UpdateStaffActivity extends AppCompatActivity {
             }
         });
         //////////////////////////////////////////////
+        //
+        etTenantNum=findViewById(R.id.etTenantNumber);
+        etUnitId=findViewById(R.id.etUnitId);
+        etUnitName=findViewById(R.id.etUnitName);
+        //
+        Intent intent=getIntent();
+        unitName=intent.getStringExtra("unitName");
+        unitId=intent.getStringExtra("unitId");
+        tenantNum=intent.getStringExtra("tenantNum");
+
+        etUnitName.setText(unitName);
+        etUnitId.setText(unitId);
+        etTenantNum.setText(tenantNum);
     }
     public void goNews(View view) {
         Intent intent = new Intent(this, NewsViewActivity.class);
@@ -165,6 +181,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SearchActivity.class);
         this.startActivity(intent);
     }
+
     public void goSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         this.startActivity(intent);

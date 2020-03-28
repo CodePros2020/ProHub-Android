@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepros.prohub.model.Chat;
@@ -50,13 +51,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-    // Toolbar items
-    private Button toolbarBtnChat;
-    private Button toolbarBtnNews;
-    private Button toolbarBtnForms;
-    private Button toolbarBtnSettings;
-    private ImageButton toolbarBtnHome, toolbarBtnSearch;
-    private ImageButton toolbarBtnMenu;
+    //Toolbar
+    private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
+    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
+    //Activity Items
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageTextView;
@@ -90,7 +88,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 2;
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
     public static final String ANONYMOUS = "anonymous";
-    private String mUsername;
+    private String mUsername,myRole;
     private String mSenderName;
     private String mReceiverName;
     private String mPhoneNumber;
@@ -120,19 +118,27 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        mUsername = mSharedPreferences.getString("username", ANONYMOUS);
+        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
+        chatMessageId = getIntent().getStringExtra("Chat_ID");
+        myRole=mSharedPreferences.getString("myRole","");
+        timestamp = "2020-03-08 12:11 AM";
+        //mFirebaseUser = mUsername;
+        /////////////////////////////////////////////////////
+        // declaring the buttons
 
-        ////////////////////////////////////////////////////////////////////
-        // TOOLBAR
+        // define the actions for each button
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
         toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
         toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
-        toolbarBtnHome = findViewById(R.id.ImageButtonHome);
+        btnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
-        // click CHAT button on toolbar
+        //click CHAT button on toolbar
         toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +154,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // click FORMS button on toolbar
+        //click FORMS button on toolbar
         toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,12 +170,29 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        // click Settings icon on toolbar
+        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSettings(v);
+            }
+        });
+        //click to go to Property page
+//        btnHome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(ChatActivity.this, toolbarBtnMenu);
+        final PopupMenu dropDownMenu = new PopupMenu(getApplicationContext(), toolbarBtnMenu);
         final Menu menu = dropDownMenu.getMenu();
         // list of items for menu:
-        menu.add(0, 0, 0, "Logout");
+        menu.add(0, 0, 0, "Manage Unit");
+        menu.add(1, 1, 1, "Manage Staff");
+        menu.add(2, 2, 2, "Logout");
 
         // logout item
         dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -177,8 +200,27 @@ public class ChatActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case 0:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+                    case 1:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+
+                    case 2:
                         // item ID 0 was clicked
-                        Intent i = new Intent(ChatActivity.this, MainActivity.class);
+                        Intent i = new Intent(getBaseContext(), MainActivity.class);
                         i.putExtra("finish", true);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
                         startActivity(i);
@@ -199,14 +241,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-        //////////////////////////////////////////////////////////////////////////
-
-        mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        mUsername = mSharedPreferences.getString("username", ANONYMOUS);
-        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
-        chatMessageId = getIntent().getStringExtra("Chat_ID");
-        timestamp = "2020-03-08 12:11 AM";
-        //mFirebaseUser = mUsername;
+        /////////////////////////////////////////////
 
         // Initialize ProgressBar and RecyclerView.
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -541,6 +576,11 @@ public class ChatActivity extends AppCompatActivity {
 
     public void goSearch(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
+        this.startActivity(intent);
+    }
+
+    public void goSettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
         this.startActivity(intent);
     }
 }

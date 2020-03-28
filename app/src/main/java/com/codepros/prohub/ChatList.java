@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
@@ -27,38 +28,42 @@ import java.util.List;
 
 public class ChatList extends AppCompatActivity {
 
-    // Toolbar items
-    private Button toolbarBtnChat;
-    private Button toolbarBtnNews;
-    private Button toolbarBtnForms;
-    private Button toolbarBtnSettings;
-    private ImageButton toolbarBtnHome, toolbarBtnSearch;
-    private ImageButton toolbarBtnMenu;
+    //Toolbar
+    private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
+    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
+    //Activity Items
 
     ChatAdapter chatAdapter;
     RecyclerView chatRecycler;
     List<ChatMessage> allChatMessages = new ArrayList<>();
     List<ChatMessage> filteredChatMessages = new ArrayList<>();
     private SharedPreferences mSharedPreferences;
-    private String mPhoneNumber;
+    private String mPhoneNumber,myRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
-        ////////////////////////////////////////////////////////////////////
-        // TOOLBAR
+        mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
+        myRole=mSharedPreferences.getString("myRole","");
+
+        /////////////////////////////////////////////////////
+        // declaring the buttons
+
+        // define the actions for each button
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
         toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
         toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
-        toolbarBtnHome = findViewById(R.id.ImageButtonHome);
+        btnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
-        // click CHAT button on toolbar
+        toolbarBtnChat.setBackgroundColor(getResources().getColor(R.color.btnBackground));
+        //click CHAT button on toolbar
         toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +79,7 @@ public class ChatList extends AppCompatActivity {
             }
         });
 
-        // click FORMS button on toolbar
+        //click FORMS button on toolbar
         toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,12 +95,29 @@ public class ChatList extends AppCompatActivity {
             }
         });
 
+        // click Settings icon on toolbar
+        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSettings(v);
+            }
+        });
+        //click to go to Property page
+//        btnHome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(ChatList.this, toolbarBtnMenu);
+        final PopupMenu dropDownMenu = new PopupMenu(getApplicationContext(), toolbarBtnMenu);
         final Menu menu = dropDownMenu.getMenu();
         // list of items for menu:
-        menu.add(0, 0, 0, "Logout");
+        menu.add(0, 0, 0, "Manage Unit");
+        menu.add(1, 1, 1, "Manage Staff");
+        menu.add(2, 2, 2, "Logout");
 
         // logout item
         dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -103,8 +125,27 @@ public class ChatList extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case 0:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+                    case 1:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+
+                    case 2:
                         // item ID 0 was clicked
-                        Intent i = new Intent(ChatList.this, MainActivity.class);
+                        Intent i = new Intent(getBaseContext(), MainActivity.class);
                         i.putExtra("finish", true);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
                         startActivity(i);
@@ -124,12 +165,10 @@ public class ChatList extends AppCompatActivity {
             }
         });
 
-
-        //////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////
 
         chatRecycler = (RecyclerView) findViewById(R.id.recyclerChatList);
-        mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
+
 
         // read the list of ChatMessages from Firebase
 
@@ -178,4 +217,10 @@ public class ChatList extends AppCompatActivity {
         Intent intent = new Intent(this, SearchActivity.class);
         this.startActivity(intent);
     }
+
+    public void goSettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        this.startActivity(intent);
+    }
+
 }

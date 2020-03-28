@@ -8,12 +8,23 @@ public class Staff {
     private String address;
     private String postalCode;
     private String city;
+    private String province;
     private String email;
     private String role;
     private String ImgUrl;
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+
+
 public Staff(){}
-    public Staff( String staffId,String propId, String name, String phoneNum, String address, String postalCode, String city, String email, String role, String imgUrl) {
+    public Staff( String staffId,String propId, String name, String phoneNum, String address, String postalCode, String city,String province, String email, String role, String imgUrl) {
         this.staffId=staffId;
         this.propId = propId;
         this.name = name;
@@ -23,7 +34,8 @@ public Staff(){}
         this.city = city;
         this.email = email;
         this.role = role;
-        ImgUrl = imgUrl;
+        this.ImgUrl = imgUrl;
+        this.province=province;
     }
 
 
@@ -108,6 +120,11 @@ public Staff(){}
     }
 
 
+    public String getPhone(){
+
+        String phone=phoneNum.substring(2,phoneNum.length());
+        return phone;
+    }
 
 
 

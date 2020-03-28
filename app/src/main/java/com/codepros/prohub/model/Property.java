@@ -2,7 +2,7 @@ package com.codepros.prohub.model;
 
 public class Property {
 
-    private int propID=0; // unique ID for property
+    private String propId; // unique ID for property
     private String phone; // this is users phone number (?)
     private String name; // building name
     private String streetLine1; // building address
@@ -12,11 +12,12 @@ public class Property {
     private String postalCode;// Postal code (need validation)
 
     public Property(){
-        ++propID;
+
+
     }
 
-    public Property(String name, String streetLine1, String streetLine2, String city, String province, String postalCode) {
-        ++propID;
+    public Property(String propId,String name, String streetLine1, String streetLine2, String city, String province, String postalCode) {
+        this.propId=propId;
         this.name = name;
         this.streetLine1 = streetLine1;
         this.streetLine2 = streetLine2;
@@ -25,8 +26,10 @@ public class Property {
         this.postalCode = postalCode;
     }
 
-    public int getPropID(){return propID;}
-
+    public String getPropId(){return propId;}
+    public void setPropId(String propId) {
+        this.propId = propId;
+    }
     public String getPhone() {
         return phone;
     }

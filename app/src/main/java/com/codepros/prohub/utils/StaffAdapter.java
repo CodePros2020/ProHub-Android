@@ -56,7 +56,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
         name=staff.getName();
         imageUrl=staff.getImgUrl();
         holder.tvName.setText(name);
-        Picasso.get().load(imageUrl).placeholder(R.drawable.ic_menu_report_image).into(holder.imgStaff);
+        Picasso.get().load(imageUrl).placeholder(R.drawable.noimg).into(holder.imgStaff);
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -65,6 +65,13 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
                 Intent newIntent=new Intent(context, DisplayStaffActivity.class);
                 b.putString("name",staff.getName());
                 b.putString("imgUrl",staff.getImgUrl());
+                b.putString("email",staff.getEmail());
+                b.putString("phone",staff.getPhone());
+                b.putString("address",staff.getAddress());
+                b.putString("city",staff.getCity());
+                b.putString("province",staff.getProvince());
+                b.putString("postal",staff.getPostalCode());
+                b.putString("role",staff.getRole());
                 newIntent.putExtras(b);
                 context.startActivity(newIntent);
             }

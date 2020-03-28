@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.codepros.prohub.model.Property;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,14 +43,13 @@ import java.io.IOException;
 public class PropertyHomeActivity extends AppCompatActivity {
 
     // Toolbar items
-    private Button toolbarBtnChat, chatButton;
-    private Button toolbarBtnNews, newsroomButton;
-    private Button toolbarBtnForms, formsButton;
-    private Button toolbarBtnSettings, settingsButton;
-    private Button btnDashboard;
-    private ImageButton toolbarBtnHome, toolbarBtnSearch;
-    private FloatingActionButton btnAddUnit;
-    private ImageButton toolbarBtnMenu; // menu
+    private Button toolbarBtnSettings, settingsButton,toolbarBtnChat, chatButton,toolbarBtnNews;
+       private Button    newsroomButton,toolbarBtnForms, formsButton,btnDashboard,btnStaff,btnUnits ;
+    private ImageButton  toolbarBtnSearch,btnHome,toolbarBtnMenu;
+
+
+    //Toolbar helper
+    ToolbarHelper toolbarHelper;
 
     // Firebase database objects
     private static final String TAG = "PropertyHomeActivity";
@@ -65,7 +65,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private JSONObject jsonData = new JSONObject(); // tentative output
 
     // property ID
-    private String propId;
+    private String propId,propName,userName;
 
     // user role
     private String myRole;
@@ -75,40 +75,39 @@ public class PropertyHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_home);
 
+        //Shard Prederences
         // get propId from intent, save to shared preference
-        propId = getIntent().getStringExtra("propId");
+        //propId = getIntent().getStringExtra("propId");
         SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        SharedPreferences.Editor prefEditor = myPreference.edit();
-        prefEditor.putString("propId", propId);
-        prefEditor.apply();
+        propId=myPreference.getString("propId","");
 
         myPropRef = FirebaseDatabase.getInstance().getReference();
-
         myRole = myPreference.getString("myRole", "");
+        userName=myPreference.getString("username","");
+        btnDashboard=findViewById(R.id.btnDashboard);
+        btnDashboard.setText(userName);
 
         // references to the buttons on view
         chatButton = findViewById(R.id.chatButton);
         newsroomButton = findViewById(R.id.newsroomButton);
         formsButton = findViewById(R.id.formsButton);
         settingsButton = findViewById(R.id.settingsButton);
-        btnDashboard=findViewById(R.id.btnDashboard);
-        btnAddUnit = findViewById(R.id.btnAddUnit);
+        btnStaff=findViewById(R.id.staffButton);
+        btnUnits=findViewById(R.id.unitButton);
+        /////////////////////////////////////////////////////
+        // declaring the buttons
 
-        // Set the name of the Logged in person
-        btnDashboard.setText("PROHUB");
-
+        // define the actions for each button
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
         toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
         toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
-        toolbarBtnHome = findViewById(R.id.ImageButtonHome);
+        btnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
-        // define the actions for each button
-
-        // click CHAT button on toolbar
+        //click CHAT button on toolbar
         toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,13 +123,13 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
-        // click FORMS button on toolbar
-        toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goForms(v);
-            }
-        });
+         //click FORMS button on toolbar
+            toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goForms(v);
+                }
+            });
 
         // click SEARCH icon on toolbar
         toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
@@ -144,16 +143,26 @@ public class PropertyHomeActivity extends AppCompatActivity {
         toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 goSettings(v);
             }
         });
-
+        //click to go to Property page
+//        btnHome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         // Menu drop down
         final PopupMenu dropDownMenu = new PopupMenu(PropertyHomeActivity.this, toolbarBtnMenu);
         final Menu menu = dropDownMenu.getMenu();
         // list of items for menu:
-        menu.add(0, 0, 0, "Logout");
+        menu.add(0, 0, 0, "Manage Unit");
+        menu.add(1, 1, 1, "Manage Staff");
+        menu.add(2, 2, 2, "Logout");
 
         // logout item
         dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -161,6 +170,25 @@ public class PropertyHomeActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case 0:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(PropertyHomeActivity.this,ViewUnitsActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+                    case 1:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(PropertyHomeActivity.this,ViewStaffActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+
+                    case 2:
                         // item ID 0 was clicked
                         Intent i = new Intent(PropertyHomeActivity.this, MainActivity.class);
                         i.putExtra("finish", true);
@@ -178,10 +206,10 @@ public class PropertyHomeActivity extends AppCompatActivity {
         toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dropDownMenu.show();
             }
         });
-
 
         // click CHAT on dashboard
         chatButton.setOnClickListener(new View.OnClickListener() {
@@ -199,16 +227,28 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
-        // click FORMS on dashboard
+         //click FORMS on dashboard
         formsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goForms(v);
             }
         });
-
-
-
+        //
+        btnUnits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goUnits(v);
+            }
+        });
+        //
+        btnStaff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goStaff(v);
+            }
+        });
+        //
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,17 +256,6 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
-
-        btnAddUnit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (myRole.equals("Landlord")) {
-                    goAddUnit(v);
-                } else {
-                    Toast.makeText(PropertyHomeActivity.this, "You cannot add property as you are not a landlord!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     public void goNews(View view) {
@@ -234,10 +263,10 @@ public class PropertyHomeActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    public void goChat(View view) {
-        Intent intent = new Intent(this, ChatList.class);
-        this.startActivity(intent);
-    }
+        public void goChat(View view) {
+            Intent intent = new Intent(this, ChatList.class);
+            this.startActivity(intent);
+        }
 
     public void goForms(View view) {
         Intent intent = new Intent(this, FormsActivity.class);
@@ -249,14 +278,16 @@ public class PropertyHomeActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    public void goAddUnit(View view) {
-        Intent intent = new Intent(this, AddUnitActivity.class);
-        intent.putExtra("propId", propId);
+    public void goSettings(View view) {
+       Intent intent = new Intent(this, SettingsActivity.class);
+       this.startActivity(intent);
+    }
+    public void goStaff(View view) {
+        Intent intent = new Intent(this, ViewStaffActivity.class);
         this.startActivity(intent);
     }
-    public void goSettings(View view) {
-        Intent intent = new Intent(this, ViewStaffActivity.class);
-        intent.putExtra("propId", propId);
+    public void goUnits(View view) {
+        Intent intent = new Intent(this,ViewUnitsActivity.class);
         this.startActivity(intent);
     }
 

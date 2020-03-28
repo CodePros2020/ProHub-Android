@@ -11,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddStaffActivity"></activity>
+        <activity android:name=".DisplayUnitActivity"></activity>
+        <activity android:name=".UpdateUnitActivity" />
+        <activity android:name=".ViewUnitsActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".AddStaffActivity" />
         <activity android:name=".UpdateStaffActivity" />
         <activity android:name=".DisplayStaffActivity" />
         <activity android:name=".ViewStaffActivity" />

@@ -13,12 +13,14 @@ import android.widget.Toast;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.model.User;
 import com.codepros.prohub.utils.Enable2FaActivity;
+import com.codepros.prohub.utils.ToolbarHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
+        ToolbarHelper toolbarHelper;
     private static final String TAG = "LoginActivity";
     // user interaction objects
     private EditText phone, password;
@@ -34,6 +36,10 @@ public class LoginActivity extends AppCompatActivity {
         phone = findViewById(R.id.txtLoginPhoneNumber);
         password = findViewById(R.id.txtLoginPassword);
         btnLogin = findViewById(R.id.btnLogin);
+
+        //toolbar
+        toolbarHelper=new ToolbarHelper(this);
+        //
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
                     if(user.authentication(passwordString)){
                         // save username and phone number to SharedPreference
                         saveToSharedPreferences(user);
+                        toolbarHelper.myRole=user.getRole();
+                        toolbarHelper.phoneNum=phoneNumber;
                         Toast.makeText(getApplicationContext(), "login successful!", Toast.LENGTH_LONG).show();
                         if(!user.isIs2FA()){
                             // intent to next page which make the 2-factor
@@ -98,6 +106,6 @@ public class LoginActivity extends AppCompatActivity {
         prefEditor.putString("username", user.getFirstname()+" "+user.getLastname());
         prefEditor.putString("phoneNum", user.getPhone());
         prefEditor.putString("myRole", user.getRole());
-        prefEditor.commit();
+        prefEditor.apply();
     }
 }

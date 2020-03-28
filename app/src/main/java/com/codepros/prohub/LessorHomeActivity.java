@@ -6,23 +6,30 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.model.Property;
 import com.codepros.prohub.utils.PropertyAdapter;
+import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LessorHomeActivity extends AppCompatActivity {
+
+    //
     private TextView textWeclomeLessor;
     private FloatingActionButton btnCreateProp;
     private ListView list_property;
-    private String userPhoneNum;
+    private String userPhoneNum,propId,propName;
+    ToolbarHelper toolbarHelper;
 
     // list of properties
     List<Property> allProperties = new ArrayList<>();
@@ -38,6 +45,7 @@ public class LessorHomeActivity extends AppCompatActivity {
         textWeclomeLessor = findViewById(R.id.textWeclomeLessor);
         btnCreateProp = findViewById(R.id.btnCreateProp);
         list_property = findViewById(R.id.list_property);
+        toolbarHelper=new ToolbarHelper(this);
 
         // set the weclome message
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
@@ -59,7 +67,7 @@ public class LessorHomeActivity extends AppCompatActivity {
                 setAdpater();
             }
         });
-
+        //
         // set the onClick event
         btnCreateProp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,5 +86,23 @@ public class LessorHomeActivity extends AppCompatActivity {
         // set the property adapter to the list view
         PropertyAdapter propertyAdapter = new PropertyAdapter(this, myProperties, myKeys);
         list_property.setAdapter(propertyAdapter);
+        list_property.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Property prop= (Property)parent.getItemAtPosition(position);
+                SetSharedPreference(prop.getPropId(),prop.getName());
+                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
+    }
+    public void SetSharedPreference(String propId,String propName){
+        SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", 0);
+        SharedPreferences.Editor prefEditor = myPreference.edit();
+        prefEditor.putString("propId", propId);
+        prefEditor.putString("propName", propName);
+        prefEditor.apply();
     }
 }

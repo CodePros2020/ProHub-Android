@@ -7,29 +7,55 @@
     tools:context=".AddUnitActivity"
     android:scrollbars="vertical">
     <include layout="@layout/layout_toolbar"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:orientation="vertical"
         tools:context=".AddPropertyActivity">
-
-        <TextView
-            android:id="@+id/unitWelcomeH1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/property_welcome"
-            android:textAlignment="center"
-            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/unitWelcomeH2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/new_unit_h2"
+            android:layout_marginTop="50dp"
+            android:text="Unit Information"
             android:textAlignment="center"
-            android:textSize="25sp" />
+            android:textSize="24sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="2dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/unit_input3"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:padding="10dp"
+                android:text="Unit ID"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"
+                />
+
+            <EditText
+                android:id="@+id/etUnitId"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="Unit Id"/>
+
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,10 +72,10 @@
 
             <TextView
                 android:id="@+id/property_input1"
-                android:layout_width="170dp"
+                android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:padding="10dp"
-                android:text="@string/unit_Name"
+                android:text="Unit Name"
                 android:textAlignment="textEnd"
                 android:textSize="20sp" />
 
@@ -59,6 +85,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
+                android:focusable="false"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:hint="@string/unit_Name"/>
@@ -79,7 +106,7 @@
 
             <TextView
                 android:id="@+id/unit_input2"
-                android:layout_width="170dp"
+                android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:padding="10dp"
                 android:text="@string/unit_tenant"
@@ -93,27 +120,14 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
+                android:focusable="false"
                 android:ems="10"
                 android:inputType="number"
                 android:hint="@string/unit_tenant"/>
 
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp">
-        <Button
-            android:id="@+id/btnSaveUnit"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:text="@string/saveBtn"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorPrimary"/>
-    </LinearLayout>
+
+
 
 </LinearLayout>

@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".ViewStaffActivity"
     android:orientation="vertical"
-    android:id="@+id/relative_layout">
+    android:id="@+id/relative_layout_unit">
     <include layout="@layout/layout_toolbar"/>
     <TextView
-        android:id="@+id/tvTitleStaff"
+        android:id="@+id/tvTitleUnit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Test Property"
@@ -22,19 +22,19 @@
         android:layout_below="@+id/toolbar"
         android:textColor="@color/colorButtonProperty"/>
 
-        <TextView
-            android:id="@+id/tvStaffList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginStart="10dp"
-            android:text="Staff List"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            android:layout_below="@+id/tvTitleStaff"/>
+    <TextView
+        android:id="@+id/tvUnitList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginStart="10dp"
+        android:text="Units List"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:layout_below="@+id/tvTitleUnit"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_add_staff"
+        android:id="@+id/btn_add_unit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -47,11 +47,11 @@
         app:rippleColor="@color/colorWhite" />
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/staffRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            android:layout_below="@+id/tvStaffList"/>
+        android:id="@+id/unitsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:layout_below="@+id/tvUnitList"/>
 
 </RelativeLayout>

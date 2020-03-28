@@ -20,7 +20,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/ImageButtonHome"
+                android:id="@+id/btnHome"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:background="@drawable/logo_dark"
@@ -46,7 +46,7 @@
                 android:id="@+id/ImageButtonMenu"
                 android:layout_width="40sp"
                 android:layout_height="50sp"
-                android:background="@drawable/menu_three"
+                android:background="@drawable/menu"
                 android:onClick="exportChatHistory"
                 android:translationX="170sp" />
         </LinearLayout>

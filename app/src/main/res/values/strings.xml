@@ -28,7 +28,7 @@
     <string name="saveBtn">Save</string>
     <string name="create_news">Create News</string>
     <string name="enter_code">Enter code</string>
-    <string name="enter_the_6_digit_code_that_we_sent_to_your_phone_number">Enter the 6-digit code that we sent to your phone number</string>
+    <string name="enter_the_6_digit_code_that_we_sent_to_your_phone_number">Enter the 3 or 4 -digit code that we sent to your phone number</string>
     <string name="to_finish_setting_up_two_factor_authentication">to finish setting up two-factor authentication.</string>
     <string name="confirmation_code">Confirmation code</string>
     <string name="you_typed_a_wrong_code_please_double_check">You typed a wrong code! Please double check!</string>
@@ -89,7 +89,7 @@
     <string name="go_property">Go Property</string>
     <!--Province Spinner-->
     <string-array name="provinces">
-        <item>Choose one!</item>
+        <item>Choose Province!</item>
         <item>Alberta</item>
         <item>British Columbia</item>
         <item>Manitoba</item>
@@ -121,4 +121,5 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="e_g_superintendent">e.g Superintendent</string>
+    <string name="news_feed_list">News Feed List</string>
 </resources>

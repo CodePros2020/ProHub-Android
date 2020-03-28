@@ -83,7 +83,7 @@ public class FormsActivity extends AppCompatActivity {
     private static final String TAG = "FormsActivity";
     public static final String FORM_CHILD = "form";
 
-    private String mPropId;
+    private String mPropId,myRole;
     public static final String ANONYMOUS = "anonymous";
     private RecyclerView mFormListRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -99,18 +99,24 @@ public class FormsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forms);
 
-        ////////////////////////////////////////////////////////////////////
-        // TOOLBAR
+        // get prop id from shared preference
+        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        mPropId = myPref.getString("propId", ANONYMOUS);
+        myRole = myPref.getString("myRole", "");
+        //////////////////////////////////////////////
+        // declaring the buttons
+
+        // define the actions for each button
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
         toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
         toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
-        toolbarBtnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
+        toolbarBtnForms.setBackgroundColor(getResources().getColor(R.color.btnBackground));
 
-        // click CHAT button on toolbar
+        //click CHAT button on toolbar
         toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +132,7 @@ public class FormsActivity extends AppCompatActivity {
             }
         });
 
-        // click FORMS button on toolbar
+        //click FORMS button on toolbar
         toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,12 +148,29 @@ public class FormsActivity extends AppCompatActivity {
             }
         });
 
+        // click Settings icon on toolbar
+        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSettings(v);
+            }
+        });
+        //click to go to Property page
+//        btnHome.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(FormsActivity.this, toolbarBtnMenu);
+        final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);
         final Menu menu = dropDownMenu.getMenu();
         // list of items for menu:
-        menu.add(0, 0, 0, "Logout");
+        menu.add(0, 0, 0, "Manage Unit");
+        menu.add(1, 1, 1, "Manage Staff");
+        menu.add(2, 2, 2, "Logout");
 
         // logout item
         dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -155,8 +178,27 @@ public class FormsActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case 0:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+                    case 1:
+                        if(myRole.equals("Tenant")){
+                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
+                            startActivity(intent);
+                            return true;
+                        }
+
+                    case 2:
                         // item ID 0 was clicked
-                        Intent i = new Intent(FormsActivity.this, MainActivity.class);
+                        Intent i = new Intent(getBaseContext(), MainActivity.class);
                         i.putExtra("finish", true);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
                         startActivity(i);
@@ -175,13 +217,9 @@ public class FormsActivity extends AppCompatActivity {
                 dropDownMenu.show();
             }
         });
+        //////////////////////////////////////////////
 
 
-        //////////////////////////////////////////////////////////////////////////
-
-        // get prop id from shared preference
-        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        mPropId = myPref.getString("propId", ANONYMOUS);
 
         // Initialize RecyclerView.
         mFormListRecyclerView = (RecyclerView) findViewById(R.id.mFormListRecyclerView);
@@ -406,6 +444,11 @@ public class FormsActivity extends AppCompatActivity {
 
     public void goSearch(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
+        this.startActivity(intent);
+    }
+
+    public void goSettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
         this.startActivity(intent);
     }
 

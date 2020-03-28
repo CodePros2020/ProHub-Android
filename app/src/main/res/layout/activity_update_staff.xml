@@ -1,10 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UpdateStaffActivity">
-    <include layout="@layout/layout_toolbar"/>
+    android:scrollbars="vertical"
+    android:scrollbarStyle="outsideOverlay"
+    tools:context=".UpdateStaffActivity"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:isScrollContainer="true"
+        android:scrollbars="vertical"
+        >
+        <include layout="@layout/layout_toolbar"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:layout_margin="10dp">
+            <TextView
+                android:id="@+id/tvUpdateStaff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Update Staff Information"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/etUpdateName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:typeface="sans" />
+
+            <EditText
+                android:id="@+id/etUpdateEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:hint="example@example.com"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:typeface="sans" />
+
+            <EditText
+                android:id="@+id/etUpdatePhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:hint="Phone e.g.(416) 111- 1234"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:typeface="sans" />
+
+            <EditText
+                android:id="@+id/etUpdateAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:hint="Address"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:typeface="sans" />
+
+            <EditText
+                android:id="@+id/etUpdatePostalCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:hint="Postal Code e.g A0A 0A0"
+                android:inputType="textPostalAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:typeface="sans" />
+
+            <EditText
+                android:id="@+id/etUpdateCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:hint="City"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:typeface="sans" />
+            <Spinner
+                android:id="@+id/spUpdateProvince"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                />
+            <EditText
+                android:id="@+id/etUpdateRole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:hint="Role e.g. superintendent"
+                android:inputType="textPostalAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:typeface="sans" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:paddingLeft="10dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/updateStaffbtn"
+                    android:layout_width="125dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:autofillHints="Upload Image"
+                    app:srcCompat="@drawable/uploadimg" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textDim"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:text="Wait few seconds for image to be uploaded."/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            tools:context=".UpdateStaffActivity">
+
+            <Button
+                android:id="@+id/updateStaffCancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:textColor="#fff"
+                android:background="@drawable/button_background"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/updateStaffPostBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:textColor="#fff"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/button_background"
+                android:text="@string/update" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

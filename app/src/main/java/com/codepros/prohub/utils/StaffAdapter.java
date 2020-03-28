@@ -88,11 +88,33 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
+//                            if(item.getItemId()==R.id.menu_item_update){
+//                                Intent newIntent = new Intent(context, UpdateStaffActivity.class);
+//                                context.startActivity(newIntent);
+//                            }
+//                            return false;
                             if(item.getItemId()==R.id.menu_item_update){
-                                Intent newIntent = new Intent(context, UpdateStaffActivity.class);
+                                Intent newIntent=new Intent(context, UpdateStaffActivity.class);
+
+                                // bundle and put extras
+                                Bundle b = new Bundle();
+                                b.putString("name",staff.getName());
+                                b.putString("imgUrl",staff.getImgUrl());
+                                b.putString("email",staff.getEmail());
+                                b.putString("phone",staff.getPhone());
+                                b.putString("address",staff.getAddress());
+                                b.putString("city",staff.getCity());
+                                b.putString("province",staff.getProvince());
+                                b.putString("postal",staff.getPostalCode());
+                                b.putString("role",staff.getRole());
+                                newIntent.putExtras(b);
+
                                 context.startActivity(newIntent);
                             }
                             return false;
+
+
+
                         }
                     });
                     popupMenu.show();

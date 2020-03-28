@@ -35,6 +35,7 @@
     <string name="validate">Validate</string>
     <string name="cancel">Cancel</string>
     <string name="post">Post</string>
+    <string name="update">Update</string>
     <string name="news_title">News Title</string>
     <string name="enter_title_here">Enter Title Here</string>
     <string name="content">Content</string>

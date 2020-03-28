@@ -49,7 +49,7 @@ public class AddUnitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_unit);
 
-        myDataRef = FirebaseDatabase.getInstance().getReference("units");
+        myDataRef = FirebaseDatabase.getInstance().getReference();
         Log.d(TAG, "onCreate: Units DB"+myDataRef.child("-M3X8yzN8R0Bs41p0PVy"));
         //Shared Preference
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
@@ -169,15 +169,21 @@ public class AddUnitActivity extends AppCompatActivity {
                 dropDownMenu.show();
             }
         });
-
+        // click to go to Property page
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
+                startActivity(intent);
+            }
+        });
+            /////////////////////////////////////
         myDataRef = FirebaseDatabase.getInstance().getReference();
 
         myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         propId = myPref.getString("propId", "");
         landlordName = myPref.getString("username", ANONYMOUS);
         landlordPhoneNumber = myPref.getString("phoneNum","0123456789");
-
-        /////////////////////////////////////////////
 
         //
         etUnitName = findViewById(R.id.etUnitName);
@@ -253,14 +259,14 @@ public class AddUnitActivity extends AppCompatActivity {
 
             String unitId=  myDataRef.push().getKey();
             Unit newUnit = new Unit(unitId,propId, tenantNumber, unitName);
-            myDataRef.child(unitId).setValue(newUnit);
+            myDataRef.child("units").child(unitId).setValue(newUnit);
         //  DatabaseReference postsRef = myDataRef.child("units");
         //  DatabaseReference newPostRef = postsRef.push();
         //  newPostRef.setValue(newUnit);
             Toast.makeText(getApplicationContext(), "New Unit Saved!", Toast.LENGTH_LONG).show();
 
             // intent to next page
-            Intent intent = new Intent(this, PropertyHomeActivity.class);
+            Intent intent = new Intent(this, ViewUnitsActivity.class);
             this.startActivity(intent);
         }
     }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepros.prohub.model.ChatMessage;
@@ -43,9 +44,10 @@ public class NewsViewActivity extends AppCompatActivity {
     public List<News> newsList=new ArrayList<>();
     public List<String> newsKeyList = new ArrayList<>();
     public FloatingActionButton btn_add;
+    TextView tvPropertyName;
     private DatabaseReference myPropRef;
     // user role
-    private String myRole;
+    private String myRole,propName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,9 @@ public class NewsViewActivity extends AppCompatActivity {
         //
         SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
         myRole= sharedPreferences.getString("myRole", "");
-
+        propName= sharedPreferences.getString("propName", "");
+        tvPropertyName=findViewById(R.id.tvPropertyName);
+        tvPropertyName.setText(propName);
         //////////////////////////////////////////////
         // declaring the buttons
 
@@ -109,13 +113,14 @@ public class NewsViewActivity extends AppCompatActivity {
             }
         });
         //click to go to Property page
-//        btnHome.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        // click to go to Property page
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Menu drop down
         final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);

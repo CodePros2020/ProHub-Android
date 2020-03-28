@@ -116,14 +116,7 @@ public class ViewStaffActivity extends AppCompatActivity {
                 goSettings(v);
             }
         });
-        //click to go to Property page
-//        btnHome.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+
 
         // Menu drop down
         final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);
@@ -176,6 +169,14 @@ public class ViewStaffActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dropDownMenu.show();
+            }
+        });
+        // click to go to Property page
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
+                startActivity(intent);
             }
         });
         //////////////////////////////////////////////

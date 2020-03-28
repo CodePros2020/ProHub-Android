@@ -20,7 +20,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/btnHome"
+                android:id="@+id/ImageButtonHome"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:background="@drawable/logo_dark"

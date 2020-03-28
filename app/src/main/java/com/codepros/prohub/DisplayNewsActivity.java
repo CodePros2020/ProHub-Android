@@ -152,6 +152,14 @@ public class DisplayNewsActivity extends AppCompatActivity {
                 dropDownMenu.show();
             }
         });
+        // click to go to Property page
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         /////////////////////////////////////////////
 

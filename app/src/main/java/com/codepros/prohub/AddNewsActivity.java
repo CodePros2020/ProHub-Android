@@ -173,6 +173,14 @@ public class AddNewsActivity extends AppCompatActivity {
                 return false;
             }
         });
+        // click to go to Property page
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Menu button click
         toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {

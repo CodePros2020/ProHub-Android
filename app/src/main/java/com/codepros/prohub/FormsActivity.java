@@ -76,7 +76,7 @@ public class FormsActivity extends AppCompatActivity {
     private Button toolbarBtnNews;
     private Button toolbarBtnForms;
     private Button toolbarBtnSettings;
-    private ImageButton toolbarBtnHome, toolbarBtnSearch;
+    private ImageButton btnHome, toolbarBtnSearch;
     private ImageButton toolbarBtnMenu;
 
     private static final int REQUEST_IMAGE = 2;
@@ -112,6 +112,7 @@ public class FormsActivity extends AppCompatActivity {
         toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
         toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
+        btnHome=findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
         toolbarBtnForms.setBackgroundColor(getResources().getColor(R.color.btnBackground));
@@ -156,13 +157,14 @@ public class FormsActivity extends AppCompatActivity {
             }
         });
         //click to go to Property page
-//        btnHome.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        // click to go to Property page
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Menu drop down
         final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);

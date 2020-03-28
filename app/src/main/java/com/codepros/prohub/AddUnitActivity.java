@@ -250,19 +250,16 @@ public class AddUnitActivity extends AppCompatActivity {
           //  Unit newUnit = new Unit(propId, tenantNumber, unitName);
             ChatMessage newChatMessage1 = new ChatMessage(chatMessageId, tenantNumber, landlordPhoneNumber, landlordName);
             ChatMessage newChatMessage2 = new ChatMessage(chatMessageId, landlordPhoneNumber, tenantNumber, tenantName);
-//
-//            DatabaseReference chatRef = myDataRef.child("chatMessages");
-//            DatabaseReference newChatRef1 = chatRef.push();
-//            DatabaseReference newChatRef2 = chatRef.push();
-//            newChatRef1.setValue(newChatMessage1);
-//            newChatRef2.setValue(newChatMessage2);
+
+            DatabaseReference chatRef = myDataRef.child("chatMessages");
+            DatabaseReference newChatRef1 = chatRef.push();
+            DatabaseReference newChatRef2 = chatRef.push();
+            newChatRef1.setValue(newChatMessage1);
+            newChatRef2.setValue(newChatMessage2);
 
             String unitId=  myDataRef.push().getKey();
             Unit newUnit = new Unit(unitId,propId, tenantNumber, unitName);
             myDataRef.child("units").child(unitId).setValue(newUnit);
-        //  DatabaseReference postsRef = myDataRef.child("units");
-        //  DatabaseReference newPostRef = postsRef.push();
-        //  newPostRef.setValue(newUnit);
             Toast.makeText(getApplicationContext(), "New Unit Saved!", Toast.LENGTH_LONG).show();
 
             // intent to next page

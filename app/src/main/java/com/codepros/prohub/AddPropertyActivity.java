@@ -168,12 +168,12 @@ public class AddPropertyActivity extends AppCompatActivity {
 
 
         // validate the input field in the new Property form
-        if(name.isEmpty()){
+        if(name.isEmpty() || name == null){
             // show error message
             String message = "Sorry, name cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(streetLine1.isEmpty()){
+        else if(streetLine1.isEmpty() || streetLine1 == null){
             // show error message
             String message = "Sorry, street address cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -184,12 +184,12 @@ public class AddPropertyActivity extends AppCompatActivity {
             String message = "Sorry, street line 2 cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }*/
-        else if(city.isEmpty()){
+        else if(city.isEmpty() || city == null){
             // show error message
             String message = "Sorry, city cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(postalCode.isEmpty()) {
+        else if(postalCode.isEmpty() || postalCode == null) {
             // show error message
             String message = "Sorry, postal code cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();

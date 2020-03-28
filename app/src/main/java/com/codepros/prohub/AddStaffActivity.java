@@ -380,23 +380,23 @@ public class AddStaffActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(postal);
 
-        if(name.isEmpty()){
+        if(name.isEmpty()|| name == null){
             String message = "Sorry, name cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(email.isEmpty()){
+        else if(email.isEmpty()|| email == null){
             String message = "Sorry, email cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(phone.isEmpty()){
+        else if(phone.isEmpty() || phone == null){
             String message = "Sorry, phone cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(address.isEmpty()){
+        else if(address.isEmpty() || address == null){
             String message = "Sorry, address cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(postal.isEmpty()){
+        else if(postal.isEmpty() || postal == null){
             String message = "Sorry, Postal code cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
@@ -404,15 +404,15 @@ public class AddStaffActivity extends AppCompatActivity {
             String message = "Sorry, Postal code is incorrect pattern. A0A 0A0!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(city.isEmpty()){
+        else if(city.isEmpty() || city == null){
             String message = "Sorry, city cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(role.isEmpty()){
+        else if(role.isEmpty() || imageUrl == null){
             String message = "Sorry, role cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(imageUrl.isEmpty()){
+        else if(imageUrl.isEmpty() || imageUrl == null){
             String message = "Please choose an image!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }

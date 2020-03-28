@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +50,7 @@ public class AddUnitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_unit);
 
         myDataRef = FirebaseDatabase.getInstance().getReference("units");
+        Log.d(TAG, "onCreate: Units DB"+myDataRef.child("-M3X8yzN8R0Bs41p0PVy"));
         //Shared Preference
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         propId = myPref.getString("propId", "");
@@ -239,19 +241,19 @@ public class AddUnitActivity extends AppCompatActivity {
             String message = "Sorry, entered number is not a tenant!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         } else {
-            Unit newUnit = new Unit(propId, tenantNumber, unitName);
+          //  Unit newUnit = new Unit(propId, tenantNumber, unitName);
             ChatMessage newChatMessage1 = new ChatMessage(chatMessageId, tenantNumber, landlordPhoneNumber, landlordName);
             ChatMessage newChatMessage2 = new ChatMessage(chatMessageId, landlordPhoneNumber, tenantNumber, tenantName);
-
-            DatabaseReference chatRef = myDataRef.child("chatMessages");
-            DatabaseReference newChatRef1 = chatRef.push();
-            DatabaseReference newChatRef2 = chatRef.push();
-            newChatRef1.setValue(newChatMessage1);
-            newChatRef2.setValue(newChatMessage2);
+//
+//            DatabaseReference chatRef = myDataRef.child("chatMessages");
+//            DatabaseReference newChatRef1 = chatRef.push();
+//            DatabaseReference newChatRef2 = chatRef.push();
+//            newChatRef1.setValue(newChatMessage1);
+//            newChatRef2.setValue(newChatMessage2);
 
             String unitId=  myDataRef.push().getKey();
             Unit newUnit = new Unit(unitId,propId, tenantNumber, unitName);
-            myDataRef.setValue(newUnit);
+            myDataRef.child(unitId).setValue(newUnit);
         //  DatabaseReference postsRef = myDataRef.child("units");
         //  DatabaseReference newPostRef = postsRef.push();
         //  newPostRef.setValue(newUnit);

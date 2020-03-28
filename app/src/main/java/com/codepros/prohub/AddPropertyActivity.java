@@ -74,12 +74,12 @@ public class AddPropertyActivity extends AppCompatActivity {
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
         //click CHAT button on toolbar
-        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goChat(v);
-            }
-        });
+//        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goChat(v);
+//            }
+//        });
 
         // click NEWS button on toolbar
         toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
@@ -329,7 +329,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             // need to save to firebase
            // DatabaseReference postsRef = myPropertyRef.child("properties");
            // DatabaseReference newPostRef = postsRef.push();
-            myPropertyRef.setValue(newProperty);
+            myPropertyRef.child(propId).setValue(newProperty);
             Toast.makeText(getApplicationContext(), "property saved!", Toast.LENGTH_LONG).show();
             // intent to next page
            Intent intent = new Intent(this, LessorHomeActivity.class);

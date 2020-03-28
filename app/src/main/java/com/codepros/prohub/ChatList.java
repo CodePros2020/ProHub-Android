@@ -23,6 +23,7 @@ import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.utils.ChatAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -179,7 +180,6 @@ public class ChatList extends AppCompatActivity {
         /////////////////////////////////////////////
 
         chatRecycler = (RecyclerView) findViewById(R.id.recyclerChatList);
-
         chatRecycler = findViewById(R.id.recyclerChatList);
         mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");

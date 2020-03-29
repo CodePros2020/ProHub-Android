@@ -61,19 +61,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_weight="1"
                 android:textSize="18sp"
                 android:padding="6dp"
-                android:text="Phone Number: " />
+                android:text="@string/phone_number" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="end"
                 android:textSize="18sp"
                 android:padding="6dp"
-                android:text="User Role: " />
+                android:text="@string/user_role" />
 
         </LinearLayout>
         <LinearLayout
@@ -87,19 +85,17 @@
                 android:id="@+id/tbUserPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textSize="18sp"
                 android:padding="6dp"
-                android:text="647-949-6506" />
+                android:text="@string/_647_949_6506" />
 
             <TextView
                 android:id="@+id/tvUserRole"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textSize="18sp"
                 android:padding="6dp"
-                android:text="Lessor" />
+                android:text="@string/lessor_tv" />
 
         </LinearLayout>
     </LinearLayout>

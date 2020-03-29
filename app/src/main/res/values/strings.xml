@@ -131,4 +131,8 @@
     <string name="new_password">New Password:</string>
     <string name="confirm_password">Confirm Password:</string>
     <string name="save_changes">Save Changes</string>
+    <string name="phone_number">Phone Number:</string>
+    <string name="user_role">User Role:</string>
+    <string name="_647_949_6506">647-949-6506</string>
+    <string name="lessor_tv">Lessor</string>
 </resources>

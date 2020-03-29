@@ -16,12 +16,13 @@ public class User {
     private String phone;
     private String password;
     private String role;
+    private String imageUrl;
     private boolean is2FA = false;
 
     public User() {
     }
 
-    public User(String firstname, String lastname, String phone, String password){
+    public User(String firstname, String lastname, String phone, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.phone = phone;
@@ -56,7 +57,7 @@ public class User {
         return this.password;
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = hashPassword(password);
     }
 
@@ -68,6 +69,14 @@ public class User {
         this.role = role;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public boolean isIs2FA() {
         return this.is2FA;
     }
@@ -76,11 +85,11 @@ public class User {
         this.is2FA = is2FA;
     }
 
-    public boolean authentication(String password){
+    public boolean authentication(String password) {
         return this.password.equals(hashPassword(hashPassword(password)));
     }
 
-    public String hashPassword(String password){
+    public String hashPassword(String password) {
         String generatedPassword = null;
         try {
             // Create MessageDigest instance for MD5
@@ -92,15 +101,12 @@ public class User {
             //This bytes[] has bytes in decimal format;
             //Convert it to hexadecimal format
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++)
-            {
+            for (int i = 0; i < bytes.length; i++) {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             //Get complete hashed password in hex format
             generatedPassword = sb.toString();
-        }
-        catch (NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return generatedPassword;

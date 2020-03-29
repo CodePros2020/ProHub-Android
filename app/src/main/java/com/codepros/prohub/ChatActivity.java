@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepros.prohub.model.Chat;
+import com.codepros.prohub.utils.ToolbarHelper;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -57,8 +58,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatActivity extends AppCompatActivity {
 
     //Toolbar
-    private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
-    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
+    private Button toolbarBtnSettings, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms;
+    private ImageButton toolbarBtnSearch, btnHome, toolbarBtnMenu;
+    private ToolbarHelper toolbar;
     //Activity Items
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -96,7 +98,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 2;
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
     public static final String ANONYMOUS = "anonymous";
-    private String mUsername,myRole;
+    private String mUsername, myRole;
     private String mSenderName;
     private String mReceiverName;
     private String mPhoneNumber;
@@ -128,9 +130,9 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         mUsername = mSharedPreferences.getString("username", ANONYMOUS);
-        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
+        mPhoneNumber = mSharedPreferences.getString("phoneNum", "0123456789");
         chatMessageId = getIntent().getStringExtra("Chat_ID");
-        myRole=mSharedPreferences.getString("myRole","");
+        myRole = mSharedPreferences.getString("myRole", "");
         timestamp = "2020-03-08 12:11 AM";
         //mFirebaseUser = mUsername;
         /////////////////////////////////////////////////////
@@ -146,114 +148,14 @@ public class ChatActivity extends AppCompatActivity {
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
-        //click CHAT button on toolbar
-        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goChat(v);
-            }
-        });
-
-        // click NEWS button on toolbar
-        toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goNews(v);
-            }
-        });
-
-        //click FORMS button on toolbar
-        toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goForms(v);
-            }
-        });
-
-        // click SEARCH icon on toolbar
-        toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSearch(v);
-            }
-        });
-
-        // click Settings icon on toolbar
-        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSettings(v);
-            }
-        });
-        //click to go to Property page
-        // click to go to Property page
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(getApplicationContext(), toolbarBtnMenu);
-        final Menu menu = dropDownMenu.getMenu();
-        // list of items for menu:
-        menu.add(0, 0, 0, "Manage Unit");
-        menu.add(1, 1, 1, "Manage Staff");
-        menu.add(2, 2, 2, "Logout");
-
-        // logout item
-        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case 0:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
-                            startActivity(intent);
-                            return true;
-                        }
-                    case 1:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
-                            startActivity(intent);
-                            return true;
-                        }
-
-                    case 2:
-                        // item ID 0 was clicked
-                        Intent i = new Intent(getBaseContext(), MainActivity.class);
-                        i.putExtra("finish", true);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
-                        startActivity(i);
-                        FirebaseAuth.getInstance().signOut();
-                        finish();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        // Menu button click
-        toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dropDownMenu.show();
-            }
-        });
+        toolbar = new ToolbarHelper(this, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms,
+                toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         //////////////////////////////////////////////////////////////////////////
 
         mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         mUsername = mSharedPreferences.getString("username", ANONYMOUS);
-        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
+        mPhoneNumber = mSharedPreferences.getString("phoneNum", "0123456789");
         chatMessageId = getIntent().getStringExtra("Chat_ID");
 
         DateFormat dateFormat = new SimpleDateFormat("MMM dd, hh:mm a");
@@ -287,8 +189,8 @@ public class ChatActivity extends AppCompatActivity {
 
         final FirebaseRecyclerOptions<Chat> options =
                 new FirebaseRecyclerOptions.Builder<Chat>()
-                    .setQuery(chatRef, parser)
-                    .build();
+                        .setQuery(chatRef, parser)
+                        .build();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Chat, MessageViewHolder>(options) {
 
             @Override
@@ -297,7 +199,7 @@ public class ChatActivity extends AppCompatActivity {
                 Chat chat = (Chat) mFirebaseAdapter.getItem(position);
 
                 //if (currentUser == mFirebaseUser.getDisplayName())
-                if (chat.getFullName().equals(mUsername)){
+                if (chat.getFullName().equals(mUsername)) {
                     // If the current user is the sender of the message
                     return VIEW_TYPE_MESSAGE_SENT;
                 } else {
@@ -309,10 +211,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull final MessageViewHolder holder, int position, @NonNull Chat model) {
 
-                switch (holder.getItemViewType())
-                {
-                    case 0:
-                    {
+                switch (holder.getItemViewType()) {
+                    case 0: {
                         //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                         if (model.getMessage() != null) {
                             holder.messageTextView.setText(model.getMessage());
@@ -359,8 +259,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                    case 1:
-                    {
+                    case 1: {
                         //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                         if (model.getMessage() != null) {
                             holder.messageTextView.setText(model.getMessage());
@@ -576,31 +475,6 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    public void goNews(View view) {
-        Intent intent = new Intent(this, NewsViewActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goChat(View view) {
-        Intent intent = new Intent(this, ChatList.class);
-        this.startActivity(intent);
-    }
-
-    public void goForms(View view) {
-        Intent intent = new Intent(this, FormsActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSearch(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSettings(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        this.startActivity(intent);
     }
 }
 

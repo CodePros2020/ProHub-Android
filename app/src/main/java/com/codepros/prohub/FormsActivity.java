@@ -35,6 +35,7 @@ import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.Form;
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
+import com.codepros.prohub.utils.ToolbarHelper;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -63,10 +64,8 @@ public class FormsActivity extends AppCompatActivity {
     // nested class
     public static class FormViewHolder extends RecyclerView.ViewHolder {
         TextView formFileNameView;
-
         public FormViewHolder(View v) {
             super(v);
-
             formFileNameView = (TextView) itemView.findViewById(R.id.formFileNameView);
         }
     }
@@ -78,12 +77,13 @@ public class FormsActivity extends AppCompatActivity {
     private Button toolbarBtnSettings;
     private ImageButton btnHome, toolbarBtnSearch;
     private ImageButton toolbarBtnMenu;
+    private ToolbarHelper toolbar;
 
     private static final int REQUEST_IMAGE = 2;
     private static final String TAG = "FormsActivity";
     public static final String FORM_CHILD = "form";
 
-    private String mPropId,myRole;
+    private String mPropId, myRole;
     public static final String ANONYMOUS = "anonymous";
     private RecyclerView mFormListRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -112,116 +112,15 @@ public class FormsActivity extends AppCompatActivity {
         toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
         toolbarBtnForms = findViewById(R.id.toolbarBtnForms);
         toolbarBtnSettings = findViewById(R.id.toolbarBtnSettings);
-        btnHome=findViewById(R.id.ImageButtonHome);
+        btnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
         toolbarBtnForms.setBackgroundColor(getResources().getColor(R.color.btnBackground));
 
-        //click CHAT button on toolbar
-        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goChat(v);
-            }
-        });
+        toolbar = new ToolbarHelper(this, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms,
+                toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
-        // click NEWS button on toolbar
-        toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goNews(v);
-            }
-        });
-
-        //click FORMS button on toolbar
-        toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goForms(v);
-            }
-        });
-
-        // click SEARCH icon on toolbar
-        toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSearch(v);
-            }
-        });
-
-        // click Settings icon on toolbar
-        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSettings(v);
-            }
-        });
-        //click to go to Property page
-        // click to go to Property page
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);
-        final Menu menu = dropDownMenu.getMenu();
-        // list of items for menu:
-        menu.add(0, 0, 0, "Manage Unit");
-        menu.add(1, 1, 1, "Manage Staff");
-        menu.add(2, 2, 2, "Logout");
-
-        // logout item
-        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case 0:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
-                            startActivity(intent);
-                            return true;
-                        }
-                    case 1:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
-                            startActivity(intent);
-                            return true;
-                        }
-
-                    case 2:
-                        // item ID 0 was clicked
-                        Intent i = new Intent(getBaseContext(), MainActivity.class);
-                        i.putExtra("finish", true);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
-                        startActivity(i);
-                        FirebaseAuth.getInstance().signOut();
-                        finish();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        // Menu button click
-        toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dropDownMenu.show();
-            }
-        });
         //////////////////////////////////////////////
-
-
 
         // Initialize RecyclerView.
         mFormListRecyclerView = (RecyclerView) findViewById(R.id.mFormListRecyclerView);
@@ -293,9 +192,8 @@ public class FormsActivity extends AppCompatActivity {
         mFormListRecyclerView.setAdapter(mFirebaseAdapter);
 
 
-
         // upload button
-        Button btnUpload =  (Button)findViewById(R.id.btnUpload);
+        Button btnUpload = (Button) findViewById(R.id.btnUpload);
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -303,7 +201,7 @@ public class FormsActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 // open image or pdf
-                String[] mimeTypes = {"image/*","application/pdf"};
+                String[] mimeTypes = {"image/*", "application/pdf"};
                 intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
 
@@ -347,7 +245,7 @@ public class FormsActivity extends AppCompatActivity {
                     newForm.setFormTitle(fileName);
 
                     //
-                                        mFirebaseDatabaseReference.child(FORM_CHILD).push()
+                    mFirebaseDatabaseReference.child(FORM_CHILD).push()
                             .setValue(newForm, new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(DatabaseError databaseError,
@@ -429,29 +327,4 @@ public class FormsActivity extends AppCompatActivity {
         return displayName;
 
     }
-    public void goNews(View view) {
-        Intent intent = new Intent(this, NewsViewActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goChat(View view) {
-        Intent intent = new Intent(this, ChatList.class);
-        this.startActivity(intent);
-    }
-
-    public void goForms(View view) {
-        Intent intent = new Intent(this, FormsActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSearch(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSettings(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        this.startActivity(intent);
-    }
-
 }

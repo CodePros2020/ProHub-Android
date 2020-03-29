@@ -36,9 +36,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddPropertyActivity extends AppCompatActivity {
-    //Toolbar
-
-    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
     //Activity Items
     private static final String TAG = "NewPropertyActivity";
     // user interaction objects

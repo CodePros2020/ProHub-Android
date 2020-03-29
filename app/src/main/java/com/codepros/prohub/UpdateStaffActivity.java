@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepros.prohub.model.Staff;
+import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,11 +48,12 @@ import java.util.regex.Pattern;
 
 public class UpdateStaffActivity extends AppCompatActivity {
     //Toolbar
-    private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
-    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
+    private Button toolbarBtnSettings, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms;
+    private ImageButton toolbarBtnSearch, btnHome, toolbarBtnMenu;
+    private ToolbarHelper toolbar;
     //
     String myRole;
-    String propId,propName;
+    String propId, propName;
 
     // views for update staff
     private EditText etUpdateName;
@@ -91,10 +93,10 @@ public class UpdateStaffActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_staff);
 
         SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
-        myRole= sharedPreferences.getString("myRole", "");
+        myRole = sharedPreferences.getString("myRole", "");
 
-        propName= sharedPreferences.getString("propName", "");
-        propId= sharedPreferences.getString("propId", "");
+        propName = sharedPreferences.getString("propName", "");
+        propId = sharedPreferences.getString("propId", "");
 
         //Shared Preferences
         myStaffRef = FirebaseDatabase.getInstance().getReference("staff");
@@ -113,120 +115,22 @@ public class UpdateStaffActivity extends AppCompatActivity {
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
-        //click CHAT button on toolbar
-        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goChat(v);
-            }
-        });
+        toolbar = new ToolbarHelper(this, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms,
+                toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
-        // click NEWS button on toolbar
-        toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goNews(v);
-            }
-        });
-
-        //click FORMS button on toolbar
-        toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goForms(v);
-            }
-        });
-
-        // click SEARCH icon on toolbar
-        toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSearch(v);
-            }
-        });
-
-        // click Settings icon on toolbar
-        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSettings(v);
-            }
-        });
-        //click to go to Property page
-        // click to go to Property page
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
-                startActivity(intent);
-            }
-        });
-        // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);
-        final Menu menu = dropDownMenu.getMenu();
-        // list of items for menu:
-        menu.add(0, 0, 0, "Manage Unit");
-        menu.add(1, 1, 1, "Manage Staff");
-        menu.add(2, 2, 2, "Logout");
-
-        // logout item
-        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case 0:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
-                            startActivity(intent);
-                            return true;
-                        }
-                    case 1:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
-                            startActivity(intent);
-                            return true;
-                        }
-
-                    case 2:
-                        // item ID 0 was clicked
-                        Intent i = new Intent(getBaseContext(), MainActivity.class);
-                        i.putExtra("finish", true);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
-                        startActivity(i);
-                        FirebaseAuth.getInstance().signOut();
-                        finish();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        // Menu button click
-        toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dropDownMenu.show();
-            }
-        });
         //////////////////////////////////////////////
 
         // find Views
-        etUpdateName=findViewById(R.id.etUpdateName);
-        etUpdateEmail=findViewById(R.id.etUpdateEmail);
-        etUpdatePhone=findViewById(R.id.etUpdatePhone);
-        etUpdateAddress=findViewById(R.id.etUpdateAddress);
-        etUpdateCity=findViewById(R.id.etUpdateCity);
-        spUpdateProvince=findViewById(R.id.spUpdateProvince);
-        etUpdatePostalCode=findViewById(R.id.etUpdatePostalCode);
-        etUpdateRole=findViewById(R.id.etUpdateRole);
+        etUpdateName = findViewById(R.id.etUpdateName);
+        etUpdateEmail = findViewById(R.id.etUpdateEmail);
+        etUpdatePhone = findViewById(R.id.etUpdatePhone);
+        etUpdateAddress = findViewById(R.id.etUpdateAddress);
+        etUpdateCity = findViewById(R.id.etUpdateCity);
+        spUpdateProvince = findViewById(R.id.spUpdateProvince);
+        etUpdatePostalCode = findViewById(R.id.etUpdatePostalCode);
+        etUpdateRole = findViewById(R.id.etUpdateRole);
         // buttons
-        updateStaffImagebtn =findViewById(R.id.updateStaffImagebtn);
+        updateStaffImagebtn = findViewById(R.id.updateStaffImagebtn);
         updateStaffCancelBtn = findViewById(R.id.updateStaffCancelBtn);
         updateStaffPostBtn = findViewById(R.id.updateStaffPostBtn);
 
@@ -252,7 +156,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
 
         // get bundled extras
         Intent displayIntent = getIntent();
-        Bundle bundle=displayIntent.getExtras();
+        Bundle bundle = displayIntent.getExtras();
 
         staffId = bundle.getString("staffId");
         imageUrl = bundle.getString("imgUrl");
@@ -269,24 +173,24 @@ public class UpdateStaffActivity extends AppCompatActivity {
         etUpdateName.setText(name);
         etUpdateEmail.setText(email);
         etUpdatePhone.setText(phone);
-        etUpdateAddress.setText(address+", ");
+        etUpdateAddress.setText(address + ", ");
         etUpdateCity.setText(city);
         etUpdatePostalCode.setText(postalCode);
         etUpdateRole.setText(role);
         Picasso.get().load(imageUrl).placeholder(R.drawable.noimg).into(this.updateStaffImagebtn);
 
         // set province Spinner
-        provinces= provinces=getResources().getStringArray(R.array.provinces);
+        provinces = provinces = getResources().getStringArray(R.array.provinces);
         SetProvinceAdapter();
 
     }
 
     // get index of spinner
-    public int getIndex(Spinner spinner, String str){
+    public int getIndex(Spinner spinner, String str) {
         int index = 0;
 
-        for (int i = 0; i<spinner.getCount(); i++){
-            if (spinner.getItemAtPosition(i).equals(str)){
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).equals(str)) {
                 index = i;
             }
         }
@@ -295,29 +199,26 @@ public class UpdateStaffActivity extends AppCompatActivity {
 
     // Setting list View adapter
     public void SetProvinceAdapter() {
-        provinceAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, provinces){
+        provinceAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, provinces) {
             @Override
-            public boolean isEnabled(int position){
-                if(position == 0)
-                {
+            public boolean isEnabled(int position) {
+                if (position == 0) {
                     // Disable the first item from Spinner
                     // First item will be use for hint
                     return false;
-                }
-                else
-                {
+                } else {
                     return true;
                 }
             }
+
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
-                if(position == 0){
+                if (position == 0) {
                     // Set the hint text color gray
                     tv.setTextColor(Color.GRAY);
-                }
-                else {
+                } else {
                     tv.setTextColor(Color.BLACK);
                 }
 
@@ -339,12 +240,12 @@ public class UpdateStaffActivity extends AppCompatActivity {
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint
-                if(position > 0){
-                        // Notify the selected item text
-                        province = spUpdateProvince.getSelectedItem().toString();
-                        Toast.makeText
-                                (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                                .show();
+                if (position > 0) {
+                    // Notify the selected item text
+                    province = spUpdateProvince.getSelectedItem().toString();
+                    Toast.makeText
+                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
 
@@ -357,7 +258,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
     }
 
     // get file extention from uri
-    private String getExtension(Uri uri){
+    private String getExtension(Uri uri) {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
@@ -365,15 +266,14 @@ public class UpdateStaffActivity extends AppCompatActivity {
     }
 
     private void FileUploader() {
-        final StorageReference ref = myStorageRef.child(System.currentTimeMillis()+"."+getExtension(imguri));
+        final StorageReference ref = myStorageRef.child(System.currentTimeMillis() + "." + getExtension(imguri));
 
-        try{
+        try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imguri);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            if(bitmap.getByteCount() > 100000){
+            if (bitmap.getByteCount() > 100000) {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-            }
-            else{
+            } else {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             }
 
@@ -400,12 +300,12 @@ public class UpdateStaffActivity extends AppCompatActivity {
                     }
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, e.getMessage());
         }
     }
 
-    private void fileChooser(){
+    private void fileChooser() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
         // set file type to open
@@ -421,7 +321,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null){
+        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null) {
             // get uri of local image
             imguri = data.getData();
 
@@ -434,7 +334,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
     }
 
     // update staff
-    private void updateStaff(View v){
+    private void updateStaff(View v) {
 
         // get input from the form
         String name = etUpdateName.getText().toString();
@@ -449,51 +349,42 @@ public class UpdateStaffActivity extends AppCompatActivity {
         Matcher matcher = pattern.matcher(postal);
 
         // validations
-        if(name.isEmpty()|| name == null){
+        if (name.isEmpty() || name == null) {
             String message = "Sorry, name cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(email.isEmpty()|| email == null){
+        } else if (email.isEmpty() || email == null) {
             String message = "Sorry, email cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(phone.isEmpty() || phone == null){
+        } else if (phone.isEmpty() || phone == null) {
             String message = "Sorry, phone cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(address.isEmpty() || address == null){
+        } else if (address.isEmpty() || address == null) {
             String message = "Sorry, address cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(postal.isEmpty() || postal == null){
+        } else if (postal.isEmpty() || postal == null) {
             String message = "Sorry, Postal code cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(!matcher.matches()){
+        } else if (!matcher.matches()) {
             String message = "Sorry, Postal code is incorrect pattern. A0A 0A0!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(city.isEmpty() || city == null){
+        } else if (city.isEmpty() || city == null) {
             String message = "Sorry, city cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(role.isEmpty() || role == null){
+        } else if (role.isEmpty() || role == null) {
             String message = "Sorry, role cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(imageUrl.isEmpty() || imageUrl == null){
+        } else if (imageUrl.isEmpty() || imageUrl == null) {
             String message = "Please choose an image!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else{
+        } else {
             // staff with updated information
-            Staff staffToUpdate = new Staff(staffId, propId,name,phone,address,postal,city,province,email,role,imageUrl);
+            Staff staffToUpdate = new Staff(staffId, propId, name, phone, address, postal, city, province, email, role, imageUrl);
 
             // update database
             myStaffRef.child(staffId).setValue(staffToUpdate);
 
             // notification
-            Toast.makeText(getApplicationContext(), staffToUpdate.getName()+" is saved!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), staffToUpdate.getName() + " is saved!", Toast.LENGTH_LONG).show();
 
             // redirect to Staff list View
             goBack();
@@ -501,33 +392,8 @@ public class UpdateStaffActivity extends AppCompatActivity {
 
     }
 
-    private void goBack(){
+    private void goBack() {
         Intent intent = new Intent(this, ViewStaffActivity.class);
         this.startActivity(intent);
     }
-
-    public void goNews(View view) {
-        Intent intent = new Intent(this, NewsViewActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goChat(View view) {
-        Intent intent = new Intent(this, ChatList.class);
-        this.startActivity(intent);
-    }
-
-    public void goForms(View view) {
-        Intent intent = new Intent(this, FormsActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSearch(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        this.startActivity(intent);
-    }
-    public void goSettings(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        this.startActivity(intent);
-    }
-
 }

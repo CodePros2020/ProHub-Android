@@ -102,33 +102,29 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // validate password with confirmed password
         // and need input for first name and last name
-        if(!passwordString.equals(confirmedPassword)){
+        if (!passwordString.equals(confirmedPassword)) {
             // show error message
             String message = "Sorry, password doesn't match, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(firstName.isEmpty()){
+        } else if (firstName.isEmpty()) {
             // show error message
             String message = "Sorry, first name cannot be empty, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(lastName.isEmpty()){
+        } else if (lastName.isEmpty()) {
             // show error message
             String message = "Sorry, last name cannot be empty, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(phoneNumber.isEmpty()){
+        } else if (phoneNumber.isEmpty()) {
             // show error message
             String message = "Sorry, phone number cannot be empty, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
         // validate phone number in correct format
-        else if(!PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber) || phoneNumber.length() < 9 || phoneNumber.length() > 13){
+        else if (!PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber) || phoneNumber.length() < 9 || phoneNumber.length() > 13) {
             // show error message
             String message = "Sorry, incorrect phone number format, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else{
+        } else {
             User newUser = new User(firstName, lastName, phoneNumber, passwordString);
             // need to save to firebase
             myUserRef.child("users").child(phoneNumber).setValue(newUser);

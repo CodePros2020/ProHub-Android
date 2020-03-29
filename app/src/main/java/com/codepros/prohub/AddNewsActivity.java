@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.codepros.prohub.model.News;
+import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,15 +42,15 @@ import java.util.Calendar;
 
 public class AddNewsActivity extends AppCompatActivity {
     //Toolbar
-    private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
-    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
+    private Button toolbarBtnSettings, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms;
+    private ImageButton toolbarBtnSearch, btnHome, toolbarBtnMenu;
     //
     private ImageView addNewsbtn;
     private EditText newsTitleInput, newsContentInput;
     private RadioButton radioBtnAll, radioBtnManage, radioBtnTrue, radioBtnFalse;
     private Button addNewsCancelBtn, addNewsPostBtn;
 
-    private String userPhoneNum, propId, imageUrl,myRole;
+    private String userPhoneNum, propId, imageUrl, myRole;
     private Uri imguri;
     private static final int REQUEST_IMAGE = 2;
     private static final String TAG = "AddNewsActivity";
@@ -58,19 +59,20 @@ public class AddNewsActivity extends AppCompatActivity {
     private DatabaseReference myNewsRef;
     private StorageReference myStorageRef;
 
+    private ToolbarHelper toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_news);
         //
         SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        myRole=myPreference.getString("myRole","");
+        myRole = myPreference.getString("myRole", "");
         userPhoneNum = myPreference.getString("phoneNum", "");
         propId = myPreference.getString("propId", "");
         //////////////////////////////////////////////
         // declaring the buttons
 
-        // define the actions for each button
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
         toolbarBtnNews = findViewById(R.id.toolbarBtnNews);
@@ -80,167 +82,60 @@ public class AddNewsActivity extends AppCompatActivity {
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
 
-        //click CHAT button on toolbar
-        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goChat(v);
-            }
-        });
+        toolbar = new ToolbarHelper(this, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms,
+                toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
-        // click NEWS button on toolbar
-        toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goNews(v);
-            }
-        });
-
-        //click FORMS button on toolbar
-        toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goForms(v);
-            }
-        });
-
-        // click SEARCH icon on toolbar
-        toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSearch(v);
-            }
-        });
-
-        // click Settings icon on toolbar
-        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSettings(v);
-            }
-        });
-        //click to go to Property page
-//        btnHome.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(getBaseContext(),PropertyHomeActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-        // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);
-        final Menu menu = dropDownMenu.getMenu();
-        // list of items for menu:
-        menu.add(0, 0, 0, "Manage Unit");
-        menu.add(1, 1, 1, "Manage Staff");
-        menu.add(2, 2, 2, "Logout");
-
-        // logout item
-        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case 0:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
-                            startActivity(intent);
-                            return true;
-                        }
-                    case 1:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
-                            startActivity(intent);
-                            return true;
-                        }
-
-                    case 2:
-                        // item ID 0 was clicked
-                        Intent i = new Intent(getBaseContext(), MainActivity.class);
-                        i.putExtra("finish", true);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
-                        startActivity(i);
-                        FirebaseAuth.getInstance().signOut();
-                        finish();
-                        return true;
-                }
-                return false;
-            }
-        });
-        // click to go to Property page
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Menu button click
-        toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dropDownMenu.show();
-            }
-        });
         //////////////////////////////////////////////
 
         myNewsRef = FirebaseDatabase.getInstance().getReference();
-    myStorageRef = FirebaseStorage.getInstance().getReference("Images");
+        myStorageRef = FirebaseStorage.getInstance().getReference("Images");
 
-    addNewsbtn = findViewById(R.id.addNewsbtn);
-    newsTitleInput = findViewById(R.id.newsTitleInput);
-    newsContentInput = findViewById(R.id.newsContentInput);
-    radioBtnAll = findViewById(R.id.radioBtnAll);
-    radioBtnManage = findViewById(R.id.radioBtnManage);
-    radioBtnTrue = findViewById(R.id.radioBtnTrue);
-    radioBtnFalse = findViewById(R.id.radioBtnFalse);
-    addNewsCancelBtn = findViewById(R.id.addNewsCancelBtn);
-    addNewsPostBtn = findViewById(R.id.addNewsPostBtn);
+        addNewsbtn = findViewById(R.id.addNewsbtn);
+        newsTitleInput = findViewById(R.id.newsTitleInput);
+        newsContentInput = findViewById(R.id.newsContentInput);
+        radioBtnAll = findViewById(R.id.radioBtnAll);
+        radioBtnManage = findViewById(R.id.radioBtnManage);
+        radioBtnTrue = findViewById(R.id.radioBtnTrue);
+        radioBtnFalse = findViewById(R.id.radioBtnFalse);
+        addNewsCancelBtn = findViewById(R.id.addNewsCancelBtn);
+        addNewsPostBtn = findViewById(R.id.addNewsPostBtn);
 
         addNewsbtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            fileChooser();
-        }
-    });
+            @Override
+            public void onClick(View v) {
+                fileChooser();
+            }
+        });
 
         addNewsCancelBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            goBack();
-        }
-    });
+            @Override
+            public void onClick(View v) {
+                goBack();
+            }
+        });
 
         addNewsPostBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            addNews(v);
-        }
-    });
-}
+            @Override
+            public void onClick(View v) {
+                addNews(v);
+            }
+        });
+    }
 
-    private String getExtension(Uri uri){
+    private String getExtension(Uri uri) {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
     private void FileUploader() {
-        final StorageReference ref = myStorageRef.child(System.currentTimeMillis()+"."+getExtension(imguri));
-        try{
+        final StorageReference ref = myStorageRef.child(System.currentTimeMillis() + "." + getExtension(imguri));
+        try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imguri);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            if(bitmap.getByteCount() > 100000){
+            if (bitmap.getByteCount() > 100000) {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-            }
-            else{
+            } else {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             }
 
@@ -267,12 +162,12 @@ public class AddNewsActivity extends AppCompatActivity {
                     }
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d(TAG, e.getMessage());
         }
     }
 
-    private void fileChooser(){
+    private void fileChooser() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
@@ -282,7 +177,7 @@ public class AddNewsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null){
+        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null) {
             imguri = data.getData();
             addNewsbtn.setImageURI(imguri);
             // upload the image to firebase storage
@@ -290,36 +185,34 @@ public class AddNewsActivity extends AppCompatActivity {
         }
     }
 
-    private void goBack(){
+    private void goBack() {
         Intent intent = new Intent(this, NewsViewActivity.class);
         this.startActivity(intent);
     }
 
-    private void addNews(View v){
+    private void addNews(View v) {
         String title = newsTitleInput.getText().toString();
         String content = newsContentInput.getText().toString();
 
-        if(title.isEmpty()){
+        if (title.isEmpty()) {
             String message = "Sorry, news title cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else if(content.isEmpty()){
+        } else if (content.isEmpty()) {
             String message = "Sorry, news content cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        }
-        else{
+        } else {
             String target = "all";
             boolean hide = false;
-            if(!radioBtnAll.isChecked() && radioBtnManage.isChecked()){
+            if (!radioBtnAll.isChecked() && radioBtnManage.isChecked()) {
                 target = "management only";
             }
-            if(radioBtnTrue.isChecked() && !radioBtnFalse.isChecked()){
+            if (radioBtnTrue.isChecked() && !radioBtnFalse.isChecked()) {
                 hide = true;
             }
             SimpleDateFormat format1 = new SimpleDateFormat("MMM dd, yyyy, KK:mm a");
             String createTime = format1.format(Calendar.getInstance().getTime());
 
-            News mNews = new News(propId, userPhoneNum, title, content,imageUrl, createTime, target, hide);
+            News mNews = new News(propId, userPhoneNum, title, content, imageUrl, createTime, target, hide);
 
             // need to save to firebase
             DatabaseReference postsRef = myNewsRef.child("news");
@@ -331,29 +224,4 @@ public class AddNewsActivity extends AppCompatActivity {
             goBack();
         }
     }
-    public void goNews(View view) {
-        Intent intent = new Intent(this, NewsViewActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goChat(View view) {
-        Intent intent = new Intent(this, ChatList.class);
-        this.startActivity(intent);
-    }
-
-    public void goForms(View view) {
-        Intent intent = new Intent(this, FormsActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSearch(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSettings(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        this.startActivity(intent);
-    }
-
 }

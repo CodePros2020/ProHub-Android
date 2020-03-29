@@ -20,7 +20,7 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-        ToolbarHelper toolbarHelper;
+    ToolbarHelper toolbarHelper;
     private static final String TAG = "LoginActivity";
     // user interaction objects
     private EditText phone, password;
@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
 
         //toolbar
-        toolbarHelper=new ToolbarHelper(this);
+        toolbarHelper = new ToolbarHelper(this);
         //
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -56,34 +56,32 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void login(View view){
+    private void login(View view) {
         String phoneNumber = phone.getText().toString();
         String passwordString = password.getText().toString();
 
-        if(myUsers.size()>0){
-            for (User user: myUsers) {
-                if(user.getPhone().equals(phoneNumber)){
-                    if(user.authentication(passwordString)){
+        if (myUsers.size() > 0) {
+            for (User user : myUsers) {
+                if (user.getPhone().equals(phoneNumber)) {
+                    if (user.authentication(passwordString)) {
                         // save username and phone number to SharedPreference
                         saveToSharedPreferences(user);
-                        toolbarHelper.myRole=user.getRole();
-                        toolbarHelper.phoneNum=phoneNumber;
+                        toolbarHelper.myRole = user.getRole();
+                        toolbarHelper.phoneNum = phoneNumber;
                         Toast.makeText(getApplicationContext(), "login successful!", Toast.LENGTH_LONG).show();
-                        if(!user.isIs2FA()){
+                        if (!user.isIs2FA()) {
                             // intent to next page which make the 2-factor
                             Intent intent = new Intent(this, Enable2FaActivity.class);
                             intent.putExtra("phoneNumber", phoneNumber);
                             intent.putExtra("userRole", user.getRole());
                             this.startActivity(intent);
                             return;
-                        }
-                        else{
-                            if(user.getRole().equals("Tenant")){
+                        } else {
+                            if (user.getRole().equals("Tenant")) {
                                 Intent intent = new Intent(this, PropertyHomeActivity.class);
                                 this.startActivity(intent);
                                 return;
-                            }
-                            else{
+                            } else {
                                 Intent intent = new Intent(this, LessorHomeActivity.class);
                                 //Intent intent = new Intent(this, AddPropertyActivity.class);
                                 this.startActivity(intent);
@@ -100,10 +98,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void saveToSharedPreferences(User user){
+    private void saveToSharedPreferences(User user) {
         SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", 0);
         SharedPreferences.Editor prefEditor = myPreference.edit();
-        prefEditor.putString("username", user.getFirstname()+" "+user.getLastname());
+        prefEditor.putString("username", user.getFirstname() + " " + user.getLastname());
         prefEditor.putString("phoneNum", user.getPhone());
         prefEditor.putString("myRole", user.getRole());
         prefEditor.apply();

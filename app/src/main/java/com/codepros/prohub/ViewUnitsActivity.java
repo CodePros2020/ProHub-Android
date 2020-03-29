@@ -25,6 +25,7 @@ import com.codepros.prohub.model.Staff;
 import com.codepros.prohub.model.Unit;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.utils.StaffAdapter;
+import com.codepros.prohub.utils.ToolbarHelper;
 import com.codepros.prohub.utils.UnitAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,22 +37,24 @@ import java.util.List;
 
 public class ViewUnitsActivity extends AppCompatActivity {
     //Toolbar
-    private Button toolbarBtnSettings, toolbarBtnChat,toolbarBtnNews,toolbarBtnForms ;
-    private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
+    private Button toolbarBtnSettings, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms;
+    private ImageButton toolbarBtnSearch, btnHome, toolbarBtnMenu;
+    private ToolbarHelper toolbar;
     //
     private TextView tvTitleUnit;
     // Activity Items
     public RecyclerView unitsRecyclerView;
     public UnitAdapter unitAdapter;
-    public List<Unit> unitList=new ArrayList<>();
+    public List<Unit> unitList = new ArrayList<>();
     public List<String> unitKeyList = new ArrayList<>();
     public FloatingActionButton btn_add;
     private DatabaseReference myUnitsRef;
     DatabaseReference drUnits;
 
-    String propId,propName;
+    String propId, propName;
     // user role
     private String myRole;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +63,9 @@ public class ViewUnitsActivity extends AppCompatActivity {
         //
         //Shared pref
         SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
-        myRole= sharedPreferences.getString("myRole", "");
-        propId= sharedPreferences.getString("propId","");
-        propName=sharedPreferences.getString("propName","");
+        myRole = sharedPreferences.getString("myRole", "");
+        propId = sharedPreferences.getString("propId", "");
+        propName = sharedPreferences.getString("propName", "");
         //////////////////////////////////////////////
         // declaring the buttons
 
@@ -75,136 +78,35 @@ public class ViewUnitsActivity extends AppCompatActivity {
         btnHome = findViewById(R.id.ImageButtonHome);
         toolbarBtnSearch = findViewById(R.id.ImageButtonSearch);
         toolbarBtnMenu = findViewById(R.id.ImageButtonMenu);
-        btn_add=findViewById(R.id.btn_add_unit);
 
-        //click CHAT button on toolbar
-        toolbarBtnChat.setOnClickListener(new View.OnClickListener() {
+        toolbar = new ToolbarHelper(this, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms,
+                toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
+
+        btn_add = findViewById(R.id.btn_add_unit);
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goChat(v);
-            }
-        });
-
-        // click NEWS button on toolbar
-        toolbarBtnNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goNews(v);
-            }
-        });
-
-        //click FORMS button on toolbar
-        toolbarBtnForms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goForms(v);
-            }
-        });
-
-        // click SEARCH icon on toolbar
-        toolbarBtnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSearch(v);
-            }
-        });
-
-        // click Settings icon on toolbar
-        toolbarBtnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goSettings(v);
-            }
-        });
-        //click to go to Property page
-        // click to go to Property page
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),PropertyHomeActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Menu drop down
-        final PopupMenu dropDownMenu = new PopupMenu(this, toolbarBtnMenu);
-        final Menu menu = dropDownMenu.getMenu();
-        // list of items for menu:
-        menu.add(0, 0, 0, "Manage Unit");
-        menu.add(1, 1, 1, "Manage Staff");
-        menu.add(2, 2, 2, "Logout");
-
-        // logout item
-        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case 0:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewUnitsActivity.class);
-                            startActivity(intent);
-                            finish();
-                            return true;
-                        }
-                    case 1:
-                        if(myRole.equals("Tenant")){
-                            Toast.makeText(getBaseContext(),"Sorry! You do not have permission to manage staff.",Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Intent intent = new Intent(getBaseContext(),ViewStaffActivity.class);
-                            startActivity(intent);
-                            finish();
-                            return true;
-                        }
-
-                    case 2:
-                        // item ID 0 was clicked
-                        Intent i = new Intent(getBaseContext(), MainActivity.class);
-                        i.putExtra("finish", true);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clean all activities
-                        startActivity(i);
-                        FirebaseAuth.getInstance().signOut();
-                        finish();
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        // Menu button click
-        toolbarBtnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dropDownMenu.show();
-            }
-        });
-        if(myRole.equals("Tenant")){
-            Toast.makeText(getApplicationContext(),"Sorry! You do not have permission to add unit.",Toast.LENGTH_LONG).show();
-        }
-        else{
-            btn_add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                if (myRole.equals("Tenant")) {
+                    Toast.makeText(getApplicationContext(), "Sorry! You do not have permission to add unit.", Toast.LENGTH_LONG).show();
+                } else {
                     Intent intent = new Intent(getBaseContext(), AddUnitActivity.class);
                     startActivity(intent);
                 }
-            });
-        }
+            }
+        });
 
         //////////////////////////////////////////////
 
-        tvTitleUnit=findViewById(R.id.tvTitleUnit);
+        tvTitleUnit = findViewById(R.id.tvTitleUnit);
         tvTitleUnit.setText(propName);
         //
         myUnitsRef = FirebaseDatabase.getInstance().getReference();
         //Add button functionality
-        Log.d("Prop: ", "Property Id"+propId);
+        Log.d("Prop: ", "Property Id" + propId);
 
         // Staff recycler view
-        unitsRecyclerView =findViewById(R.id.unitsRecyclerView);
+        unitsRecyclerView = findViewById(R.id.unitsRecyclerView);
         unitsRecyclerView.setHasFixedSize(true);
         unitsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -215,14 +117,14 @@ public class ViewUnitsActivity extends AppCompatActivity {
             @Override
             public void DataIsLoad(List<Unit> listUnits, List<String> keys) {
                 unitList.clear();
-                for(Unit unit:listUnits){
-                    if(unit.getPropId().equals(propId)){
+                for (Unit unit : listUnits) {
+                    if (unit.getPropId().equals(propId)) {
                         unitList.add(unit);
                     }
                 }
                 // filter the target viewer
                 //unitList=listUnits;
-                unitKeyList=keys;
+                unitKeyList = keys;
                 setUnitsAdapter();
             }
         });
@@ -230,39 +132,13 @@ public class ViewUnitsActivity extends AppCompatActivity {
     }
 
     private void setUnitsAdapter() {
-        unitAdapter = new UnitAdapter( unitList,unitKeyList, myRole,this);
+        unitAdapter = new UnitAdapter(unitList, unitKeyList, myRole, this);
         unitsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(unitsRecyclerView);
         unitsRecyclerView.setAdapter(unitAdapter);
     }
 
-    public void goNews(View view) {
-        Intent intent = new Intent(this, NewsViewActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goChat(View view) {
-        Intent intent = new Intent(this, ChatList.class);
-        this.startActivity(intent);
-    }
-
-    public void goForms(View view) {
-        Intent intent = new Intent(this, FormsActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSearch(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        this.startActivity(intent);
-    }
-
-    public void goSettings(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        this.startActivity(intent);
-    }
-
-
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallback=new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -271,17 +147,16 @@ public class ViewUnitsActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
-            if(myRole.equals("Tenant")){
-                Toast.makeText(getApplicationContext(),"Sorry! You do not have permission to delete unit.",Toast.LENGTH_LONG).show();
-            }
-            else{
-                Unit unit=unitList.get(viewHolder.getAdapterPosition());
+            if (myRole.equals("Tenant")) {
+                Toast.makeText(getApplicationContext(), "Sorry! You do not have permission to delete unit.", Toast.LENGTH_LONG).show();
+            } else {
+                Unit unit = unitList.get(viewHolder.getAdapterPosition());
                 unitList.remove(viewHolder.getAdapterPosition());
-                drUnits=FirebaseDatabase.getInstance().getReference("units").child(unit.getUnitId());
+                drUnits = FirebaseDatabase.getInstance().getReference("units").child(unit.getUnitId());
                 drUnits.removeValue();
                 unitAdapter.notifyDataSetChanged();
 
-                Toast.makeText(getBaseContext(),"Unit deleted successfully",Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Unit deleted successfully", Toast.LENGTH_LONG).show();
             }
 
 

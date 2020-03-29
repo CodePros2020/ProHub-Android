@@ -124,4 +124,11 @@
     <string name="e_g_superintendent">e.g Superintendent</string>
     <string name="news_feed_list">News Feed List</string>
     <string name="property_name_1">Property Name</string>
+    <string name="user_information">User Information</string>
+    <string name="user_name">User Name</string>
+    <string name="change_password">Change Password</string>
+    <string name="current_password">Current Password:</string>
+    <string name="new_password">New Password:</string>
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

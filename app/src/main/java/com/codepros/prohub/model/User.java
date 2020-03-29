@@ -22,11 +22,12 @@ public class User {
     public User() {
     }
 
-    public User(String firstname, String lastname, String phone, String password) {
+    public User(String firstname, String lastname, String phone, String password, String imageUrl) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.phone = phone;
         this.password = hashPassword(password);
+        this.imageUrl = imageUrl;
     }
 
     public String getFirstname() {

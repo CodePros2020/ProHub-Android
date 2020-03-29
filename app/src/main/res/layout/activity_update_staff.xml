@@ -127,7 +127,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/updateStaffbtn"
+                    android:id="@+id/updateStaffImagebtn"
                     android:layout_width="125dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

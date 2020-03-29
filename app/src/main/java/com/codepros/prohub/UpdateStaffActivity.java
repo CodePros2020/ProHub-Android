@@ -53,33 +53,37 @@ public class UpdateStaffActivity extends AppCompatActivity {
     String myRole;
     String propId,propName;
 
-    private TextView tvUpdateStaff;
+    // views for update staff
     private EditText etUpdateName;
     private EditText etUpdateEmail;
     private EditText etUpdatePhone;
     private EditText etUpdateAddress;
     private EditText etUpdatePostalCode;
     private EditText etUpdateCity;
+    private EditText etUpdateRole;
+    private Spinner spUpdateProvince;
+    ImageView updateStaffImagebtn;
+    Button updateStaffCancelBtn;
+    Button updateStaffPostBtn;
+
+    // province dropdown list
     ArrayAdapter<String> provinceAdapter;
     String[] provinces;
 
+    // variables for Staff
     String staffId;
-
-    private Spinner spUpdateProvince;
-    private EditText etUpdateRole;
-    ImageView updateStaffbtn;
-    Button updateStaffCancelBtn, updateStaffPostBtn;
-
     String name, email, phone, address, postalCode, city, province, role, imageUrl;
-    private Uri imguri;
 
-    private static final String TAG = "UpdateStaffActivity";
+    // image file upload
+    private Uri imguri;
     private static final int REQUEST_IMAGE = 2;
 
     // firebase database objects
     private DatabaseReference myStaffRef;
     private StorageReference myStorageRef;
 
+    // constant
+    private static final String TAG = "UpdateStaffActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +216,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
         });
         //////////////////////////////////////////////
 
+        // find Views
         etUpdateName=findViewById(R.id.etUpdateName);
         etUpdateEmail=findViewById(R.id.etUpdateEmail);
         etUpdatePhone=findViewById(R.id.etUpdatePhone);
@@ -220,12 +225,13 @@ public class UpdateStaffActivity extends AppCompatActivity {
         spUpdateProvince=findViewById(R.id.spUpdateProvince);
         etUpdatePostalCode=findViewById(R.id.etUpdatePostalCode);
         etUpdateRole=findViewById(R.id.etUpdateRole);
-        updateStaffbtn =findViewById(R.id.updateStaffbtn);
+        // buttons
+        updateStaffImagebtn =findViewById(R.id.updateStaffImagebtn);
         updateStaffCancelBtn = findViewById(R.id.updateStaffCancelBtn);
         updateStaffPostBtn = findViewById(R.id.updateStaffPostBtn);
 
-
-        updateStaffbtn.setOnClickListener(new View.OnClickListener() {
+        // button evvents
+        updateStaffImagebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fileChooser();
@@ -237,15 +243,12 @@ public class UpdateStaffActivity extends AppCompatActivity {
                 goBack();
             }
         });
-
-        //Province Spinner
         updateStaffPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateStaff(v);
             }
         });
-
 
         // get bundled extras
         Intent displayIntent = getIntent();
@@ -262,25 +265,23 @@ public class UpdateStaffActivity extends AppCompatActivity {
         postalCode = bundle.getString("postal");
         role = bundle.getString("role");
 
+        // set text to views
         etUpdateName.setText(name);
         etUpdateEmail.setText(email);
         etUpdatePhone.setText(phone);
         etUpdateAddress.setText(address+", ");
         etUpdateCity.setText(city);
-        //
-        //Province Spinner
+        etUpdatePostalCode.setText(postalCode);
+        etUpdateRole.setText(role);
+        Picasso.get().load(imageUrl).placeholder(R.drawable.noimg).into(this.updateStaffImagebtn);
+
+        // set province Spinner
         provinces= provinces=getResources().getStringArray(R.array.provinces);
         SetProvinceAdapter();
 
-//        spUpdateProvince.setSelection(getIndex(spUpdateProvince, province));
-
-        etUpdatePostalCode.setText(postalCode);
-        etUpdateRole.setText(role);
-        Picasso.get().load(imageUrl).placeholder(R.drawable.noimg).into(this.updateStaffbtn);
-
-
     }
 
+    // get index of spinner
     public int getIndex(Spinner spinner, String str){
         int index = 0;
 
@@ -290,8 +291,8 @@ public class UpdateStaffActivity extends AppCompatActivity {
             }
         }
         return index;
-
     }
+
     // Setting list View adapter
     public void SetProvinceAdapter() {
         provinceAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, provinces){
@@ -324,12 +325,14 @@ public class UpdateStaffActivity extends AppCompatActivity {
             }
         };
 
+        // set adapter to spinner
         provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spUpdateProvince.setAdapter(provinceAdapter);
 
         // set province from retrieved record
         spUpdateProvince.setSelection(getIndex(spUpdateProvince, province));
 
+        // set onItemSelected event
         spUpdateProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -353,14 +356,17 @@ public class UpdateStaffActivity extends AppCompatActivity {
 
     }
 
+    // get file extention from uri
     private String getExtension(Uri uri){
         ContentResolver cr = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
     private void FileUploader() {
         final StorageReference ref = myStorageRef.child(System.currentTimeMillis()+"."+getExtension(imguri));
+
         try{
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imguri);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -401,31 +407,36 @@ public class UpdateStaffActivity extends AppCompatActivity {
 
     private void fileChooser(){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        // set file type to open
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
+
+        // open file explorer
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
+    //
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == REQUEST_IMAGE && resultCode == RESULT_OK && data != null){
+            // get uri of local image
             imguri = data.getData();
-            updateStaffbtn.setImageURI(imguri);
+
+            // update uri
+            updateStaffImagebtn.setImageURI(imguri);
+
             // upload the image to firebase storage
             FileUploader();
         }
     }
 
-
-
-    private void goBack(){
-        Intent intent = new Intent(this, ViewStaffActivity.class);
-        this.startActivity(intent);
-    }
-
+    // update staff
     private void updateStaff(View v){
 
+        // get input from the form
         String name = etUpdateName.getText().toString();
         String email = etUpdateEmail.getText().toString();
         String phone = etUpdatePhone.getText().toString();
@@ -437,6 +448,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(postal);
 
+        // validations
         if(name.isEmpty()|| name == null){
             String message = "Sorry, name cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -474,21 +486,25 @@ public class UpdateStaffActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
         else{
-            Toast.makeText(getApplicationContext(), myStaffRef.child(staffId).toString(), Toast.LENGTH_LONG).show();
+            // staff with updated information
+            Staff staffToUpdate = new Staff(staffId, propId,name,phone,address,postal,city,province,email,role,imageUrl);
 
-            Staff updatedStaff = new Staff(staffId,propId,name,phone,address,postal,city,province,email,role,imageUrl);
+            // update database
+            myStaffRef.child(staffId).setValue(staffToUpdate);
 
-            myStaffRef.child(staffId).setValue(updatedStaff);
+            // notification
+            Toast.makeText(getApplicationContext(), staffToUpdate.getName()+" is saved!", Toast.LENGTH_LONG).show();
 
-            Toast.makeText(getApplicationContext(), updatedStaff.getName()+" is saved!", Toast.LENGTH_LONG).show();
             // redirect to Staff list View
             goBack();
         }
 
-
     }
 
-
+    private void goBack(){
+        Intent intent = new Intent(this, ViewStaffActivity.class);
+        this.startActivity(intent);
+    }
 
     public void goNews(View view) {
         Intent intent = new Intent(this, NewsViewActivity.class);
@@ -513,4 +529,5 @@ public class UpdateStaffActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SettingsActivity.class);
         this.startActivity(intent);
     }
+
 }

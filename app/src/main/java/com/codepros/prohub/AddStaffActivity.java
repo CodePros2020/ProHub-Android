@@ -408,7 +408,7 @@ public class AddStaffActivity extends AppCompatActivity {
             String message = "Sorry, city cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
-        else if(role.isEmpty() || imageUrl == null){
+        else if(role.isEmpty() || role == null){
             String message = "Sorry, role cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }

@@ -76,6 +76,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
                 context.startActivity(newIntent);
             }
         });
+
         holder.tvMenuOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,16 +89,12 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-//                            if(item.getItemId()==R.id.menu_item_update){
-//                                Intent newIntent = new Intent(context, UpdateStaffActivity.class);
-//                                context.startActivity(newIntent);
-//                            }
-//                            return false;
                             if(item.getItemId()==R.id.menu_item_update){
                                 Intent newIntent=new Intent(context, UpdateStaffActivity.class);
 
                                 // bundle and put extras
                                 Bundle b = new Bundle();
+                                b.putString("staffId", staff.getStaffId()); // for update
                                 b.putString("name",staff.getName());
                                 b.putString("imgUrl",staff.getImgUrl());
                                 b.putString("email",staff.getEmail());

@@ -63,6 +63,8 @@ public class UpdateStaffActivity extends AppCompatActivity {
     ArrayAdapter<String> provinceAdapter;
     String[] provinces;
 
+    String staffId;
+
     private Spinner spUpdateProvince;
     private EditText etUpdateRole;
     ImageView updateStaffbtn;
@@ -220,7 +222,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
         etUpdateRole=findViewById(R.id.etUpdateRole);
         updateStaffbtn =findViewById(R.id.updateStaffbtn);
         updateStaffCancelBtn = findViewById(R.id.updateStaffCancelBtn);
-        updateStaffPostBtn = findViewById(R.id.updateStaffCancelBtn);
+        updateStaffPostBtn = findViewById(R.id.updateStaffPostBtn);
 
 
         updateStaffbtn.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +251,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
         Intent displayIntent = getIntent();
         Bundle bundle=displayIntent.getExtras();
 
+        staffId = bundle.getString("staffId");
         imageUrl = bundle.getString("imgUrl");
         name = bundle.getString("name");
         email = bundle.getString("email");
@@ -422,65 +425,67 @@ public class UpdateStaffActivity extends AppCompatActivity {
     }
 
     private void updateStaff(View v){
-        Toast.makeText(getApplicationContext(), "clicked!", Toast.LENGTH_LONG).show();
 
-        //        String name = etName.getText().toString();
-//        String email = etEmail.getText().toString();
-//        String phone = etPhone.getText().toString();
-//        String address = etAddress.getText().toString();
-//        String postal = etPostal.getText().toString();
-//        String city = etCity.getText().toString();
-//        String role = etRole.getText().toString();
-//        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
-//        Pattern pattern = Pattern.compile(regex);
-//        Matcher matcher = pattern.matcher(postal);
-//
-//        if(name.isEmpty()|| name == null){
-//            String message = "Sorry, name cannot be empty!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else if(email.isEmpty()|| email == null){
-//            String message = "Sorry, email cannot be empty!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else if(phone.isEmpty() || phone == null){
-//            String message = "Sorry, phone cannot be empty!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else if(address.isEmpty() || address == null){
-//            String message = "Sorry, address cannot be empty!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else if(postal.isEmpty() || postal == null){
-//            String message = "Sorry, Postal code cannot be empty!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else if(!matcher.matches()){
-//            String message = "Sorry, Postal code is incorrect pattern. A0A 0A0!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else if(city.isEmpty() || city == null){
-//            String message = "Sorry, city cannot be empty!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else if(role.isEmpty() || imageUrl == null){
-//            String message = "Sorry, role cannot be empty!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else if(imageUrl.isEmpty() || imageUrl == null){
-//            String message = "Please choose an image!";
-//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//        }
-//        else{
-//
-//            String staffId = myStaffRef.push().getKey();
-//            Staff staff = new Staff(staffId,propId,name,phone,address,postal,city,province,email,role,imageUrl);
-//            // need to save to firebase
-//            myStaffRef.child(staffId).setValue(staff);
-//            Toast.makeText(getApplicationContext(), staff.getName()+" is saved!", Toast.LENGTH_LONG).show();
-//            // redirect to Staff list View
-//            goBack();
-//        }
+        String name = etUpdateName.getText().toString();
+        String email = etUpdateEmail.getText().toString();
+        String phone = etUpdatePhone.getText().toString();
+        String address = etUpdateAddress.getText().toString();
+        String postal = etUpdatePostalCode.getText().toString();
+        String city = etUpdateCity.getText().toString();
+        String role = etUpdateRole.getText().toString();
+        String regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(postal);
+
+        if(name.isEmpty()|| name == null){
+            String message = "Sorry, name cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(email.isEmpty()|| email == null){
+            String message = "Sorry, email cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(phone.isEmpty() || phone == null){
+            String message = "Sorry, phone cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(address.isEmpty() || address == null){
+            String message = "Sorry, address cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(postal.isEmpty() || postal == null){
+            String message = "Sorry, Postal code cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(!matcher.matches()){
+            String message = "Sorry, Postal code is incorrect pattern. A0A 0A0!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(city.isEmpty() || city == null){
+            String message = "Sorry, city cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(role.isEmpty() || role == null){
+            String message = "Sorry, role cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else if(imageUrl.isEmpty() || imageUrl == null){
+            String message = "Please choose an image!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), myStaffRef.child(staffId).toString(), Toast.LENGTH_LONG).show();
+
+            Staff updatedStaff = new Staff(staffId,propId,name,phone,address,postal,city,province,email,role,imageUrl);
+
+            myStaffRef.child(staffId).setValue(updatedStaff);
+
+            Toast.makeText(getApplicationContext(), updatedStaff.getName()+" is saved!", Toast.LENGTH_LONG).show();
+            // redirect to Staff list View
+            goBack();
+        }
+
+
     }
 
 

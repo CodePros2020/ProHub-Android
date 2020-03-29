@@ -124,4 +124,15 @@
     <string name="e_g_superintendent">e.g Superintendent</string>
     <string name="news_feed_list">News Feed List</string>
     <string name="property_name_1">Property Name</string>
+    <string name="user_information">User Information</string>
+    <string name="user_name">User Name</string>
+    <string name="change_password">Change Password</string>
+    <string name="current_password">Current Password:</string>
+    <string name="new_password">New Password:</string>
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="phone_number">Phone Number:</string>
+    <string name="user_role">User Role:</string>
+    <string name="_647_949_6506">647-949-6506</string>
+    <string name="lessor_tv">Lessor</string>
 </resources>

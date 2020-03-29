@@ -125,7 +125,7 @@ public class RegistrationActivity extends AppCompatActivity {
             String message = "Sorry, incorrect phone number format, please try again!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         } else {
-            User newUser = new User(firstName, lastName, phoneNumber, passwordString);
+            User newUser = new User(firstName, lastName, phoneNumber, passwordString,"");
             // need to save to firebase
             myUserRef.child("users").child(phoneNumber).setValue(newUser);
             //Toast.makeText(getApplicationContext(), "authentication: "+test, Toast.LENGTH_LONG).show();

@@ -11,4 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Test Settings"/>
+
+    <Button
+        android:id="@+id/btnUserInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Personal Information" />
 </LinearLayout>

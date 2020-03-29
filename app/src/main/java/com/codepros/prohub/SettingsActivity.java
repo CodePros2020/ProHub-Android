@@ -23,7 +23,9 @@ public class SettingsActivity extends AppCompatActivity {
     private ImageButton toolbarBtnSearch,btnHome,toolbarBtnMenu;
     private ToolbarHelper toolbar;
     //
+    private Button btnUserInfo;
     String myRole;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
         myRole= sharedPreferences.getString("myRole", "");
 
         //////////////////////////////////////////////
-        // declaring the buttons
-
         // define the actions for each button
         // Button for top toolbar
         toolbarBtnChat = findViewById(R.id.toolbarBtnChat);
@@ -48,6 +48,19 @@ public class SettingsActivity extends AppCompatActivity {
 
         toolbar = new ToolbarHelper(this, toolbarBtnChat, toolbarBtnNews, toolbarBtnForms,
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
+
+        //////////////////////////////////////////////
+        btnUserInfo = findViewById(R.id.btnUserInfo);
+        btnUserInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goUserInfo();
+            }
+        });
     }
 
+    private void goUserInfo(){
+        Intent intent = new Intent(this, UserInfoActivity.class);
+        startActivity(intent);
+    }
 }

@@ -120,11 +120,11 @@ public Staff(){}
     }
 
 
-    public String getPhone(){
-
-        String phone=phoneNum.substring(2,phoneNum.length());
-        return phone;
-    }
+//    public String getPhone(){
+//
+//        String phone=phoneNum.substring(2,phoneNum.length());
+//        return phone;
+//    }
 
 
 

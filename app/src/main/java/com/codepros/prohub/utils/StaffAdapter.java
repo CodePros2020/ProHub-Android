@@ -66,7 +66,9 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
                 b.putString("name",staff.getName());
                 b.putString("imgUrl",staff.getImgUrl());
                 b.putString("email",staff.getEmail());
-                b.putString("phone",staff.getPhone());
+//                b.putString("phone",staff.getPhone());
+                b.putString("phone",staff.getPhoneNum());
+                b.putString("phone",staff.getPhoneNum());
                 b.putString("address",staff.getAddress());
                 b.putString("city",staff.getCity());
                 b.putString("province",staff.getProvince());
@@ -98,7 +100,8 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
                                 b.putString("name",staff.getName());
                                 b.putString("imgUrl",staff.getImgUrl());
                                 b.putString("email",staff.getEmail());
-                                b.putString("phone",staff.getPhone());
+//                                b.putString("phone",staff.getPhone());
+                                b.putString("phone",staff.getPhoneNum());
                                 b.putString("address",staff.getAddress());
                                 b.putString("city",staff.getCity());
                                 b.putString("province",staff.getProvince());

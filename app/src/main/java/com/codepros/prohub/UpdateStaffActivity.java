@@ -348,6 +348,13 @@ public class UpdateStaffActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(postal);
 
+        // phone number validation
+        // modified from https://www.regexpal.com/17
+//        String phoneNumRegex = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
+        String phoneNumRegex = "^(?:(?:\\+?\\d\\s*(?:[.-]\\s*)?)?(?:\\(\\s*(\\d{3})\\s*\\)|(\\d{3}))\\s*(?:[.-]\\s*)?)?(\\d{3})\\s*(?:[.-]\\s*)?(\\d{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
+        Pattern phoneNumPattern = Pattern.compile(phoneNumRegex);
+        Matcher phoneMatcher = phoneNumPattern.matcher(phone);
+
         // validations
         if (name.isEmpty() || name == null) {
             String message = "Sorry, name cannot be empty!";
@@ -357,6 +364,9 @@ public class UpdateStaffActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         } else if (phone.isEmpty() || phone == null) {
             String message = "Sorry, phone cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        } else if(!phoneMatcher.matches()){
+            String message = "Sorry, Phone number is incorrect pattern!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         } else if (address.isEmpty() || address == null) {
             String message = "Sorry, address cannot be empty!";

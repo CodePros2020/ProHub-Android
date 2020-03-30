@@ -171,8 +171,6 @@ public class ViewUnitsActivity extends AppCompatActivity {
                 // display alert dialog for deletion
                 AlertDialog.Builder builder = new AlertDialog.Builder(viewHolder.itemView.getContext());
 
-                unitList.remove(viewHolder.getAdapterPosition());
-
                 builder.setMessage("Are you sure to delete the staff?")
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {

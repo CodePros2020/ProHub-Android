@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -147,17 +149,59 @@ public class ViewUnitsActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
+//            if (myRole.equals("Tenant")) {
+//                Toast.makeText(getApplicationContext(), "Sorry! You do not have permission to delete unit.", Toast.LENGTH_LONG).show();
+//            } else {
+//                Unit unit = unitList.get(viewHolder.getAdapterPosition());
+//                unitList.remove(viewHolder.getAdapterPosition());
+//                drUnits = FirebaseDatabase.getInstance().getReference("units").child(unit.getUnitId());
+//                drUnits.removeValue();
+//                unitAdapter.notifyDataSetChanged();
+//
+//                Toast.makeText(getBaseContext(), "Unit deleted successfully", Toast.LENGTH_LONG).show();
+//            }
+
             if (myRole.equals("Tenant")) {
                 Toast.makeText(getApplicationContext(), "Sorry! You do not have permission to delete unit.", Toast.LENGTH_LONG).show();
             } else {
-                Unit unit = unitList.get(viewHolder.getAdapterPosition());
-                unitList.remove(viewHolder.getAdapterPosition());
-                drUnits = FirebaseDatabase.getInstance().getReference("units").child(unit.getUnitId());
-                drUnits.removeValue();
-                unitAdapter.notifyDataSetChanged();
+                // get the position of staff to remove
+                final int position = viewHolder.getAdapterPosition();
+                final Unit unitToRemove = unitList.remove(position);
 
-                Toast.makeText(getBaseContext(), "Unit deleted successfully", Toast.LENGTH_LONG).show();
+                // display alert dialog for deletion
+                AlertDialog.Builder builder = new AlertDialog.Builder(viewHolder.itemView.getContext());
+
+                unitList.remove(viewHolder.getAdapterPosition());
+
+                builder.setMessage("Are you sure to delete the staff?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // delete
+                                drUnits = FirebaseDatabase.getInstance().getReference("units").child(unitToRemove.getUnitId());
+                                drUnits.removeValue();
+
+                                // reflect the change
+                                unitAdapter.notifyDataSetChanged();
+
+                                // toast message
+                                Toast.makeText(getBaseContext(), "Unit deleted successfully", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // get the unit back
+                                unitList.add(position, unitToRemove);
+
+                                // reflect the change
+                                unitAdapter.notifyDataSetChanged();
+                            }
+                        });
+                builder.show();
+
             }
+
+
 
 
         }

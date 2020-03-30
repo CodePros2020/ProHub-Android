@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -147,18 +149,48 @@ public class ViewStaffActivity extends AppCompatActivity {
             return false;
         }
 
+
+
         @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+        public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+
             if (myRole.equals("Tenant")) {
                 Toast.makeText(getApplicationContext(), "Sorry! You do not have permission to delete staff.", Toast.LENGTH_LONG).show();
             } else {
-                Staff staff = staffList.get(viewHolder.getAdapterPosition());
-                staffList.remove(viewHolder.getAdapterPosition());
-                drStaff = FirebaseDatabase.getInstance().getReference("staff").child(staff.getStaffId());
-                drStaff.removeValue();
-                staffAdapter.notifyDataSetChanged();
 
-                Toast.makeText(getBaseContext(), "Staff deleted successfully", Toast.LENGTH_LONG).show();
+                // get the position of staff to remove
+                final int position = viewHolder.getAdapterPosition();
+                final Staff staffToRemove = staffList.remove(position);
+
+                // display alert dialog for deletion
+                AlertDialog.Builder builder = new AlertDialog.Builder(viewHolder.itemView.getContext());
+
+                builder.setMessage("Are you sure to delete the staff?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // delete
+                                drStaff = FirebaseDatabase.getInstance().getReference("staff").child(staffToRemove.getStaffId());
+                                drStaff.removeValue();
+
+                                // reflect the change
+                                staffAdapter.notifyDataSetChanged();
+
+                                // toast message
+                                Toast.makeText(getBaseContext(), "Staff deleted successfully", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // get the staff back
+                                staffList.add(position, staffToRemove);
+
+                                // reflect the change
+                                staffAdapter.notifyDataSetChanged();
+                            }
+                        });
+                builder.show();
+
             }
 
         }

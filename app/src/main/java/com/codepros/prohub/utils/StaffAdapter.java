@@ -1,6 +1,8 @@
 package com.codepros.prohub.utils;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepros.prohub.DisplayNewsActivity;
@@ -23,8 +26,11 @@ import com.codepros.prohub.DisplayStaffActivity;
 import com.codepros.prohub.EditNewsActivity;
 import com.codepros.prohub.R;
 import com.codepros.prohub.UpdateStaffActivity;
+import com.codepros.prohub.ViewStaffActivity;
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.model.Staff;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.net.URI;
@@ -35,6 +41,9 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
     private List<String> listItemKeys;
     private Context context;
     private String  name, imageUrl, myRole;
+
+    private DatabaseReference myStaffRef;
+
     public StaffAdapter(List<Staff> newsList,List<String> keys,String myRole,Context context){
         this.listItems=newsList;
         this.myRole = myRole;
@@ -110,6 +119,27 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder>{
                                 newIntent.putExtras(b);
 
                                 context.startActivity(newIntent);
+                            } else if(item.getItemId()==R.id.menu_item_delete){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setMessage("Do you want to delete the staff?")
+                                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+
+                                                myStaffRef = FirebaseDatabase.getInstance().getReference("staff");
+
+                                                // delete database
+                                                myStaffRef.child(staff.getStaffId()).removeValue();
+                                                Toast.makeText(context, staff.getName() + "is deleted!", Toast.LENGTH_LONG).show();
+                                            }
+                                        })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
+                                ;
+                                builder.show();
                             }
                             return false;
 

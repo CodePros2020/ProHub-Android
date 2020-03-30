@@ -52,7 +52,6 @@ public class ViewStaffActivity extends AppCompatActivity {
     public List<Staff> staffList = new ArrayList<>();
     public List<String> staffKeyList = new ArrayList<>();
     public FloatingActionButton btn_add;
-    private DatabaseReference myStaffRef;
     DatabaseReference drStaff;
 
     String propId, propName;
@@ -90,7 +89,6 @@ public class ViewStaffActivity extends AppCompatActivity {
         tvTitleStaff = findViewById(R.id.tvTitleStaff);
         tvTitleStaff.setText(propName);
         //
-        myStaffRef = FirebaseDatabase.getInstance().getReference();
         //Add button functionality
         Log.d("Prop: ", "Property Id" + propId);
         if (myRole.equals("Tenant")) {

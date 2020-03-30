@@ -18,29 +18,38 @@
         android:paddingBottom="10dp"
         android:textSize="24sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:orientation="horizontal">-->
 
-        <ImageButton
+<!--        <ImageButton-->
+<!--            android:id="@+id/ivUserIconBtn1"-->
+<!--            android:layout_width="125dp"-->
+<!--            android:layout_height="125dp"-->
+<!--            android:layout_margin="15dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:src="@drawable/uploadimg"/>-->
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivUserIconBtn"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_margin="15dp"
             android:layout_gravity="center"
-            android:src="@drawable/uploadimg"/>
+            android:src="@drawable/upload"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="1dp" />
 
         <TextView
             android:id="@+id/tvUserName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textSize="20sp"
             android:text="@string/user_name"/>
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -130,6 +139,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="top"
             android:ems="10"
             android:inputType="textPassword" />
     </LinearLayout>
@@ -151,6 +161,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="top"
             android:ems="10"
             android:inputType="textPassword" />
     </LinearLayout>
@@ -172,6 +183,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="top"
             android:ems="10"
             android:inputType="textPassword" />
     </LinearLayout>
@@ -179,8 +191,10 @@
     <Button
         android:id="@+id/btnChangePass"
         android:layout_width="200dp"
+        android:layout_marginBottom="5dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorWhite"
         android:background="@drawable/button_background"
         android:text="@string/save_changes" />
 

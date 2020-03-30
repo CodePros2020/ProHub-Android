@@ -16,6 +16,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +46,8 @@ public class UserInfoActivity extends AppCompatActivity {
     private User myUser;
     private Uri imguri;
     //
-    private ImageButton ivUserIconBtn;
+    private ImageButton ivUserIconBtn1;
+    private ImageView ivUserIconBtn;
     private Button btnChangePass;
     private TextView tvUserName, tbUserPhone, tvUserRole;
     private EditText etCurrentPass, etNewPass, etConfirmPass;

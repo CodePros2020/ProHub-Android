@@ -164,7 +164,7 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
                                 input.setLayoutParams(lp);
                                 alertDialog.setView(input);
 
-                                alertDialog.setPositiveButton("YES",
+                                alertDialog.setPositiveButton("Edit",
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
 

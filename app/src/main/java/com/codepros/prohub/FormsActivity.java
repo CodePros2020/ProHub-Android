@@ -105,8 +105,8 @@ public class FormsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forms);
 
-        // for pdf testing
-        exportChatHistory();
+        // for pdf upload testing
+//        exportChatHistory();
 
         // get prop id from shared preference
         SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
@@ -394,7 +394,9 @@ public class FormsActivity extends AppCompatActivity {
 
 
 
-    // for pdf testing
+    /////////////////////////////////////////////
+    // for pdf file upload testing
+
     private static final int PERMISSION_REQUEST_CODE = 100;
     private String EXPORT_FILENAME;
     private JSONObject jsonData = new JSONObject(); // tentative output
@@ -409,7 +411,6 @@ public class FormsActivity extends AppCompatActivity {
     // export chat history function tentatively put in PropertyHomeActivity
 
     public void exportChatHistory() {
-//    public void exportChatHistory(View view) {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkPermission()) {
                 printPdf();

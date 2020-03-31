@@ -93,6 +93,7 @@ public class ViewStaffActivity extends AppCompatActivity {
         tvTitleStaff.setText(propName);
         //
         myStaffRef = FirebaseDatabase.getInstance().getReference();
+
         //Add button functionality
         Log.d("Prop: ", "Property Id" + propId);
         if (myRole.equals("Tenant")) {

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.ChatMessage;
+import com.codepros.prohub.model.Form;
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.model.Property;
 import com.codepros.prohub.model.Staff;
@@ -28,6 +29,7 @@ public class FirebaseDataseHelper {
     private DatabaseReference myUnitRef;
     private DatabaseReference myNewsRef;
     private DatabaseReference myStaffRef;
+    private DatabaseReference myFormRef;
     private DatabaseReference myChatMessageRef;
     private DatabaseReference myChatRef;
 
@@ -38,6 +40,7 @@ public class FirebaseDataseHelper {
     private List<ChatMessage> chatMessages = new ArrayList<>();
     private List<News> newsList = new ArrayList<>();
     private List<Staff> staffList = new ArrayList<>();
+    private List<Form> formList = new ArrayList<>();
     private List<Chat> chats = new ArrayList<>();
 
     // interface to load User database
@@ -73,6 +76,10 @@ public class FirebaseDataseHelper {
     public interface StaffDataStatus{
         void DataIsLoad(List<Staff> staffList, List<String> keys);
     }
+    // interface to load Form database
+    public interface FormDataStatus{
+        void DataIsLoad(List<Form> formList, List<String> keys);
+    }
 
     public FirebaseDataseHelper(){
         myDatabase = FirebaseDatabase.getInstance();
@@ -82,6 +89,7 @@ public class FirebaseDataseHelper {
         myNewsRef = myDatabase.getReference("news");
         myChatMessageRef = myDatabase.getReference("chatMessages");
         myStaffRef = myDatabase.getReference("staff");
+        myFormRef = myDatabase.getReference("form");
         myChatRef = myDatabase.getReference("chat");
     }
 
@@ -225,6 +233,27 @@ public class FirebaseDataseHelper {
                     staffList.add(staff);
                 }
                 staffDataStatus.DataIsLoad(staffList, keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    public void readForm(final FormDataStatus formDataStatus) {
+        myFormRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                formList.clear();
+                List<String> keys = new ArrayList<>();
+                for (DataSnapshot keyNode : dataSnapshot.getChildren()) {
+                    keys.add(keyNode.getKey());
+                    Form form = keyNode.getValue(Form.class);
+                    formList.add(form);
+                }
+                formDataStatus.DataIsLoad(formList, keys);
             }
 
             @Override

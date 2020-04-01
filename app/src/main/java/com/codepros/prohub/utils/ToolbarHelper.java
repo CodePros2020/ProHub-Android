@@ -1,8 +1,10 @@
 package com.codepros.prohub.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -32,6 +36,7 @@ import com.codepros.prohub.SettingsActivity;
 import com.codepros.prohub.ViewStaffActivity;
 import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.ChatMessage;
+import com.codepros.prohub.model.Form;
 import com.codepros.prohub.model.Property;
 import com.codepros.prohub.model.Unit;
 import com.codepros.prohub.model.User;
@@ -44,6 +49,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.JsonObject;
 import com.google.type.Date;
 import com.itextpdf.text.BaseColor;
@@ -333,21 +340,71 @@ public class ToolbarHelper {
     // Need to build below the project and install into the emulator
     // https://github.com/barteksc/AndroidPdfViewer
     // export chat history function tentatively put in PropertyHomeActivity
+    String exportingFileName = "";
     public void exportChatHistory() {
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkPermission()) {
-                printPdf();
-            } else {
-                requestPermission(); // Code for permission
-            }
-        } else {
-            printPdf();
-        }
+        // get current date time
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyyMMdd");
+        java.util.Date date = new java.util.Date(System.currentTimeMillis());
+        String dateString = formatter.format(date);
+
+        // filename and extension
+        String fileNameBody = dateString + "_" + myTenant.getFirstname() + "_" + myTenant.getLastname();
+
+        final String extension = "pdf";
+        final String fullFileName = fileNameBody + "." + extension;
+
+        // show dialog box for filename selection
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle("Export Chat History");
+        alertDialog.setMessage("Enter PDF File Name");
+
+        // hard-coded dialog layout
+        final EditText input = new EditText(context);
+        input.setText(fileNameBody);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+
+        alertDialog.setPositiveButton("Export",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        exportingFileName = input.getText().toString();
+
+                        if(exportingFileName.isEmpty() || exportingFileName == null) {
+                            exportingFileName = fullFileName;
+                        } else {
+                            exportingFileName += "." + extension;
+                        }
+                        //print
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            if (checkPermission()) {
+                                printPdf();
+                            } else {
+                                requestPermission(); // Code for permission
+                            }
+                        } else {
+                            printPdf();
+                        }
+
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+        alertDialog.show();
+
     }
 
     public void printPdf() {
-        EXPORT_FILENAME = Environment.getExternalStorageDirectory().toString() + "/PDF/" + "Name.pdf";
+//        EXPORT_FILENAME = Environment.getExternalStorageDirectory().toString() + "/PDF/" + "Name.pdf";
+        EXPORT_FILENAME = Environment.getExternalStorageDirectory().toString() + "/PDF/" + exportingFileName;
 
         // Create New Blank Document
         Document document = new Document(PageSize.A4);

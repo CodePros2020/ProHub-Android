@@ -68,6 +68,7 @@ public class FirebaseDataseHelper {
         void DataIsLoad(List<Chat> chats, List<String> keys);
     }
 
+
     // interface to load News database
     public interface NewsDataStatus{
         void DataIsLoad(List<News> newsList, List<String> keys);

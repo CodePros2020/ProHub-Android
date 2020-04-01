@@ -121,6 +121,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Chat, MessageViewHolder>
             mFirebaseAdapter;
+    private String propId;
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
 
@@ -136,6 +137,7 @@ public class ChatActivity extends AppCompatActivity {
         mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         mUsername = mSharedPreferences.getString("username", ANONYMOUS);
         mPhoneNumber = mSharedPreferences.getString("phoneNum", "0123456789");
+        propId = mSharedPreferences.getString("propId", "");
         chatMessageId = getIntent().getStringExtra("Chat_ID");
 
         myRole = mSharedPreferences.getString("myRole", "");
@@ -162,10 +164,11 @@ public class ChatActivity extends AppCompatActivity {
         mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         mUsername = mSharedPreferences.getString("username", ANONYMOUS);
         mPhoneNumber = mSharedPreferences.getString("phoneNum", "0123456789");
+
         chatMessageId = getIntent().getStringExtra("Chat_ID");
 
         // for export chat history
-        toolbar.setChatMessageId(chatMessageId);
+        toolbar.setChatHistoryExportInfo(chatMessageId, propId);
 
         DateFormat dateFormat = new SimpleDateFormat("MMM dd, hh:mm a");
         Date now = Calendar.getInstance().getTime();

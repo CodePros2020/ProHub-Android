@@ -32,7 +32,9 @@ import com.codepros.prohub.SettingsActivity;
 import com.codepros.prohub.ViewStaffActivity;
 import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.ChatMessage;
+import com.codepros.prohub.model.Property;
 import com.codepros.prohub.model.Unit;
+import com.codepros.prohub.model.User;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
@@ -78,7 +80,11 @@ public class ToolbarHelper {
     public String propId, myRole, propName, phoneNum, chatMessageId;
 
     // for export Chat History
-    private DatabaseReference mFirebaseDatabaseReference;
+    private DatabaseReference myPropRef;
+    private Property myProp;
+    private Unit myUnit;
+    private User myTenant;
+    private User myLandlord;
 
 
     public ToolbarHelper(Context context) {
@@ -157,8 +163,11 @@ public class ToolbarHelper {
     }
 
     // for export chat history
-    public void setChatMessageId(String chatMessageId){
+    public void setChatHistoryExportInfo(String chatMessageId, String propId){
         this.chatMessageId = chatMessageId;
+        this.propId = propId;
+        // read chat for export chat history
+        setUpForExportChatHistory();
     }
 
     // Menu button Action
@@ -174,18 +183,6 @@ public class ToolbarHelper {
             menu.add(2, 2, 2, "Export Chat History");
         }
 
-        // read chat for export chat history
-        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
-            @Override
-            public void DataIsLoad(List<Chat> chats, List<String> keys) {
-                chatList.clear();
-                for(Chat c : chats) {
-                    if(c.getChatMessageId().equals(chatMessageId)) {
-                        chatList.add(c);
-                    }
-                }
-            }
-        });
 
         // logout item
         dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -228,6 +225,66 @@ public class ToolbarHelper {
                 dropDownMenu.show();
             }
         });
+
+    }
+
+    private void setUpForExportChatHistory(){
+        System.out.println(chatMessageId);
+        final String phoneNum = (chatMessageId.split("_"))[0];
+        final String tenantId = (chatMessageId.split("_"))[1];
+
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                chatList.clear();
+                for(Chat c : chats) {
+                    if(c.getChatMessageId().equals(chatMessageId)) {
+                        chatList.add(c);
+                    }
+                }
+            }
+        });
+        new FirebaseDataseHelper().readProperty(new FirebaseDataseHelper.PropDataStatus() {
+            @Override
+            public void DataIsLoad(List<Property> properties, List<String> keys) {
+                for(Property p : properties) {
+                    if(p.getPropId().equals(propId)) {
+                        myProp = p;
+                    }
+                }
+            }
+        });
+        new FirebaseDataseHelper().readUnits(new FirebaseDataseHelper.UnitDataStatus() {
+            @Override
+            public void DataIsLoad(List<Unit> units, List<String> keys) {
+                for(Unit u : units) {
+                    if(u.getTenantId().equals(tenantId) && u.getPropId().equals(propId)) {
+                        myUnit = u;
+                    }
+                }
+            }
+        });
+        new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
+            @Override
+            public void DataIsLoad(List<User> users, List<String> keys) {
+                for(User u : users) {
+                    if(u.getPhone().equals(tenantId) && u.getRole().equals("Tenant")) {
+                        myTenant = u;
+                    }
+                }
+            }
+        });
+        new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
+            @Override
+            public void DataIsLoad(List<User> users, List<String> keys) {
+                for(User u : users) {
+                    if(u.getPhone().equals(phoneNum) && u.getRole().equals("Landlord")) {
+                        myLandlord = u;
+                    }
+                }
+            }
+        });
+
 
     }
 
@@ -290,11 +347,6 @@ public class ToolbarHelper {
     }
 
     public void printPdf() {
-        // get storage directory path
-        // PDF Filepath:
-        // Settings > Storage&USB > Internal Storage
-        // Others > PDF > Name.pdf
-
         EXPORT_FILENAME = Environment.getExternalStorageDirectory().toString() + "/PDF/" + "Name.pdf";
 
         // Create New Blank Document
@@ -314,6 +366,7 @@ public class ToolbarHelper {
             document.open();
 
             addTitlePage(document, pdfWriter);
+            addChatHistoryPage(document, pdfWriter);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (DocumentException e) {
@@ -326,8 +379,6 @@ public class ToolbarHelper {
 
         Toast.makeText(context, "PDF File created! : " + EXPORT_FILENAME, Toast.LENGTH_LONG).show();
 
-        // open default PDF viewer
-//        openGeneratedPDF();
     }
 
 
@@ -335,23 +386,120 @@ public class ToolbarHelper {
         // Font Style for Document
         Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
         Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 22, Font.BOLD
-                | Font.UNDERLINE, BaseColor.GRAY);
+                | Font.UNDERLINE);
+        Font subTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD
+                , BaseColor.GRAY);
+
+        Font bodyFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.NORMAL);
 
         Font normal = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
 
-        // Document header
-        Paragraph prHead = new Paragraph();
+        // DOCUMENT TITLE
+//        Paragraph prHead = new Paragraph();
+//        prHead.setFont(titleFont);
+//        prHead.add("ProHub\n");
+//        prHead.setFont(catFont);
+//        prHead.add("\nChat History\n");
+//        prHead.add("\n");
+//        prHead.setAlignment(Element.ALIGN_CENTER);
+//
+//        document.add(prHead); // Add all above details into Document
 
+        Paragraph prHead = new Paragraph();
         prHead.setFont(titleFont);
-        prHead.add("ProHub\n");
-        prHead.setFont(catFont);
-        prHead.add("\nName1 Name2\n");
-        prHead.add("\n");
+        prHead.add(myProp.getName() + "\n");
+
+        prHead.setFont(subTitleFont);
+
+        String fullAddress = myProp.getStreetLine1() + ", " + myProp.getCity() + ", " + myProp.getProvince();
+        prHead.add("\n" + fullAddress);
+        if(myProp.getPostalCode() != null){
+            prHead.add(" " + myProp.getPostalCode().toUpperCase());
+        }
+        prHead.add("\n\n\n");
         prHead.setAlignment(Element.ALIGN_CENTER);
 
         document.add(prHead); // Add all above details into Document
 
-        // Document body
+
+
+
+        // DOCUMENT
+
+        Paragraph prTenantNameLabel = new Paragraph();
+        prTenantNameLabel.setFont(catFont);
+        prTenantNameLabel.add("Tenant Name\n\n");
+        document.add(prTenantNameLabel);
+
+        Paragraph prTenantName = new Paragraph();
+        prTenantName.setFont(bodyFont);
+        prTenantName.add(myTenant.getFirstname() + " " + myTenant.getLastname() + "\n\n");
+        document.add(prTenantName);
+
+        Paragraph prUnitNameLabel = new Paragraph();
+        prUnitNameLabel.setFont(catFont);
+        prUnitNameLabel.add("Unit Name\n\n");
+        document.add(prUnitNameLabel);
+
+        Paragraph prUnitName = new Paragraph();
+        prUnitName.setFont(bodyFont);
+        prUnitName.add(myUnit.getUnitName() + "\n\n\n");
+        document.add(prUnitName);
+
+
+        Paragraph prTenantContactLabel = new Paragraph();
+        prTenantContactLabel.setFont(catFont);
+        prTenantContactLabel.add("Contact Information\n\n");
+        document.add(prTenantContactLabel);
+
+        Paragraph prTenantPhoneNum = new Paragraph();
+        prTenantPhoneNum.setFont(bodyFont);
+        prTenantPhoneNum.add(myTenant.getPhone() + "\n\n\n");
+        document.add(prTenantPhoneNum);
+
+        Paragraph prLandlordLabel = new Paragraph();
+        prLandlordLabel.setFont(catFont);
+        prLandlordLabel.add("Landlord Name\n\n");
+        document.add(prLandlordLabel);
+
+        Paragraph prLandlordName = new Paragraph();
+        prLandlordName.setFont(bodyFont);
+        prLandlordName.add(myLandlord.getFirstname() + " " + myLandlord.getLastname() + "\n\n\n");
+        document.add(prLandlordName);
+
+//        Paragraph prTenantInfo = new Paragraph();
+//        prTenantInfo.setFont(bodyFont);
+//        prTenantInfo.add(myProp.getName() + "\n\n");
+//        if(myUnit != null) {
+//            prTenantInfo.add(myUnit.getUnitName() + "\n");
+//        }
+//        prTenantInfo.add(myProp.getStreetLine1() + "\n");
+//        prTenantInfo.add(myProp.getCity() + ", " + myProp.getProvince() + "\n");
+//        if(myProp.getPostalCode() != null){
+//            prTenantInfo.add(myProp.getPostalCode().toUpperCase() + "\n\n");
+//        }
+//        document.add(prTenantInfo); // Add all above details into Document
+
+
+        // Create new Page in PDF
+//        document.newPage();
+    }
+
+    public void addChatHistoryPage(Document document, PdfWriter pdfWriter) throws DocumentException, IOException {
+        // Font Style for Document
+        Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+        Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 22, Font.BOLD
+                | Font.UNDERLINE, BaseColor.GRAY);
+
+        Font normal = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
+
+        // chat history header
+        Paragraph prChatHistoryCat = new Paragraph();
+        prChatHistoryCat.setFont(catFont);
+        prChatHistoryCat.add("Chat History\n\n");
+        document.add(prChatHistoryCat);
+
+        // chat history
         Paragraph prChatHistory = new Paragraph();
         prChatHistory.setFont(normal);
         for(Chat c: chatList ){
@@ -364,8 +512,7 @@ public class ToolbarHelper {
         document.newPage();
     }
 
-
-    // for export chat history file permission
+        // for export chat history file permission
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (result == PackageManager.PERMISSION_GRANTED) {
@@ -385,20 +532,5 @@ public class ToolbarHelper {
 
 
 
-
-    private void openGeneratedPDF() {
-        File file = new File(EXPORT_FILENAME);
-        if (file.exists()) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            Uri uri = Uri.fromFile(file);
-            intent.setDataAndType(uri, "application/pdf");
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            try {
-                context.startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(context, "No Application avaiable to view pdf", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
 }

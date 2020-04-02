@@ -124,17 +124,22 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                                 String createTime = myNewsList.get(i).getCreateTime();
                                 String creatorPhoneNumber = myNewsList.get(i).getCreatorPhoneNumber();
                                 String hideFlag = Boolean.toString(myNewsList.get(i).getHideFlag());
+                                String imageUrl = myNewsList.get(i).getImageUrl();
                                 String newsTitle = myNewsList.get(i).getNewsTitle();
                                 String targetViewer = myNewsList.get(i).getTargetViewer();
 
-                                Intent intent = new Intent(SearchActivity.this, NewsViewActivity.class);
-                                intent.putExtra("propId", propId);
-                                intent.putExtra("content", content);
-                                intent.putExtra("createTime", createTime);
-                                intent.putExtra("creatorPhoneNumber", creatorPhoneNumber);
-                                intent.putExtra("hideFlag", hideFlag);
-                                intent.putExtra("newsTitle", newsTitle);
-                                intent.putExtra("targetViewer", targetViewer);
+                                Bundle b = new Bundle();
+                                Intent intent = new Intent(SearchActivity.this, DisplayNewsActivity.class);
+                                b.putString("title", newsTitle);
+                                b.putString("description", content);
+                                b.putString("date", createTime);
+                                b.putString("imgUrl", imageUrl);
+                                b.putString("propId", propId);
+                                b.putString("creatorPhoneNumber", creatorPhoneNumber);
+                                b.putString("hideFlag", hideFlag);
+                                b.putString("targetViewer", targetViewer);
+
+                                intent.putExtras(b);
 
                                 SearchActivity.this.startActivity(intent);
                             }

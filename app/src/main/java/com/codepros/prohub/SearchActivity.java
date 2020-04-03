@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.codepros.prohub.model.ChatMessage;
+import com.codepros.prohub.model.Form;
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.model.Unit;
@@ -36,10 +37,11 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     private List<ChatMessage> myChatMessageList;
     private List<News> allNewsList;
     private List<News> myNewsList;
+    private List<Form> allFormList;
+    private List<Form> myFormList;
     private List<String> searchList;
 
     // firebase database objects
-    private DatabaseReference myDatabaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         setContentView(R.layout.activity_search);
 
         // set variables
-        myDatabaseRef = FirebaseDatabase.getInstance().getReference();
-
         spFilter = findViewById(R.id.search_filter_spinner);
         filter = getResources().getStringArray(R.array.search_filter);
         filterVal = "Chat";
@@ -60,6 +60,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
         allNewsList = new ArrayList<>();
         myNewsList = new ArrayList<>();
+
+        allFormList = new ArrayList<>();
+        myFormList = new ArrayList<>();
 
         searchList = new ArrayList<>();
 
@@ -93,6 +96,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                 }
             }
         });
+
         new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
             @Override
             public void DataIsLoad(List<News> news, List<String> keys) {
@@ -100,6 +104,18 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                 for (int i = 0; i < allNewsList.size(); i++) {
                     if (allNewsList.get(i).getPropId().equals(propId)) {
                         myNewsList.add(allNewsList.get(i));
+                    }
+                }
+            }
+        });
+
+        new FirebaseDataseHelper().readForm(new FirebaseDataseHelper.FormDataStatus() {
+            @Override
+            public void DataIsLoad(List<Form> form, List<String> keys) {
+                allFormList = form;
+                for (int i = 0; i < allFormList.size(); i++) {
+                    if (allFormList.get(i).getPropId().equals(propId)) {
+                        myFormList.add(allFormList.get(i));
                     }
                 }
             }
@@ -130,7 +146,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                             }
                         }
                         break;
-                    case "Newsroom":
+                    case "News":
                         for (int i = 0; i < myNewsList.size(); i++) {
                             if (myNewsList.get(i).getNewsTitle().equals(selection)) {
                                 String content = myNewsList.get(i).getContent();
@@ -153,6 +169,28 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                                 b.putString("targetViewer", targetViewer);
 
                                 intent.putExtras(b);
+
+                                SearchActivity.this.startActivity(intent);
+                            }
+                        }
+                        break;
+                    case "Form":
+                        for (int i = 0; i < myFormList.size(); i++) {
+                            if (myFormList.get(i).getFormTitle().equals(selection)) {
+                                String formId = myFormList.get(i).getFormTitle();
+                                String formTitle = myFormList.get(i).getFormTitle();
+                                String contentUrl = myFormList.get(i).getContentUrl();
+
+                                Intent intent = new Intent(SearchActivity.this, FormsActivity.class);
+
+                                SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", 0);
+                                SharedPreferences.Editor prefEditor = myPreference.edit();
+                                prefEditor.putString("formId", formId);
+                                prefEditor.putString("formTitle", formTitle);
+                                prefEditor.putString("contentUrl", contentUrl);
+                                prefEditor.putString("propId", propId);
+                                prefEditor.putString("isSearching", "true");
+                                prefEditor.apply();
 
                                 SearchActivity.this.startActivity(intent);
                             }
@@ -186,10 +224,16 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                     searchList.add(myChatMessageList.get(i).getSenderName());
                 }
                 break;
-            case "Newsroom":
+            case "News":
                 searchList.clear();
                 for (int i = 0; i < myNewsList.size(); i++) {
                     searchList.add(myNewsList.get(i).getNewsTitle());
+                }
+                break;
+            case "Form":
+                searchList.clear();
+                for (int i = 0; i < myFormList.size(); i++) {
+                    searchList.add(myFormList.get(i).getFormTitle());
                 }
                 break;
             default:

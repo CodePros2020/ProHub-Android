@@ -89,8 +89,8 @@ public class FormsActivity extends AppCompatActivity {
     public List<Form> formList = new ArrayList<>();
     public FormsAdapter formsAdapter;
 
-    String propId, propName, myRole;
-
+    String propId, propName, myRole, formId;
+    boolean isSearching;
     private RecyclerView formRecyclerView;
 
     // firebase database objects
@@ -113,6 +113,8 @@ public class FormsActivity extends AppCompatActivity {
         myRole = sharedPreferences.getString("myRole", "");
         propName = sharedPreferences.getString("propName", "");
         propId = sharedPreferences.getString("propId", "");
+        isSearching = Boolean.parseBoolean(sharedPreferences.getString("isSearching", "false"));
+        formId = sharedPreferences.getString("formId", "");
 
         //Shared Preferences
         myFormRef = FirebaseDatabase.getInstance().getReference("form");
@@ -141,20 +143,41 @@ public class FormsActivity extends AppCompatActivity {
         formRecyclerView.setHasFixedSize(true);
         formRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        new FirebaseDataseHelper().readForm(new FirebaseDataseHelper.FormDataStatus() {
-            @Override
-            public void DataIsLoad(List<Form> listForm, List<String> keys) {
-                formList.clear();
-                for (Form form : listForm) {
-                    if (form.getPropId().equals(propId)) {
-                        formList.add(form);
+        if (!isSearching) {
+            new FirebaseDataseHelper().readForm(new FirebaseDataseHelper.FormDataStatus() {
+                @Override
+                public void DataIsLoad(List<Form> listForm, List<String> keys) {
+                    formList.clear();
+                    for (Form form : listForm) {
+                        if (form.getPropId().equals(propId)) {
+                            formList.add(form);
+                        }
                     }
+                    formKeyList = keys;
+                    setFormsAdapter();
                 }
-                formKeyList = keys;
-                setFormsAdapter();
-            }
+            });
+        } else {
+            new FirebaseDataseHelper().readForm(new FirebaseDataseHelper.FormDataStatus() {
+                @Override
+                public void DataIsLoad(List<Form> listForm, List<String> keys) {
+                    formList.clear();
+                    for (Form form : listForm) {
+                        if (form.getFormId().equals(formId)) {
+                            formList.add(form);
+                        }
+                    }
+                    formKeyList = keys;
+                    setFormsAdapter();
+                }
 
-        });
+            });
+        }
+
+        SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", 0);
+        SharedPreferences.Editor prefEditor = myPreference.edit();
+        prefEditor.putString("isSearching", "false");
+        prefEditor.apply();
 
         // upload button
         FloatingActionButton  btnUpload = (FloatingActionButton) findViewById(R.id.btnUpload);
@@ -311,7 +334,6 @@ public class FormsActivity extends AppCompatActivity {
                 });
 
         alertDialog.show();
-
     }
 
     @Override

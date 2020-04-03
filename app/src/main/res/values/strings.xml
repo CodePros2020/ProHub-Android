@@ -106,7 +106,8 @@
     <string-array name="search_filter">
         <item>Please select the section</item>
         <item>Chat</item>
-        <item>Newsroom</item>
+        <item>News</item>
+        <item>Form</item>
     </string-array>
     <string name="title_activity_view_news">ViewNewsActivity</string>
     <!-- Strings used for fragments for navigation -->

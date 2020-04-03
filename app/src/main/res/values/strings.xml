@@ -78,6 +78,13 @@
     <string name="i_m_a_landlord">I\'m a landlord</string>
     <string name="i_m_a_tenant">I\'m a tenant</string>
     <string name="type_here_to_search">Type here to search</string>
+    <string name="search_description">
+        Please follow the following steps:\n\n
+        1. Choose one of Chat, News or Form from the spinner.\n\n
+        2. Enter inside the input box below the spinner what you want to search under the selected category (minimum 1 character required).\n\n
+        3. Click one of the element appeared under the your inputted text. It will direct you to the desired search result.\n\n
+        * Note: if you want to exit, hit back button located on the left bottom of your screen.
+    </string>
     <string name="test_message">Test Message</string>
     <string name="john_doe">John Doe</string>
     <string name="test_message_sent">Test Message</string>

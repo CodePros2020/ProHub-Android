@@ -41,6 +41,7 @@ public class AddUnitActivity extends AppCompatActivity {
     private String chatMessageId;
     private Button btnSaveUnit;
     private List<User> userList;
+    private List<Unit>unitsList;
     public static final String ANONYMOUS = "anonymous";
     SharedPreferences myPref;
 
@@ -87,12 +88,21 @@ public class AddUnitActivity extends AppCompatActivity {
         etTenantNumber = findViewById(R.id.etTenantNumber);
         btnSaveUnit = findViewById(R.id.btnSaveUnit);
         userList = new ArrayList<>();
+        //
+
 
         // read values
         new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
             @Override
             public void DataIsLoad(List<User> users, List<String> keys) {
                 userList = users;
+            }
+        });
+        //Read Units
+        new FirebaseDataseHelper().readUnits(new FirebaseDataseHelper.UnitDataStatus() {
+            @Override
+            public void DataIsLoad(List<Unit> units, List<String> keys) {
+                unitsList = units;
             }
         });
 
@@ -119,6 +129,7 @@ public class AddUnitActivity extends AppCompatActivity {
                     tenantName = u.getFirstname() + " " + u.getLastname();
                     chatMessageId = landlordPhoneNumber + "_" + tenantNumber;
                 }
+
             }
         }
         // validate the input field in the new Property form
@@ -152,15 +163,28 @@ public class AddUnitActivity extends AppCompatActivity {
             DatabaseReference newChatRef2 = chatRef.push();
             newChatRef1.setValue(newChatMessage1);
             newChatRef2.setValue(newChatMessage2);
+            boolean isExist=false;
+            for(Unit u:unitsList){
+                Log.d(TAG, "addUnit:Unit Name in DB"+u.getUnitName());
+                Log.d(TAG, "addUnit:Unit Name in input"+unitName);
+                if(u.getUnitName().toUpperCase().equals(unitName.toUpperCase())){
+                    isExist=true;
+                }
+            }
+            if(isExist){
+                Toast.makeText(getApplicationContext(), "Please add different unit name.Unit already Exist!", Toast.LENGTH_LONG).show();
+            }
+            else{
+                String unitId = myDataRef.push().getKey();
+                Unit newUnit = new Unit(unitId, propId, tenantNumber, unitName);
+                assert unitId != null;
+                myDataRef.child("units").child(unitId).setValue(newUnit);
+                Toast.makeText(getApplicationContext(), "New Unit Saved!", Toast.LENGTH_LONG).show();
+                // intent to next page
+                Intent intent = new Intent(this, ViewUnitsActivity.class);
+                this.startActivity(intent);
 
-            String unitId = myDataRef.push().getKey();
-            Unit newUnit = new Unit(unitId, propId, tenantNumber, unitName);
-            myDataRef.child("units").child(unitId).setValue(newUnit);
-            Toast.makeText(getApplicationContext(), "New Unit Saved!", Toast.LENGTH_LONG).show();
-
-            // intent to next page
-            Intent intent = new Intent(this, ViewUnitsActivity.class);
-            this.startActivity(intent);
+            }
         }
     }
 }

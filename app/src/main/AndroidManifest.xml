@@ -40,7 +40,7 @@
         <activity android:name=".ChatList" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".LessorHomeActivity" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".SearchActivity"  android:parentActivityName=".PropertyHomeActivity" />
         <activity
             android:name=".AddPropertyActivity"
             android:parentActivityName=".PropertyHomeActivity"

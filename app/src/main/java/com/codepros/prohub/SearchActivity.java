@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.model.Unit;
@@ -27,11 +28,12 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     private String[] filter;
     private String filterVal;
     private String propId;
+    private String phoneNum;
     private AppCompatAutoCompleteTextView atvSearch;
 
     private ArrayAdapter<String> searchListAdapter;
-    private List<Unit> allUnitList;
-    private List<Unit> myUnitList;
+    private List<ChatMessage> allChatMessageList;
+    private List<ChatMessage> myChatMessageList;
     private List<News> allNewsList;
     private List<News> myNewsList;
     private List<String> searchList;
@@ -53,8 +55,8 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
         atvSearch = findViewById(R.id.atv_search);
 
-        allUnitList = new ArrayList<>();
-        myUnitList = new ArrayList<>();
+        allChatMessageList = new ArrayList<>();
+        myChatMessageList = new ArrayList<>();
 
         allNewsList = new ArrayList<>();
         myNewsList = new ArrayList<>();
@@ -63,6 +65,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
         SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         propId = myPref.getString("propId", "");
+        phoneNum = myPref.getString("phoneNum", "0123456789");
 
         // set spinner
         setFilterSpinner();
@@ -71,13 +74,21 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 //        Init();
 
         // read values
-        new FirebaseDataseHelper().readUnits(new FirebaseDataseHelper.UnitDataStatus() {
+        new FirebaseDataseHelper().readChatMessages(new FirebaseDataseHelper.ChatMessageDataStatus() {
             @Override
-            public void DataIsLoad(List<Unit> units, List<String> keys) {
-                allUnitList = units;
-                for (int i = 0; i < allUnitList.size(); i++) {
-                    if (allUnitList.get(i).getPropId().equals(propId)) {
-                        myUnitList.add(allUnitList.get(i));
+            public void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys) {
+                allChatMessageList = chatMessages;
+                for (int i = 0; i < allChatMessageList.size(); i++) {
+                    if (allChatMessageList.get(i).getReceiverNumber().equals(phoneNum)) {
+                        boolean isExisting = false;
+                        for (int a = 0; a < myChatMessageList.size(); a++) {
+                            if (myChatMessageList.get(a).getReceiverNumber().equals(phoneNum)) {
+                                isExisting = true;
+                            }
+                        }
+                        if (!isExisting) {
+                            myChatMessageList.add(allChatMessageList.get(i));
+                        }
                     }
                 }
             }
@@ -102,16 +113,18 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
                 switch (filterVal) {
                     case "Chat":
-                        for (int i = 0; i < myUnitList.size(); i++) {
-                            if (myUnitList.get(i).getUnitName().equals(selection)) {
-                                String propId = myUnitList.get(i).getPropId();
-                                String tenantId = myUnitList.get(i).getTenantId();
-                                String unitName = myUnitList.get(i).getUnitName();
+                        for (int i = 0; i < myChatMessageList.size(); i++) {
+                            if (myChatMessageList.get(i).getSenderName().equals(selection)) {
+                                String chatId = myChatMessageList.get(i).getChatMessageId();
+                                String senderName = myChatMessageList.get(i).getSenderName();
+                                String senderNumber = myChatMessageList.get(i).getSenderNumber();
+                                String receiverNumber = myChatMessageList.get(i).getReceiverNumber();
 
                                 Intent intent = new Intent(SearchActivity.this, ChatActivity.class);
-                                intent.putExtra("propId", propId);
-                                intent.putExtra("tenantId", tenantId);
-                                intent.putExtra("unitName", unitName);
+                                intent.putExtra("Chat_ID", chatId);
+                                intent.putExtra("senderName", senderName);
+                                intent.putExtra("senderNumber", senderNumber);
+                                intent.putExtra("receiverNumber", receiverNumber);
 
                                 SearchActivity.this.startActivity(intent);
                             }
@@ -169,8 +182,8 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
         switch (filterVal) {
             case "Chat":
                 searchList.clear();
-                for (int i = 0; i < myUnitList.size(); i++) {
-                    searchList.add(myUnitList.get(i).getUnitName());
+                for (int i = 0; i < myChatMessageList.size(); i++) {
+                    searchList.add(myChatMessageList.get(i).getSenderName());
                 }
                 break;
             case "Newsroom":

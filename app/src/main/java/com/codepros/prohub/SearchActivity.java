@@ -177,7 +177,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                     case "Form":
                         for (int i = 0; i < myFormList.size(); i++) {
                             if (myFormList.get(i).getFormTitle().equals(selection)) {
-                                String formId = myFormList.get(i).getFormTitle();
+                                String formId = myFormList.get(i).getFormId();
                                 String formTitle = myFormList.get(i).getFormTitle();
                                 String contentUrl = myFormList.get(i).getContentUrl();
 

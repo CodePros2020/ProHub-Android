@@ -134,7 +134,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
         updateStaffCancelBtn = findViewById(R.id.updateStaffCancelBtn);
         updateStaffPostBtn = findViewById(R.id.updateStaffPostBtn);
 
-        // button evvents
+        // button events
         updateStaffImagebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -394,7 +394,7 @@ public class UpdateStaffActivity extends AppCompatActivity {
             myStaffRef.child(staffId).setValue(staffToUpdate);
 
             // notification
-            Toast.makeText(getApplicationContext(), staffToUpdate.getName() + " is saved!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), staffToUpdate.getName() + " is updated!", Toast.LENGTH_LONG).show();
 
             // redirect to Staff list View
             goBack();

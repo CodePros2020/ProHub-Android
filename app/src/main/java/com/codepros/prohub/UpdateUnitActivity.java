@@ -15,8 +15,11 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.Unit;
 import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class UpdateUnitActivity extends AppCompatActivity {
     //Toolbar
@@ -24,15 +27,19 @@ public class UpdateUnitActivity extends AppCompatActivity {
     private ImageButton toolbarBtnSearch, btnHome, toolbarBtnMenu;
     private ToolbarHelper toolbar;
     //
-    String unitName, unitId, tenantNum, myRole;
+    String unitName, unitId, tenantNum, myRole,propId;
     EditText etUnitName, etUnitId, etTenantNum;
+    Button btnUpdate,btnCancel;
+    DatabaseReference   myUnitRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_unit);
+        myUnitRef=FirebaseDatabase.getInstance().getReference("units");
         SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
         myRole = sharedPreferences.getString("myRole", "");
+        propId = sharedPreferences.getString("propId", "");
 
         //////////////////////////////////////////////
         // declaring the buttons
@@ -56,6 +63,8 @@ public class UpdateUnitActivity extends AppCompatActivity {
         etTenantNum = findViewById(R.id.etTenantNumber);
         etUnitId = findViewById(R.id.etUnitId);
         etUnitName = findViewById(R.id.etUnitName);
+        btnCancel=findViewById(R.id.updateCancelBtn);
+        btnUpdate=findViewById(R.id.updateUnitBtn);
         //
         Intent intent = getIntent();
         unitName = intent.getStringExtra("unitName");
@@ -65,5 +74,51 @@ public class UpdateUnitActivity extends AppCompatActivity {
         etUnitName.setText(unitName);
         etUnitId.setText(unitId);
         etTenantNum.setText(tenantNum);
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUnit(v);
+
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               goBack();;
+            }
+        });
+    }
+    public void updateUnit(View v){
+            String unitName=etUnitName.getText().toString();
+            String tenantNo=etTenantNum.getText().toString();
+            String unitId=etUnitId.getText().toString();
+        // validations
+        if (unitName.isEmpty()) {
+            String message = "Sorry, unit name cannot be empty!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+       else if (tenantNo.isEmpty()) {
+            String message = "Please add tenant number!";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+        else {
+            // staff with updated information
+            Unit updateUnit = new Unit(unitId,propId,tenantNo,unitName);
+
+            // update database
+            myUnitRef.child(unitId).setValue(updateUnit);
+
+            // notification
+            Toast.makeText(getApplicationContext(), updateUnit.getUnitName() + " is updated!", Toast.LENGTH_LONG).show();
+
+            // redirect to Staff list View
+            goBack();
+        }
+
+    }
+    public void goBack(){
+        Intent intent=new Intent(getApplicationContext(),ViewUnitsActivity.class);
+        startActivity(intent);
     }
 }

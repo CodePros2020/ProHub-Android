@@ -124,6 +124,36 @@
                 android:hint="@string/unit_tenant"/>
 
         </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        tools:context=".UpdateStaffActivity">
+
+        <Button
+            android:id="@+id/updateCancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_margin="20px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:background="@drawable/button_background"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/updateUnitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20px"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/button_background"
+            android:text="@string/update" />
+
     </LinearLayout>
 
 

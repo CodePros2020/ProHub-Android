@@ -87,8 +87,6 @@ public class ViewStaffActivity extends AppCompatActivity {
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         //////////////////////////////////////////////
-
-        //
         tvTitleStaff = findViewById(R.id.tvTitleStaff);
         tvTitleStaff.setText(propName);
         //

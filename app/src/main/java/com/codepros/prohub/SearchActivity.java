@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -81,11 +82,13 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             @Override
             public void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys) {
                 allChatMessageList = chatMessages;
+                System.out.println("Phone Number in Read Chat Messages: " + phoneNum);
                 for (int i = 0; i < allChatMessageList.size(); i++) {
+                    System.out.println("Chat Message " + i + ": " + allChatMessageList.get(i).getSenderName());
                     if (allChatMessageList.get(i).getReceiverNumber().equals(phoneNum)) {
                         boolean isExisting = false;
                         for (int a = 0; a < myChatMessageList.size(); a++) {
-                            if (myChatMessageList.get(a).getReceiverNumber().equals(phoneNum)) {
+                            if (myChatMessageList.get(a).getSenderNumber().equals(allChatMessageList.get(i).getSenderNumber())) {
                                 isExisting = true;
                             }
                         }

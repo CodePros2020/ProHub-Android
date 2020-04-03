@@ -50,7 +50,7 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
     private List<Form> listItems;
     private List<String> listItemKeys;
     private Context context;
-    private String formTitle, formContentUrl;
+    private String formTitle, formContentUrl,formDate;
     private String  name, imageUrl, myRole;
 
     String fileNameToUpdate = "";
@@ -87,9 +87,9 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
 
         formTitle = form.getFormTitle();
         formContentUrl = form.getContentUrl();
-
+        formDate=form.getDateCreated();
         holder.tvFormTitle.setText(formTitle);
-
+        holder.tvDateCreated.setText(formDate);
         // open file on click
         holder.relativeLayout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -110,7 +110,7 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
                     try {
                         context.startActivity(intent);
                     } catch (ActivityNotFoundException e) {
-                        Toast.makeText(context, "No Application avaiable to view the pdf", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "No Application available to view the pdf", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     // set intent to view the file in action view
@@ -120,7 +120,7 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
                     try {
                         context.startActivity(intent);
                     } catch (ActivityNotFoundException e) {
-                        Toast.makeText(context, "No Application avaiable to view the image", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "No Application available to view the image", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -181,6 +181,7 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
                                                 Form formToUpdate = new Form();
                                                 formToUpdate.setFormId(form.getFormId());
                                                 formToUpdate.setPropId(form.getPropId());
+                                                formToUpdate.setDateCreated(form.getDateCreated());
                                                 formToUpdate.setContentUrl(form.getContentUrl());
                                                 formToUpdate.setFormTitle(fileNameToUpdate);
 
@@ -263,6 +264,7 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
 
         TextView tvMenuOptions;
         TextView tvFormTitle;
+        TextView tvDateCreated;
         RelativeLayout relativeLayout;
 
         // constructor
@@ -271,7 +273,7 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
 
             tvMenuOptions=itemView.findViewById(R.id.tvOption);
             tvFormTitle = itemView.findViewById(R.id.tvFormTitle);
-
+            tvDateCreated=itemView.findViewById(R.id.tvFormDate);
             relativeLayout=itemView.findViewById(R.id.layout_FormsRelative);
         }
     }

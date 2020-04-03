@@ -67,7 +67,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class FormsActivity extends AppCompatActivity {
@@ -83,6 +85,7 @@ public class FormsActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE = 2;
     private static final String TAG = "FormsActivity";
+    private static String createTime;
     public static final String FORM_CHILD = "form";
 
     public List<String> formKeyList = new ArrayList<>();
@@ -137,6 +140,9 @@ public class FormsActivity extends AppCompatActivity {
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         //////////////////////////////////////////////
+        SimpleDateFormat format1 = new SimpleDateFormat("MMM dd, yyyy, KK:mm a");
+        createTime = format1.format(Calendar.getInstance().getTime());
+
 
         // Initialize RecyclerView
         formRecyclerView = (RecyclerView) findViewById(R.id.formRecyclerView);
@@ -297,11 +303,12 @@ public class FormsActivity extends AppCompatActivity {
                         // get ready to create
                         final String newFormId = myFormRef.push().getKey();
 
-                        Form newForm = new Form();
+                        Form newForm = new Form(createTime);
                         newForm.setFormId(newFormId);
                         newForm.setPropId(propId);
                         newForm.setContentUrl(uri.toString());
                         newForm.setFormTitle(fileNameToUpload);
+                       // newForm.setDateCreated(createTime);
 
                         myFormRef.child(newFormId).setValue(newForm, new DatabaseReference.CompletionListener() {
                             @Override
@@ -368,11 +375,13 @@ public class FormsActivity extends AppCompatActivity {
                                                 public void onComplete(@NonNull Task<Uri> task) {
                                                     if (task.isSuccessful()) {
                                                         //
-                                                        Form formWithFileUrl = new Form();
+                                                        Form formWithFileUrl = new Form(createTime);
                                                         formWithFileUrl.setFormId(key);
                                                         formWithFileUrl.setPropId(propId);
                                                         formWithFileUrl.setContentUrl(task.getResult().toString());
                                                         formWithFileUrl.setFormTitle(fileName);
+                                                        //formWithFileUrl.setDateCreated(createTime);
+
 
                                                         myFormRef.child(key)
                                                                 .setValue(formWithFileUrl);
@@ -410,7 +419,7 @@ public class FormsActivity extends AppCompatActivity {
         } else if (uriString.startsWith("file://")) {
             displayName = myFile.getName();
         }
-
+        Log.d("Forms Activity", "getFileNameFromUri: "+displayName);
         return displayName;
     }
 }

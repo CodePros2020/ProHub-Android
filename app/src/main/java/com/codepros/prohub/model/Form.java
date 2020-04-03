@@ -1,19 +1,33 @@
 package com.codepros.prohub.model;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class Form {
     private String formId;
     private String propId;
     private String formTitle;
     private String contentUrl;
+    private String dateCreated;
 
-    public Form() {
+    public Form(){}
+    public Form(String date) {
+    dateCreated=date;
+
     }
-
     public Form(String formId, String propId, String formTitle, String contentUrl) {
+
         this.formId = formId;
         this.propId = propId;
         this.formTitle = formTitle;
         this.contentUrl = contentUrl;
+    }
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public String getFormId() {

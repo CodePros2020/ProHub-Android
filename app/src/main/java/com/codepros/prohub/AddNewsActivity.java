@@ -206,9 +206,9 @@ public class AddNewsActivity extends AppCompatActivity {
             if (!radioBtnAll.isChecked() && radioBtnManage.isChecked()) {
                 target = "management only";
             }
-            if (radioBtnTrue.isChecked() && !radioBtnFalse.isChecked()) {
-                hide = true;
-            }
+//            if (radioBtnTrue.isChecked() && !radioBtnFalse.isChecked()) {
+//                hide = true;
+//            }
             SimpleDateFormat format1 = new SimpleDateFormat("MMM dd, yyyy, KK:mm a");
             String createTime = format1.format(Calendar.getInstance().getTime());
 

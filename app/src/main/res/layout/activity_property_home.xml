@@ -5,29 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/bg_new"
     tools:context=".PropertyHomeActivity">
-
     <include layout="@layout/layout_toolbar"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/btnDashboard"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:backgroundTint="#ffffff"
-            android:clickable="false"
-            android:drawableLeft="@drawable/dashboard"
-            android:padding="24dp"
-            android:text="DashboardTest"
-            android:textAlignment="center"
-            android:textColor="#008577"
-            android:textSize="20sp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivUserImg"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="30dp"
+                android:src="@drawable/img"
+                app:civ_border_color="#008577"
+                app:civ_border_width="1dp" />
+
+            <TextView
+                android:id="@+id/btnDashboard"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="10dp"
+                android:backgroundTint="#ffffff"
+                android:clickable="false"
+                android:padding="10dp"
+                android:text="DashboardTest"
+                android:textAlignment="textStart"
+                android:textColor="#008577"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/chatButton"
@@ -37,16 +52,17 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="37dp"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="120dp"
             android:layout_marginEnd="237dp"
-            android:backgroundTint="#008577"
-            android:drawableTop="@drawable/question"
-            android:elevation="4dp"
+            android:backgroundTint="#ffffff"
+            android:drawableTop="@drawable/chat"
+            android:elevation="10dp"
             android:onClick="goChat"
             android:padding="12dp"
             android:text="@string/chat_property_home"
+            android:background="@drawable/btn_border"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"
+            android:textColor="#008577"
             android:textSize="20sp" />
 
         <Button
@@ -55,15 +71,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="120dp"
             android:layout_marginEnd="45dp"
-            android:backgroundTint="#008577"
+            android:backgroundTint="#FFFFFF"
             android:drawableTop="@drawable/news"
-            android:elevation="4dp"
+            android:elevation="10dp"
             android:padding="12dp"
             android:text="@string/news_property_home"
+            android:background="@drawable/btn_border"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"
+            android:textColor="#008577"
             android:textSize="20sp" />
 
         <Button
@@ -76,13 +93,14 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="236dp"
-            android:backgroundTint="#008577"
-            android:drawableTop="@drawable/employees"
-            android:elevation="4dp"
+            android:backgroundTint="#ffffff"
+            android:background="@drawable/btn_border"
+            android:drawableTop="@drawable/staff"
+            android:elevation="10dp"
             android:onClick="goForms"
             android:padding="12dp"
             android:text="STAFF"
-            android:textColor="#FFFFFF"
+            android:textColor="#008577"
             android:textSize="20sp" />
 
         <Button
@@ -95,13 +113,14 @@
             android:layout_marginStart="41dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="234dp"
-            android:backgroundTint="#008577"
-            android:drawableTop="@drawable/clipboard"
-            android:elevation="4dp"
+            android:backgroundTint="#FFFFFF"
+            android:background="@drawable/btn_border"
+            android:drawableTop="@drawable/form"
+            android:elevation="10dp"
             android:onClick="goForms"
             android:padding="12dp"
             android:text="@string/forms_property_home"
-            android:textColor="#FFFFFF"
+            android:textColor="#008577"
             android:textSize="20sp" />
 
         <Button
@@ -112,12 +131,13 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="45dp"
-            android:backgroundTint="#008577"
+            android:backgroundTint="#FFFFFF"
             android:drawableTop="@drawable/apartment"
-            android:elevation="4dp"
+            android:background="@drawable/btn_border"
+            android:elevation="10dp"
             android:padding="12dp"
             android:text="Units"
-            android:textColor="#FFFFFF"
+            android:textColor="#008577"
             android:textSize="20sp" />
 
         <Button
@@ -128,12 +148,13 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="46dp"
-            android:backgroundTint="#008577"
+            android:backgroundTint="#FFFFFF"
             android:drawableTop="@drawable/wheel"
-            android:elevation="4dp"
+            android:background="@drawable/btn_border"
+            android:elevation="10dp"
             android:padding="12dp"
             android:text="@string/settings_property_home"
-            android:textColor="#FFFFFF"
+            android:textColor="#008577"
             android:textSize="20sp" />
 
     </RelativeLayout>

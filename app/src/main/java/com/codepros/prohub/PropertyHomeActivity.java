@@ -18,20 +18,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.User;
+import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.codepros.prohub.model.Property;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -39,6 +46,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PropertyHomeActivity extends AppCompatActivity {
 
@@ -48,13 +57,18 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private ImageButton toolbarBtnSearch, btnHome, toolbarBtnMenu;
     //Toolbar helper
     ToolbarHelper toolbar;
+    TextView tvDashboard;
+    ImageView ivUserImg;
+
 
     // Firebase database objects
     private static final String TAG = "PropertyHomeActivity";
     private DatabaseReference myPropRef;
+    private StorageReference myStorageRef;
+    //
 
     // Chat database ref for export chat history
-    private DatabaseReference myChatRef;
+   // private DatabaseReference myPropRef;
     public static final String CHAT_CHILD = "chat";
 
     // Export chat History
@@ -63,7 +77,7 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private JSONObject jsonData = new JSONObject(); // tentative output
 
     // property ID
-    private String propId, propName, userName;
+    private String propId, propName, userName,phoneNum, imgUrl;
 
     // user role
     private String myRole;
@@ -75,15 +89,33 @@ public class PropertyHomeActivity extends AppCompatActivity {
 
         //Shard Prederences
         // get propId from intent, save to shared preference
-        //propId = getIntent().getStringExtra("propId");
         SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         propId = myPreference.getString("propId", "");
-
-        myPropRef = FirebaseDatabase.getInstance().getReference();
         myRole = myPreference.getString("myRole", "");
         userName = myPreference.getString("username", "");
-        btnDashboard = findViewById(R.id.btnDashboard);
-        btnDashboard.setText(userName);
+        phoneNum=myPreference.getString("phoneNum","");
+        //
+        myPropRef = FirebaseDatabase.getInstance().getReference("users");
+        myStorageRef = FirebaseStorage.getInstance().getReference("userIcons");
+        // read the list of News from Firebase
+        new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
+            @Override
+            public void DataIsLoad(List<User> listUsers, List<String> keys) {
+                for (User user : listUsers) {
+                    if (user.getPhone().equals(phoneNum)) {
+                        imgUrl = user.getImageUrl();
+                        loadUserImage();
+                    }
+                }
+            }
+        });
+
+       // btnDashboard = findViewById(R.id.btnDashboard);
+        tvDashboard=findViewById(R.id.btnDashboard);
+        ivUserImg=findViewById(R.id.ivUserImg);
+        tvDashboard.setText(userName);
+        Picasso.get().load(imgUrl).placeholder(R.drawable.noimg).into(ivUserImg);
+       // ivUserImg.setImageURI(imgUrl);
 
         // references to the buttons on view
         chatButton = findViewById(R.id.chatButton);
@@ -153,6 +185,12 @@ public class PropertyHomeActivity extends AppCompatActivity {
             }
         });
 
+    }
+    // loads the user image according to imageURL
+    private void loadUserImage(){
+        if (imgUrl != null && !imgUrl.isEmpty()) {
+            Picasso.get().load(imgUrl).into(this.ivUserImg);
+        }
     }
 
     public void goNews(View view) {

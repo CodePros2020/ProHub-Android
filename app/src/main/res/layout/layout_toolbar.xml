@@ -33,14 +33,14 @@
                 android:text="@string/prohub_toolbar"
                 android:textSize="28sp"
                 android:textColor="@color/colorWhite"
-                android:translationX="30sp"/>
+                android:translationX="30dp"/>
 
             <ImageButton
                 android:id="@+id/ImageButtonSearch"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
                 android:background="@drawable/search"
-                android:translationX="140sp" />
+                android:translationX="140dp" />
 
             <ImageButton
                 android:id="@+id/ImageButtonMenu"
@@ -48,7 +48,7 @@
                 android:layout_height="50sp"
                 android:background="@drawable/menu"
                 android:onClick="exportChatHistory"
-                android:translationX="150sp" />
+                android:translationX="145dp" />
         </LinearLayout>
 
         <LinearLayout

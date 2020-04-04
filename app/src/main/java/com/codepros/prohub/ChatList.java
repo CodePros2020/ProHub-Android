@@ -85,8 +85,6 @@ public class ChatList extends AppCompatActivity {
 
         chatRecycler = (RecyclerView) findViewById(R.id.recyclerChatList);
         chatRecycler = findViewById(R.id.recyclerChatList);
-        mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
 
         // read the list of ChatMessages from Firebase
 

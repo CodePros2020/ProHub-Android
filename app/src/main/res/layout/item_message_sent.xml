@@ -21,6 +21,7 @@
                 android:id="@+id/messengerTextView"
                 android:layout_width="wrap_content"
                 android:text="@string/john_doe_sent"
+                android:visibility="gone"
                 android:paddingRight="10dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
@@ -78,7 +79,8 @@
             android:id="@+id/messengerImageView"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="5dp"
             android:src="@drawable/ic_account_circle_black_36dp"/>
 
     </LinearLayout>

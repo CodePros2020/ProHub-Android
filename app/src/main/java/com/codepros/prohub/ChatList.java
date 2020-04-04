@@ -53,6 +53,7 @@ public class ChatList extends AppCompatActivity {
     private String myRole;
     private String mPhoneNumber;
     String lastMessage;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,32 @@ public class ChatList extends AppCompatActivity {
                 setChatAdapter();
             }
         });
+
+
+        /////////////////////////////////////////////////////////////////////////
+
+//        reference = FirebaseDatabase.getInstance().getReference("chat");
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                int unread = 0;
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    Chat chat = snapshot.getValue(Chat.class);
+//                    if (chat.getPhoneNumber().equals(mPhoneNumber) && chat.getChatSeen().equals("false")) {
+//                        unread++;
+//                    }
+//                }
+//
+//                Log.d("UNREAD_MESSAGE", "Unread#: " + unread);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+        ////////////////////////////////////////////////////////////////////////
     }
 
     private void setChatAdapter() {

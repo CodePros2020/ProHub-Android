@@ -209,7 +209,6 @@ public class ChatActivity extends AppCompatActivity {
                 if (allMessages != null) {
                     for (Chat chat : allMessages)
                     {
-                        if (chat.getPhoneNumber().equals(mPhoneNumber))
                         if (chat.getPhoneNumber().equals("6475545687"))
                         {
                             count++;

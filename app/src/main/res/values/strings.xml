@@ -146,4 +146,10 @@
     <string name="lessor_tv">Lessor</string>
     <string name="formtitle">formTitle</string>
     <string name="formDate">May 14, 2020, 4:43 PM</string>
+    <string name="settings_image">settings image</string>
+    <string name="view_chats">View all the chats</string>
+    <string name="account_info">Account info, Password, Picture</string>
+    <string name="account_settings_title">Account Settings</string>
+    <string name="staff_management_subtitle">Staff Management</string>
+    <string name="staff_title">Staff</string>
 </resources>

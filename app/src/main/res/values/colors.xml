@@ -8,4 +8,5 @@
     <color name="normalBackground">#FAFAFA</color>
     <color name="btnBackground">#b8dbd9</color>
     <color  name="textDim"> #b2babb </color>
+    <color name="divider">#a3a7a7</color>
 </resources>

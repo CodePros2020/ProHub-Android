@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="110dp"
     android:layout_margin="4dp"
     android:orientation="vertical"
     android:id="@+id/rootFormView">
@@ -20,8 +20,9 @@
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:layout_width="59dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -29,15 +30,16 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="5dp"
+
                     android:layout_marginStart="10dp"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="35dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginBottom="10dp"
                     android:src="@drawable/document" />
 
             </RelativeLayout>
             <LinearLayout
-                android:layout_width="310dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <RelativeLayout
@@ -92,7 +94,7 @@
                             android:layout_marginEnd="5dp"
                             android:text="@string/formDate"
                             android:textColor="@color/textDim"
-                            android:textSize="16sp"
+                            android:textSize="12sp"
                             android:padding="5dp"
                             />
                     </LinearLayout>

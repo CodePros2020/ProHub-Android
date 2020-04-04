@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
     //
 
     private Button btnUserInfo, btnStaff;
+    private RelativeLayout layoutUserInfo, layoutStaff,layoutChatSettings;
     private TextView tvUserName;
     private ImageView ivUserIconBtn;
     private String userName, imageUrl, userPhoneNum;
@@ -98,18 +100,29 @@ public class SettingsActivity extends AppCompatActivity {
         ivUserIconBtn = findViewById(R.id.ivUserIconBtn);
 
         // Buttons for "Account Settings" and "Staff"
-        btnUserInfo = findViewById(R.id.btnUserInfo);
-        btnStaff = findViewById(R.id.btnStaff);
-        btnUserInfo.setOnClickListener(new View.OnClickListener() {
+//        btnUserInfo = findViewById(R.id.btnUserInfo);
+//        btnStaff = findViewById(R.id.btnStaff);
+
+        layoutUserInfo = findViewById(R.id.btnUserInfo);
+        layoutStaff = findViewById(R.id.btnStaff);
+        layoutChatSettings=findViewById(R.id.layoutChatSettings);
+
+        layoutUserInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goUserInfo();
             }
         });
-        btnStaff.setOnClickListener(new View.OnClickListener() {
+        layoutStaff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goStaff();
+            }
+        });
+        layoutChatSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goChat();
             }
         });
 
@@ -135,6 +148,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
     private void goStaff(){
         Intent intent = new Intent(this, ViewStaffActivity.class);
+        startActivity(intent);
+    }
+    private void goChat(){
+        Intent intent = new Intent(this, ChatList.class);
         startActivity(intent);
     }
 }

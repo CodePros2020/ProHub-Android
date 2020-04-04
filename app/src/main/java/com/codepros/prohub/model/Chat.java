@@ -17,7 +17,8 @@ public class Chat {
     public Chat() {
     }
 
-    public Chat(String chatMessageId, String fullName, String message, String phoneNumber, String photoUrl, String imageUrl, String timestamp, String chatSeen) {
+    public Chat(String chatId,String chatMessageId, String fullName, String message, String phoneNumber, String photoUrl, String imageUrl, String timestamp, String chatSeen) {
+        this.chatId=chatId;
         this.chatMessageId = chatMessageId;
         this.fullName = fullName;
         this.message = message;

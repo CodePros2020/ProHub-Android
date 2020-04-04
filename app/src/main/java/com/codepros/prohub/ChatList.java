@@ -93,11 +93,14 @@ public class ChatList extends AppCompatActivity {
             @Override
             public void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys) {
                 allChatMessages = chatMessages;
-                for (ChatMessage chat : allChatMessages)
-                {
-                    if (chat.getReceiverNumber().equals(mPhoneNumber))
+
+                if (allChatMessages != null) {
+                    for (ChatMessage chat : allChatMessages)
                     {
-                        filteredChatMessages.add(chat);
+                        if (chat.getReceiverNumber().equals(mPhoneNumber))
+                        {
+                            filteredChatMessages.add(chat);
+                        }
                     }
                 }
                 Log.d("FilteredLENGTH", String.valueOf(filteredChatMessages.size()));

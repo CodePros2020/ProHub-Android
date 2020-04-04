@@ -7,15 +7,17 @@ public class ChatMessage {
 
     private String chatMessageId;
     private String receiverNumber;
+    private String senderPhotoUrl;
     private String senderNumber;
     private String senderName;
 
     public ChatMessage() {
     }
 
-    public ChatMessage(String chatMessageId, String receiverNumber, String senderNumber, String senderName) {
+    public ChatMessage(String chatMessageId, String receiverNumber, String senderPhotoUrl, String senderNumber, String senderName) {
         this.chatMessageId = chatMessageId;
         this.receiverNumber = receiverNumber;
+        this.senderPhotoUrl = senderPhotoUrl;
         this.senderNumber = senderNumber;
         this.senderName = senderName;
     }
@@ -34,6 +36,14 @@ public class ChatMessage {
 
     public void setReceiverNumber(String receiverNumber) {
         this.receiverNumber = receiverNumber;
+    }
+
+    public String getSenderPhotoUrl() {
+        return senderPhotoUrl;
+    }
+
+    public void setSenderPhotoUrl(String senderPhotoUrl) {
+        this.senderPhotoUrl = senderPhotoUrl;
     }
 
     public String getSenderNumber() {

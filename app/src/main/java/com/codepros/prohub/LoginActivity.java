@@ -104,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
         prefEditor.putString("username", user.getFirstname() + " " + user.getLastname());
         prefEditor.putString("phoneNum", user.getPhone());
         prefEditor.putString("myRole", user.getRole());
+        prefEditor.putString("profilePic", user.getImageUrl());
         prefEditor.apply();
     }
 }

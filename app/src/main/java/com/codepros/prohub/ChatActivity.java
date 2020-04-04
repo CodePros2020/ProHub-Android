@@ -46,6 +46,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -54,6 +55,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -70,27 +72,26 @@ public class ChatActivity extends AppCompatActivity {
         ImageView messageImageView;
         TextView messengerTextView;
         TextView timeTextView;
+        TextView messengerTextSeen;
         CircleImageView messengerImageView;
-        LinearLayout layoutSender;
-        LinearLayout layoutReceiver;
 
         public MessageViewHolder(View v, boolean isSender) {
             super(v);
 
             if (isSender) {
-                //layoutSender = (LinearLayout) itemView.findViewById(R.id.layoutSender);
-                messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
-                messageImageView = (ImageView) itemView.findViewById(R.id.messageImageView);
-                messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
-                messengerImageView = (CircleImageView) itemView.findViewById(R.id.messengerImageView);
-                timeTextView = (TextView) itemView.findViewById(R.id.text_message_time);
+                messageTextView = itemView.findViewById(R.id.messageTextView);
+                messageImageView = itemView.findViewById(R.id.messageImageView);
+                messengerTextView = itemView.findViewById(R.id.messengerTextView);
+                messengerImageView = itemView.findViewById(R.id.messengerImageView);
+                timeTextView = itemView.findViewById(R.id.text_message_time);
+                messengerTextSeen = itemView.findViewById(R.id.messengerTextSeen);
             } else {
-                //layoutReceiver = (LinearLayout) itemView.findViewById(R.id.layoutReceiver);
-                messageTextView = (TextView) itemView.findViewById(R.id.messageTextView);
-                messageImageView = (ImageView) itemView.findViewById(R.id.messageImageView);
-                messengerTextView = (TextView) itemView.findViewById(R.id.messengerTextView);
-                messengerImageView = (CircleImageView) itemView.findViewById(R.id.messengerImageView);
-                timeTextView = (TextView) itemView.findViewById(R.id.text_message_time);
+                messageTextView = itemView.findViewById(R.id.messageTextView);
+                messageImageView = itemView.findViewById(R.id.messageImageView);
+                messengerTextView = itemView.findViewById(R.id.messengerTextView);
+                messengerImageView = itemView.findViewById(R.id.messengerImageView);
+                timeTextView = itemView.findViewById(R.id.text_message_time);
+                messengerTextSeen = itemView.findViewById(R.id.messengerTextSeen);
             }
         }
     }
@@ -105,6 +106,7 @@ public class ChatActivity extends AppCompatActivity {
     private String mReceiverName;
     private String mPhoneNumber;
     private String mPhotoUrl;
+    private String seen;
     private SharedPreferences mSharedPreferences;
     private String chatMessageId;
     private String timestamp;
@@ -130,6 +132,10 @@ public class ChatActivity extends AppCompatActivity {
     // for export chat history
     private static final int PERMISSION_REQUEST_CODE = 100;
 
+    // for seen and delivered
+    ValueEventListener seenListener;
+    DatabaseReference reference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,10 +145,17 @@ public class ChatActivity extends AppCompatActivity {
         mPhoneNumber = mSharedPreferences.getString("phoneNum", "0123456789");
         propId = mSharedPreferences.getString("propId", "");
         chatMessageId = getIntent().getStringExtra("Chat_ID");
+        seen = "false";
+//        seenMessage(chatMessageId, mPhoneNumber);
 
         myRole = mSharedPreferences.getString("myRole", "");
-        timestamp = "2020-03-08 12:11 AM";
-        //mFirebaseUser = mUsername;
+
+        String picture = mSharedPreferences.getString("profilePic", null);
+
+        if (picture != null) {
+            mPhotoUrl = picture;
+        }
+
         /////////////////////////////////////////////////////
         // declaring the buttons
 
@@ -160,12 +173,6 @@ public class ChatActivity extends AppCompatActivity {
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         //////////////////////////////////////////////////////////////////////////
-
-        mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        mUsername = mSharedPreferences.getString("username", ANONYMOUS);
-        mPhoneNumber = mSharedPreferences.getString("phoneNum", "0123456789");
-
-        chatMessageId = getIntent().getStringExtra("Chat_ID");
 
         // for export chat history
         toolbar.setChatHistoryExportInfo(chatMessageId, propId);
@@ -190,13 +197,11 @@ public class ChatActivity extends AppCompatActivity {
                 Chat chat = snapshot.getValue(Chat.class);
                 if (chat != null) {
                     chat.setChatId(snapshot.getKey());
-                    //mUsername = chat.getFullName();
                 }
                 return chat;
             }
         };
 
-//        DatabaseReference chatRef = mFirebaseDatabaseReference.child(CHAT_CHILD).equalTo(chatMessageId);
         Query chatRef = mFirebaseDatabaseReference.child(CHAT_CHILD).orderByChild("chatMessageId").equalTo(chatMessageId);
 
         final FirebaseRecyclerOptions<Chat> options =
@@ -208,9 +213,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public int getItemViewType(int position) {
 
-                Chat chat = (Chat) mFirebaseAdapter.getItem(position);
+                Chat chat = mFirebaseAdapter.getItem(position);
 
-                //if (currentUser == mFirebaseUser.getDisplayName())
                 if (chat.getFullName().equals(mUsername)) {
                     // If the current user is the sender of the message
                     return VIEW_TYPE_MESSAGE_SENT;
@@ -230,6 +234,7 @@ public class ChatActivity extends AppCompatActivity {
                             holder.messageTextView.setText(model.getMessage());
                             holder.timeTextView.setText(model.getTimestamp());
                             holder.messageTextView.setVisibility(TextView.VISIBLE);
+                            //holder.messengerTextSeen.setText("SEEN::: " +model.getChatSeen());
                             holder.messageImageView.setVisibility(ImageView.GONE);
                         } else if (model.getImageUrl() != null) {
                             String imageUrl = model.getImageUrl();
@@ -261,7 +266,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
 
                         holder.messengerTextView.setText(model.getFullName());
-                        if (model.getPhotoUrl() == null) {
+                        if (model.getPhotoUrl() == null || model.getPhotoUrl().equals("")) {
                             holder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
                                     R.drawable.ic_account_circle_black_36dp));
                         } else {
@@ -269,6 +274,27 @@ public class ChatActivity extends AppCompatActivity {
                                     .load(model.getPhotoUrl())
                                     .into(holder.messengerImageView);
                         }
+
+//                        if (model.getChatSeen() == null)
+//                        {
+//                            if (position == mFirebaseAdapter.getItemCount()-1) {
+//                                if (!model.getChatSeen().equals(seen)) {
+//                                    holder.messengerTextSeen.setText("Seen");
+//                                } else {
+//                                    holder.messengerTextSeen.setText("Delivered");
+//                                }
+//                            } else {
+//                                holder.messengerTextSeen.setVisibility(View.GONE);
+//                            }
+//                        }
+
+//                        Log.d("CHATSEEN", model.getChatSeen());
+
+//                        if (model.seen().equals("true")) {
+//                            holder.messengerTextSeen.setText("Seen");
+//                        } else {
+//                            holder.messengerTextSeen.setText("Delivered");
+//                        }
                     }
                     break;
                     case 1: {
@@ -278,6 +304,7 @@ public class ChatActivity extends AppCompatActivity {
                             holder.messageTextView.setVisibility(TextView.VISIBLE);
                             holder.messageImageView.setVisibility(ImageView.GONE);
                             holder.timeTextView.setText(model.getTimestamp());
+                            holder.messengerTextSeen.setText(model.getChatSeen());
                         } else if (model.getImageUrl() != null) {
                             String imageUrl = model.getImageUrl();
                             if (imageUrl.startsWith("gs://")) {
@@ -308,6 +335,43 @@ public class ChatActivity extends AppCompatActivity {
                         }
 
                         holder.messengerTextView.setText(model.getFullName());
+                        if (model.getPhotoUrl() == null || model.getPhotoUrl().equals("")) {
+                        //if (mPhotoUrl == null) {
+                            holder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
+                                    R.drawable.ic_account_circle_black_36dp));
+                        } else {
+                            Glide.with(ChatActivity.this)
+                                    .load(model.getPhotoUrl())
+                                    .into(holder.messengerImageView);
+                        }
+
+//                        if (model.getChatSeen().equals("false")) {
+//                            holder.messengerTextSeen.setText("Delivered");
+//                        } else if (model.getChatSeen().equals("true")) {
+//                            holder.messengerTextSeen.setText("Seen");
+//                        }
+
+//                        if (model.getChatSeen() != null)
+//                        {
+//                            if (position == mFirebaseAdapter.getItemCount()-1) {
+//                                if (!model.getChatSeen().equals(seen)) {
+//                                    holder.messengerTextSeen.setText("Seen");
+//                                } else {
+//                                    holder.messengerTextSeen.setText("Delivered");
+//                                }
+//                            } else {
+//                                holder.messengerTextSeen.setVisibility(View.GONE);
+//                            }
+//                        }
+//
+//                        Log.d("CHATSEEN", model.getChatSeen());
+
+//                        if (model.seen().equals("true")) {
+//                            holder.messengerTextSeen.setText("Seen");
+//                        } else {
+//                            holder.messengerTextSeen.setText("Delivered");
+//                        }
+
                     }
                     break;
                     default:
@@ -315,6 +379,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
 
             }
+
 
             @NonNull
             @Override
@@ -386,7 +451,8 @@ public class ChatActivity extends AppCompatActivity {
                         mPhoneNumber,
                         mPhotoUrl,
                         null /* no image */,
-                        timestamp);
+                        timestamp,
+                        seen);
                 mFirebaseDatabaseReference.child(CHAT_CHILD)
                         .push().setValue(chat);
                 mMessageEditText.setText("");
@@ -404,12 +470,17 @@ public class ChatActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_IMAGE);
             }
         });
+
+        seenMessage(chatMessageId, mPhoneNumber);
+
     }
 
     @Override
     public void onPause() {
         mFirebaseAdapter.stopListening();
         super.onPause();
+        reference.removeEventListener(seenListener);
+
     }
 
     @Override
@@ -432,7 +503,8 @@ public class ChatActivity extends AppCompatActivity {
                     Chat tempMessage = new Chat(chatMessageId, mUsername, null, mPhoneNumber,
                             mPhotoUrl,
                             LOADING_IMAGE_URL,
-                            timestamp);
+                            timestamp,
+                            seen);
                     mFirebaseDatabaseReference.child(CHAT_CHILD).push()
                             .setValue(tempMessage, new DatabaseReference.CompletionListener() {
                                 @Override
@@ -442,7 +514,6 @@ public class ChatActivity extends AppCompatActivity {
                                         String key = databaseReference.getKey();
                                         StorageReference storageReference =
                                                 FirebaseStorage.getInstance()
-                                                        //.getReference(mFirebaseUser.getUid())
                                                         .getReference(mPhoneNumber)
                                                         .child(key)
                                                         .child(uri.getLastPathSegment());
@@ -475,7 +546,8 @@ public class ChatActivity extends AppCompatActivity {
                                                                 new Chat(chatMessageId, mUsername, null, mPhoneNumber,
                                                                         mPhotoUrl,
                                                                         task.getResult().toString(),
-                                                                        timestamp);
+                                                                        timestamp,
+                                                                        seen);
                                                         mFirebaseDatabaseReference.child(CHAT_CHILD).child(key)
                                                                 .setValue(friendlyMessage);
                                                     }
@@ -503,69 +575,28 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-}
+    // for seenMessage
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
-//
-//        if (requestCode == REQUEST_IMAGE) {
-//            if (resultCode == RESULT_OK) {
-//                if (data != null) {
-//                    final Uri uri = data.getData();
-//                    Log.d(TAG, "Uri: " + uri.toString());
-//
-//                    Chat tempMessage = new Chat(mPhoneNumber, null, mUsername, mPhotoUrl,
-//                            LOADING_IMAGE_URL);
-//                    mFirebaseDatabaseReference.child(CHAT_CHILD).push()
-//                            .setValue(tempMessage, new DatabaseReference.CompletionListener() {
-//                                @Override
-//                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-//                                    if (databaseError == null) {
-//                                        String key = databaseReference.getKey();
-//                                        StorageReference storageReference = FirebaseStorage.getInstance()
-//                                                .getReference()
-//                                                .child(key)
-//                                                .child(uri.getLastPathSegment());
-//
-//                                        putImageInStorage(storageReference, uri, key);
-//                                    } else {
-//                                        Log.w(TAG, "Unable to write message to database.",
-//                                        databaseError.toException());
-//                                    }
-//                                }
-//                            });
-//                }
-//            }
-//        }
-//    }
-//
-//    private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
-//        storageReference.putFile(uri).addOnCompleteListener(ChatActivity.this,
-//                new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            task.getResult().getMetadata().getReference().getDownloadUrl()
-//                                    .addOnCompleteListener(ChatActivity.this,
-//                                            new OnCompleteListener<Uri>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<Uri> task) {
-//                                                    if (task.isSuccessful()) {
-//                                                        Chat chat = new Chat(mPhoneNumber, null,
-//                                                                mUsername, mPhotoUrl,
-//                                                                task.getResult().toString());
-//                                                        mFirebaseDatabaseReference.child(CHAT_CHILD).child(key)
-//                                                                .setValue(chat);
-//                                                    }
-//                                                }
-//                                            });
-//                        } else {
-//                            Log.w(TAG, "Image upload task was not successful.",
-//                                    task.getException());
-//                        }
-//                    }
-//                });
-//    }
-//}
+    private void seenMessage(final String chatMsgId, final String senderPhoneNumber) {
+        reference = FirebaseDatabase.getInstance().getReference("chat");
+        seenListener = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getChatMessageId().equals(chatMsgId) && !chat.getPhoneNumber().equals(senderPhoneNumber)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("chatSeen", "true");
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+}

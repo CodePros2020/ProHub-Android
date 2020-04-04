@@ -4,13 +4,6 @@ import java.text.DateFormat;
 
 public class Chat {
 
-//    private String id;
-//    private String phoneNumber;
-//    private String message;
-//    private String fullName;
-//    private String photoUrl;
-//    private String imageUrl;
-
     private String chatId;
     private String chatMessageId;
     private String fullName;
@@ -19,12 +12,13 @@ public class Chat {
     private String photoUrl;
     private String imageUrl;
     private String timestamp;
+    private String chatSeen;
 
     public Chat() {
     }
 
     public Chat(String chatMessageId, String fullName, String message, String phoneNumber,
-                String photoUrl, String imageUrl, String timestamp) {
+                String photoUrl, String imageUrl, String timestamp, String chatSeen) {
         this.chatMessageId = chatMessageId;
         this.fullName = fullName;
         this.message = message;
@@ -32,6 +26,7 @@ public class Chat {
         this.photoUrl = photoUrl;
         this.imageUrl = imageUrl;
         this.timestamp = timestamp;
+        this.chatSeen = chatSeen;
     }
 
     public String getChatId() {
@@ -98,59 +93,11 @@ public class Chat {
         this.timestamp = timestamp;
     }
 
-    //    public Chat(String phoneNumber, String message, String fullName, String photoUrl, String imageUrl) {
-//        this.phoneNumber = phoneNumber;
-//        this.message = message;
-//        this.fullName = fullName;
-//        this.photoUrl = photoUrl;
-//        this.imageUrl = imageUrl;
-//    }
-//
-//    public String getId() {
-//        return id;
-//    }
-//
-//    public void setId(String id) {
-//        this.id = id;
-//    }
-//
-//    public String getPhoneNumber() {
-//        return phoneNumber;
-//    }
-//
-//    public void setPhoneNumber(String phoneNumber) {
-//        this.phoneNumber = phoneNumber;
-//    }
-//
-//    public String getMessage() {
-//        return message;
-//    }
-//
-//    public void setMessage(String message) {
-//        this.message = message;
-//    }
-//
-//    public String getFullName() {
-//        return fullName;
-//    }
-//
-//    public void setFullName(String fullName) {
-//        this.fullName = fullName;
-//    }
-//
-//    public String getPhotoUrl() {
-//        return photoUrl;
-//    }
-//
-//    public void setPhotoUrl(String photoUrl) {
-//        this.photoUrl = photoUrl;
-//    }
-//
-//    public String getImageUrl() {
-//        return imageUrl;
-//    }
-//
-//    public void setImageUrl(String imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
+    public String getChatSeen() {
+        return chatSeen;
+    }
+
+    public void setChatSeen(String chatSeen) {
+        chatSeen = chatSeen;
+    }
 }

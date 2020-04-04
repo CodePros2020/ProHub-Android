@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.codepros.prohub.ChatActivity;
+import com.codepros.prohub.ChatList;
 import com.codepros.prohub.R;
 import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.ChatMessage;
@@ -26,6 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
@@ -64,6 +69,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
         lastMessage(chat.getChatMessageId(), holder.txtLastMessage, holder.txtTimeDateSent);
 
+        if (chat.getSenderPhotoUrl() == null || chat.getSenderPhotoUrl().equals("")) {
+            holder.chatImageView.setImageDrawable(ContextCompat.getDrawable(holder.chatImageView.getContext(),
+                    R.drawable.ic_account_circle_black_36dp));
+        } else {
+            Glide.with(holder.chatImageView.getContext())
+                    .load(chat.getSenderPhotoUrl())
+                    .into(holder.chatImageView);
+        }
+
         holder.onChatClickListener = new OnChatClickListener() {
             @Override
             public void onChatClick(View v, int position) {
@@ -91,6 +105,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
         TextView txtSenderFullName;
         TextView txtTimeDateSent;
         TextView txtLastMessage;
+        CircleImageView chatImageView;
         OnChatClickListener onChatClickListener = null;
 
         public ChatHolder(View view) {
@@ -99,6 +114,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
             txtSenderFullName = view.findViewById(R.id.chatSenderFullName);
             txtTimeDateSent = view.findViewById(R.id.chatSentDate);
             txtLastMessage = view.findViewById(R.id.chatLastMessage);
+            chatImageView = view.findViewById(R.id.chatImageView);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

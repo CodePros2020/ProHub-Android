@@ -153,7 +153,7 @@ public class FormsAdapter extends RecyclerView.Adapter<FormsAdapter.ViewHolder> 
                                 // show dialog box for filename selection
                                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                                 alertDialog.setTitle("Edit Form Title");
-                                alertDialog.setMessage("Enter Form Title");
+                                //alertDialog.setMessage("Enter Form Title");
 
                                 // hard-coded dialog layout
                                 final EditText input = new EditText(context);

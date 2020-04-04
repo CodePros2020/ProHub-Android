@@ -278,7 +278,7 @@ public class FormsActivity extends AppCompatActivity {
         // show dialog box for filename selection
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("New Form Title");
-        alertDialog.setMessage("Enter Form Title");
+        //alertDialog.setMessage("Enter Form Title");
 
         // hard-coded dialog layout
         final EditText input = new EditText(this);

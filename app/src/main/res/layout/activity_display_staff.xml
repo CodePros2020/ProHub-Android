@@ -9,8 +9,8 @@
     <include layout="@layout/layout_toolbar"/>
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivStaff"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_margin="15dp"
        android:layout_gravity="center"
         android:src="@drawable/img"
@@ -34,71 +34,79 @@
         android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tvEmail"
-        android:text="example@example.com"
-        android:padding="10dp"
-        android:layout_gravity="center"
-        android:textSize="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tvPhone"
-        android:text="(416) 123-1234"
-        android:padding="10dp"
-        android:layout_gravity="center"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:background="@drawable/login_layout_border"
+        android:orientation="vertical">
         <TextView
-            android:id="@+id/tvAddress"
-            android:text="941 Progress Ave"
+            android:id="@+id/tvEmail"
+            android:text="example@example.com"
             android:padding="10dp"
             android:layout_gravity="center"
             android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/tvCity"
-            android:text="Toronto"
+            android:id="@+id/tvPhone"
+            android:text="(416) 123-1234"
             android:padding="10dp"
-            android:layout_marginStart="30dp"
             android:layout_gravity="center"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/tvAddress"
+                android:text="941 Progress Ave"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tvCity"
+                android:text="Toronto"
+                android:padding="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/tvProvince"
+                android:text="Ontario"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tvPostal"
+                android:text="A0A 0A0"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center">
-        <TextView
-            android:id="@+id/tvProvince"
-            android:text="Ontario"
-            android:padding="10dp"
-            android:layout_gravity="center"
-            android:textSize="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tvPostal"
-            android:text="A0A 0A0"
-            android:padding="10dp"
-            android:layout_gravity="center"
-            android:textSize="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
 
 </LinearLayout>

@@ -177,7 +177,7 @@ public class ChatActivity extends AppCompatActivity {
 
         //////////////////////////////////////////////////////////////////////////
 
-
+        Log.d("CheckNumber", "Number: " + mPhoneNumber);
         /////////////////////////////////////////////////////////////////////////
 
 //        reference = FirebaseDatabase.getInstance().getReference(CHAT_CHILD);
@@ -209,9 +209,10 @@ public class ChatActivity extends AppCompatActivity {
                 if (allMessages != null) {
                     for (Chat chat : allMessages)
                     {
+                        Log.d(TAG, "DataIsLoad: "+chat.getPhoneNumber());
                         if (chat.getPhoneNumber().equals(mPhoneNumber))
                         {
-                            count++;
+                            ++count;
                         }
                     }
                 }
@@ -470,8 +471,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Send messages on click.
-
-                Chat chat = new Chat(chatMessageId, mUsername, mMessageEditText.getText().toString(),
+                String chatId = mFirebaseDatabaseReference.push().getKey();
+                Chat chat = new Chat(chatId,chatMessageId, mUsername, mMessageEditText.getText().toString(),
                         mPhoneNumber,
                         mPhotoUrl,
                         null /* no image */,
@@ -523,8 +524,8 @@ public class ChatActivity extends AppCompatActivity {
                 if (data != null) {
                     final Uri uri = data.getData();
                     Log.d(TAG, "Uri: " + uri.toString());
-
-                    Chat tempMessage = new Chat(chatMessageId, mUsername, null, mPhoneNumber,
+                    String chatId = mFirebaseDatabaseReference.push().getKey();
+                    Chat tempMessage = new Chat(chatId,chatMessageId, mUsername, null, mPhoneNumber,
                             mPhotoUrl,
                             LOADING_IMAGE_URL,
                             timestamp,
@@ -566,8 +567,9 @@ public class ChatActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Uri> task) {
                                                     if (task.isSuccessful()) {
+                                                        String chatId = mFirebaseDatabaseReference.push().getKey();
                                                         Chat friendlyMessage =
-                                                                new Chat(chatMessageId, mUsername, null, mPhoneNumber,
+                                                                new Chat(chatId,chatMessageId, mUsername, null, mPhoneNumber,
                                                                         mPhotoUrl,
                                                                         task.getResult().toString(),
                                                                         timestamp,

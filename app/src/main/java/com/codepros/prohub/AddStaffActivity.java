@@ -370,18 +370,19 @@ public class AddStaffActivity extends AppCompatActivity {
         }
            else {
                 boolean exist=false;
-            String staffId = myStaffRef.push().getKey();
-            Staff newStaff = new Staff(staffId, propId, name, phone, address, postal, city, province, email, role, imageUrl);
-            // need to save to firebase
             for(Staff staff:staffList){
-                if(staff.getStaffId().equals(staffId)){
+                if(staff.getPhoneNum().equals(phone)){
                     exist=true;
-                    Toast.makeText(getApplicationContext(), newStaff.getName() + " is saved!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), staff.getName() + " already exist!", Toast.LENGTH_LONG).show();
                 }
                 else{
                     exist=false;
                 }
             }
+            String staffId = myStaffRef.push().getKey();
+            Staff newStaff = new Staff(staffId, propId, name, phone, address, postal, city, province, email, role, imageUrl);
+            // need to save to firebase
+
             if(!exist){
                 myStaffRef.child(staffId).setValue(newStaff);
                 Toast.makeText(getApplicationContext(), newStaff.getName() + " is saved!", Toast.LENGTH_LONG).show();

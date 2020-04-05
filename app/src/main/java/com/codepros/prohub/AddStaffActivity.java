@@ -74,7 +74,7 @@ public class AddStaffActivity extends AppCompatActivity {
     // firebase database objects
     private DatabaseReference myStaffRef;
     private StorageReference myStorageRef;
-
+    private boolean clicked=false;
     List<Chat> allMessages = new ArrayList<>();
 
 
@@ -155,6 +155,7 @@ public class AddStaffActivity extends AppCompatActivity {
         addStaffBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clicked=true;
                 fileChooser();
             }
         });
@@ -268,9 +269,11 @@ public class AddStaffActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         imageUrl = task.getResult().toString();
                     }
+
                 }
             });
         } catch (Exception e) {
+            imageUrl="";
             Log.d(TAG, e.getMessage());
         }
     }
@@ -323,10 +326,14 @@ public class AddStaffActivity extends AppCompatActivity {
         } else if (email.isEmpty() || email == null) {
             String message = "Sorry, email cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        } else if (phone.isEmpty() || phone == null) {
+        }
+        else if (phone.length() > 15)  {
+            String message = "Please add correct phone number";
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }else if (phone.isEmpty() || phone == null )  {
             String message = "Sorry, phone cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        } else if(!phoneMatcher.matches()){
+        }else if(!phoneMatcher.matches()){
                 String message = "Sorry, Phone number is incorrect pattern!";
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         } else if (address.isEmpty() || address == null) {
@@ -344,10 +351,11 @@ public class AddStaffActivity extends AppCompatActivity {
         } else if (role.isEmpty() || role == null) {
             String message = "Sorry, role cannot be empty!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        } else if (imageUrl.isEmpty() || imageUrl == null) {
+        }else if (!clicked) {
             String message = "Please choose an image!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        } else {
+        }
+           else {
 
             String staffId = myStaffRef.push().getKey();
             Staff staff = new Staff(staffId, propId, name, phone, address, postal, city, province, email, role, imageUrl);

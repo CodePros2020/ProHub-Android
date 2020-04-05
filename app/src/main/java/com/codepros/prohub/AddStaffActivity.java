@@ -76,6 +76,7 @@ public class AddStaffActivity extends AppCompatActivity {
     private StorageReference myStorageRef;
     private boolean clicked=false;
     List<Chat> allMessages = new ArrayList<>();
+    List<Staff> staffList=new ArrayList<Staff>();
 
 
     @Override
@@ -175,7 +176,19 @@ public class AddStaffActivity extends AppCompatActivity {
                 addStaff(v);
             }
         });
+        new FirebaseDataseHelper().readStaff(new FirebaseDataseHelper.StaffDataStatus() {
+            @Override
+            public void DataIsLoad(List<Staff> listStaff, List<String> keys) {
+               staffList=listStaff;
+            }
+
+        });
+
     }
+
+
+
+
 
     // Setting list View adapter
     public void SetProvinceAdapter() {
@@ -356,14 +369,26 @@ public class AddStaffActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         }
            else {
-
+                boolean exist=false;
             String staffId = myStaffRef.push().getKey();
-            Staff staff = new Staff(staffId, propId, name, phone, address, postal, city, province, email, role, imageUrl);
+            Staff newStaff = new Staff(staffId, propId, name, phone, address, postal, city, province, email, role, imageUrl);
             // need to save to firebase
-            myStaffRef.child(staffId).setValue(staff);
-            Toast.makeText(getApplicationContext(), staff.getName() + " is saved!", Toast.LENGTH_LONG).show();
-            // redirect to Staff list View
-            goBack();
+            for(Staff staff:staffList){
+                if(staff.getStaffId().equals(staffId)){
+                    exist=true;
+                    Toast.makeText(getApplicationContext(), newStaff.getName() + " is saved!", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    exist=false;
+                }
+            }
+            if(!exist){
+                myStaffRef.child(staffId).setValue(newStaff);
+                Toast.makeText(getApplicationContext(), newStaff.getName() + " is saved!", Toast.LENGTH_LONG).show();
+                // redirect to Staff list View
+                goBack();
+            }
+
         }
     }
 

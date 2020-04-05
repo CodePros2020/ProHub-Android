@@ -56,6 +56,7 @@ public class NewsViewActivity extends AppCompatActivity {
      List<Chat> allMessages = new ArrayList<>();
     private String userPhoneNum;
     private String newsTitle;
+    private boolean isSearching;
 
 
     @Override
@@ -67,6 +68,7 @@ public class NewsViewActivity extends AppCompatActivity {
         myRole = sharedPreferences.getString("myRole", "");
         propName = sharedPreferences.getString("propName", "");
         newsTitle = sharedPreferences.getString("title", "");
+        isSearching = Boolean.parseBoolean(sharedPreferences.getString("isSearching", "false"));
         tvPropertyName = findViewById(R.id.tvPropertyName);
         tvPropertyName.setText(propName);
         //////////////////////////////////////////////
@@ -150,27 +152,54 @@ public class NewsViewActivity extends AppCompatActivity {
 
         //Read News from database
         // read the list of News from Firebase
-        new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
-            @Override
-            public void DataIsLoad(List<News> listNews, List<String> keys) {
-                // filter the target viewer
-                for (int i = 0; i < listNews.size(); i++) {
-                    if (!listNews.get(i).getHideFlag()) {
-                        if ((myRole.equals("Tenant"))) {
-                            if ((listNews.get(i).getTargetViewer().equals("all"))) {
+        if (!isSearching) {
+            new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
+                @Override
+                public void DataIsLoad(List<News> listNews, List<String> keys) {
+                    // filter the target viewer
+                    for (int i = 0; i < listNews.size(); i++) {
+                        if (!listNews.get(i).getHideFlag()) {
+                            if ((myRole.equals("Tenant"))) {
+                                if ((listNews.get(i).getTargetViewer().equals("all"))) {
+                                    newsList.add(listNews.get(i));
+                                    newsKeyList.add(keys.get(i));
+                                }
+                            } else {
                                 newsList.add(listNews.get(i));
                                 newsKeyList.add(keys.get(i));
                             }
-                        } else {
-                            newsList.add(listNews.get(i));
-                            newsKeyList.add(keys.get(i));
+                        }
+
+                    }
+                    setNewsAdapter();
+                }
+            });
+        } else {
+            new FirebaseDataseHelper().readNews(new FirebaseDataseHelper.NewsDataStatus() {
+                @Override
+                public void DataIsLoad(List<News> listNews, List<String> keys) {
+                    // filter the target viewer
+                    for (int i = 0; i < listNews.size(); i++) {
+                        if (!listNews.get(i).getHideFlag()) {
+                            if ((myRole.equals("Tenant"))) {
+                                if ((listNews.get(i).getTargetViewer().equals("all"))) {
+                                    if (listNews.get(i).getNewsTitle().equals(newsTitle)) {
+                                        newsList.add(listNews.get(i));
+                                        newsKeyList.add(keys.get(i));
+                                    }
+                                }
+                            } else {
+                                if (listNews.get(i).getNewsTitle().equals(newsTitle)) {
+                                    newsList.add(listNews.get(i));
+                                    newsKeyList.add(keys.get(i));
+                                }
+                            }
                         }
                     }
-
+                    setNewsAdapter();
                 }
-                setNewsAdapter();
-            }
-        });
+            });
+        }
 
         SharedPreferences.Editor prefEditor = myPreference.edit();
         prefEditor.putString("isSearching", "false");

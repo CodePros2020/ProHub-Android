@@ -106,15 +106,31 @@ public class SettingsActivity extends AppCompatActivity {
         tvUserName.setText(userName);
         ivUserIconBtn = findViewById(R.id.ivUserIconBtn);
 
-        // Buttons for "Account Settings" and "Staff"
-//        btnUserInfo = findViewById(R.id.btnUserInfo);
-//        btnStaff = findViewById(R.id.btnStaff);
-
+        // Layout for "Account Settings" ,"Chat "and "Staff"
         layoutUserInfo = findViewById(R.id.btnUserInfo);
         layoutStaff = findViewById(R.id.btnStaff);
         layoutChatSettings=findViewById(R.id.layoutChatSettings);
 
         layoutUserInfo.setOnClickListener(new View.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      goUserInfo();
+                                                  }
+                                              });
+        layoutStaff.setOnClickListener(new View.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      goStaff();
+                                                  }
+                                              });
+        layoutChatSettings.setOnClickListener(new View.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(View v) {
+                                                      goChat();
+                                                  }
+                                              });
+
+
 
         /////////////////////////////////////////////////////////////////////////
 
@@ -149,25 +165,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         ////////////////////////////////////////////////////////////////////////
 
-        btnUserInfo = findViewById(R.id.btnUserInfo);
-        btnUserInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goUserInfo();
-            }
-        });
-        layoutStaff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goStaff();
-            }
-        });
-        layoutChatSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goChat();
-            }
-        });
 
         // sets visibility of the "Staff" button depending on the user role
         switch (myRole) {

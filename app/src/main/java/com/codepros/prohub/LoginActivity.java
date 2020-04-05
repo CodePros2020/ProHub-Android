@@ -37,6 +37,10 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.txtLoginPassword);
         btnLogin = findViewById(R.id.btnLogin);
 
+
+        //////
+
+        //////
         //toolbar
         toolbarHelper = new ToolbarHelper(this);
         //

@@ -371,7 +371,7 @@ public class AddStaffActivity extends AppCompatActivity {
            else {
                 boolean exist=false;
             for(Staff staff:staffList){
-                if(staff.getPhoneNum().equals(phone)){
+                if(staff.getPhoneNum().equals(phone) && staff.getPropId().equals(propId)){
                     exist=true;
                     Toast.makeText(getApplicationContext(), staff.getName() + " already exist!", Toast.LENGTH_LONG).show();
                 }

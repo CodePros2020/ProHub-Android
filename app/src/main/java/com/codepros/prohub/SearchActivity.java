@@ -161,17 +161,13 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                                 String targetViewer = myNewsList.get(i).getTargetViewer();
 
                                 Bundle b = new Bundle();
-                                Intent intent = new Intent(SearchActivity.this, DisplayNewsActivity.class);
-                                b.putString("title", newsTitle);
-                                b.putString("description", content);
-                                b.putString("date", createTime);
-                                b.putString("imgUrl", imageUrl);
-                                b.putString("propId", propId);
-                                b.putString("creatorPhoneNumber", creatorPhoneNumber);
-                                b.putString("hideFlag", hideFlag);
-                                b.putString("targetViewer", targetViewer);
+                                Intent intent = new Intent(SearchActivity.this, NewsViewActivity.class);
 
-                                intent.putExtras(b);
+                                SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", 0);
+                                SharedPreferences.Editor prefEditor = myPreference.edit();
+                                prefEditor.putString("title", newsTitle);
+                                prefEditor.putString("isSearching", "true");
+                                prefEditor.apply();
 
                                 SearchActivity.this.startActivity(intent);
                             }

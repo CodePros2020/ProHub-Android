@@ -54,7 +54,8 @@ public class NewsViewActivity extends AppCompatActivity {
     private String myRole, propName;
 
      List<Chat> allMessages = new ArrayList<>();
-     private String userPhoneNum;
+    private String userPhoneNum;
+    private String newsTitle;
 
 
     @Override
@@ -65,6 +66,7 @@ public class NewsViewActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("myUserSharedPref", Context.MODE_PRIVATE);
         myRole = sharedPreferences.getString("myRole", "");
         propName = sharedPreferences.getString("propName", "");
+        newsTitle = sharedPreferences.getString("title", "");
         tvPropertyName = findViewById(R.id.tvPropertyName);
         tvPropertyName.setText(propName);
         //////////////////////////////////////////////
@@ -170,6 +172,9 @@ public class NewsViewActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences.Editor prefEditor = myPreference.edit();
+        prefEditor.putString("isSearching", "false");
+        prefEditor.apply();
     }
 
     private void setNewsAdapter() {
@@ -177,5 +182,4 @@ public class NewsViewActivity extends AppCompatActivity {
         newsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         newsRecyclerView.setAdapter(newsAdapter);
     }
-
 }

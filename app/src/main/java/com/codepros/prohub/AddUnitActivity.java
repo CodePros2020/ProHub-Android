@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.Staff;
 import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.model.Unit;
@@ -45,7 +47,7 @@ public class AddUnitActivity extends AppCompatActivity {
     private List<ChatMessage>chatMessageList;
     public static final String ANONYMOUS = "anonymous";
     SharedPreferences myPref;
-
+    List<Chat> allMessages = new ArrayList<>();
     // firebase database objects
     private DatabaseReference myDataRef;
 
@@ -56,10 +58,13 @@ public class AddUnitActivity extends AppCompatActivity {
 
         myDataRef = FirebaseDatabase.getInstance().getReference();
         Log.d(TAG, "onCreate: Units DB" + myDataRef.child("-M3X8yzN8R0Bs41p0PVy"));
-        //Shared Preference
-        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+
+        myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         propId = myPref.getString("propId", "");
-        myRole = myPref.getString("myRole", "");
+        landlordName = myPref.getString("username", ANONYMOUS);
+        landlordPhoneNumber = myPref.getString("phoneNum", "0123456789");
+        landlordProfilePicture = myPref.getString("profilePic", null);
+
         /////////////////////////////////////////////////////
         // declaring the buttons
 
@@ -77,13 +82,37 @@ public class AddUnitActivity extends AppCompatActivity {
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         /////////////////////////////////////
-        myDataRef = FirebaseDatabase.getInstance().getReference();
 
-        myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        propId = myPref.getString("propId", "");
-        landlordName = myPref.getString("username", ANONYMOUS);
-        landlordPhoneNumber = myPref.getString("phoneNum", "0123456789");
-        landlordProfilePicture = myPref.getString("profilePic", null);
+        /////////////////////////////////////////////////////////////////////////
+
+        // for unread chat messages counter
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(landlordPhoneNumber) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(landlordPhoneNumber))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        ////////////////////////////////////////////////////////////////////////
 
         //
         etUnitName = findViewById(R.id.etUnitName);

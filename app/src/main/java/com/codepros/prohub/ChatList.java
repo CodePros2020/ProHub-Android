@@ -2,12 +2,14 @@ package com.codepros.prohub;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -48,7 +50,6 @@ public class ChatList extends AppCompatActivity {
     List<ChatMessage> allChatMessages = new ArrayList<>();
     List<ChatMessage> filteredChatMessages = new ArrayList<>();
     List<Chat> allMessages = new ArrayList<>();
-    List<Chat> recentMessage = new ArrayList<>();
     private SharedPreferences mSharedPreferences;
     private String myRole;
     private String mPhoneNumber;
@@ -110,26 +111,32 @@ public class ChatList extends AppCompatActivity {
 
         /////////////////////////////////////////////////////////////////////////
 
-//        reference = FirebaseDatabase.getInstance().getReference("chat");
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                int unread = 0;
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Chat chat = snapshot.getValue(Chat.class);
-//                    if (chat.getPhoneNumber().equals(mPhoneNumber) && chat.getChatSeen().equals("false")) {
-//                        unread++;
-//                    }
-//                }
-//
-//                Log.d("UNREAD_MESSAGE", "Unread#: " + unread);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        // for unread chat messages counter in the toolbar
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(mPhoneNumber) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(mPhoneNumber))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
 
         ////////////////////////////////////////////////////////////////////////
     }

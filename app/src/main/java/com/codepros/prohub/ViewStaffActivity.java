@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.News;
 import com.codepros.prohub.model.Staff;
 import com.codepros.prohub.model.Unit;
@@ -61,6 +63,10 @@ public class ViewStaffActivity extends AppCompatActivity {
     // user role
     private String myRole;
 
+     List<Chat> allMessages = new ArrayList<>();
+     private String userPhoneNum;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +93,40 @@ public class ViewStaffActivity extends AppCompatActivity {
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         //////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////
+
+        // for unread chat messages counter in the toolbar
+        SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        userPhoneNum = myPreference.getString("phoneNum", "");
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(userPhoneNum) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(userPhoneNum))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        ////////////////////////////////////////////////////////////////////////
+
         tvTitleStaff = findViewById(R.id.tvTitleStaff);
         tvTitleStaff.setText(propName);
         //

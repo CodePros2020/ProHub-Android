@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -177,30 +178,9 @@ public class ChatActivity extends AppCompatActivity {
 
         //////////////////////////////////////////////////////////////////////////
 
-        Log.d("CheckNumber", "Number: " + mPhoneNumber);
         /////////////////////////////////////////////////////////////////////////
 
-//        reference = FirebaseDatabase.getInstance().getReference(CHAT_CHILD);
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                int unread = 0;
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Chat chat = snapshot.getValue(Chat.class);
-//                    if (chat.getChatSeen().equals("false")) {
-//                        unread++;
-//                    }
-//                }
-//
-//                Log.d("UNREAD_MESSAGE", "Unread#: " + unread);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
+        // for unread chat messages counter in the toolbar
         new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
             @Override
             public void DataIsLoad(List<Chat> chats, List<String> keys) {
@@ -209,17 +189,21 @@ public class ChatActivity extends AppCompatActivity {
                 if (allMessages != null) {
                     for (Chat chat : allMessages)
                     {
-                        Log.d(TAG, "DataIsLoad: "+chat.getPhoneNumber());
-                        if (chat.getPhoneNumber().equals(mPhoneNumber))
+                        if (!chat.getPhoneNumber().equals(mPhoneNumber) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(mPhoneNumber))
                         {
-                            ++count;
+                            count++;
                         }
                     }
                 }
 
-                Log.d("COUNT_MESSAGE", "Count: " + String.valueOf(allMessages.size()));
-                Log.d("COUNT_MESSAGE", "Count: " + count);
-                Log.d("CheckNumber", "Number: " + mPhoneNumber);
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
             }
         });
 
@@ -280,7 +264,6 @@ public class ChatActivity extends AppCompatActivity {
 
                 switch (holder.getItemViewType()) {
                     case 0: {
-                        //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                         if (model.getMessage() != null) {
                             holder.messageTextView.setText(model.getMessage());
                             holder.timeTextView.setText(model.getTimestamp());
@@ -333,10 +316,6 @@ public class ChatActivity extends AppCompatActivity {
                                 holder.messengerTextSeen.setText("Seen");
                             }
                         }
-//                        else {
-//                            holder.messengerTextSeen.setVisibility(View.GONE);
-//                        }
-
                     }
                     break;
                     case 1: {
@@ -394,9 +373,6 @@ public class ChatActivity extends AppCompatActivity {
                                 holder.messengerTextSeen.setText("Seen");
                             }
                         }
-//                        else {
-//                            holder.messengerTextSeen.setVisibility(View.GONE);
-//                        }
                     }
                     break;
                     default:

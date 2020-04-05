@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepros.prohub.model.User;
+import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -82,6 +84,9 @@ public class PropertyHomeActivity extends AppCompatActivity {
     // user role
     private String myRole;
 
+    List<Chat> allMessages = new ArrayList<>();
+    private String userPhoneNum;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +121,38 @@ public class PropertyHomeActivity extends AppCompatActivity {
         tvDashboard.setText(userName);
         Picasso.get().load(imgUrl).placeholder(R.drawable.noimg).into(ivUserImg);
        // ivUserImg.setImageURI(imgUrl);
+
+        /////////////////////////////////////////////////////////////////////////
+
+        // for unread chat messages counter
+        userPhoneNum = myPreference.getString("phoneNum", "");
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(userPhoneNum) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(userPhoneNum))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        ////////////////////////////////////////////////////////////////////////
 
         // references to the buttons on view
         chatButton = findViewById(R.id.chatButton);

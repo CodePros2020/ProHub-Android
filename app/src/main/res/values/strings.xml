@@ -96,6 +96,7 @@
     <string name="forms_toolbar">FORMS</string>
     <string name="settings_toolbar">SETTINGS</string>
     <string name="go_property">Go Property</string>
+    <string name="chat_seen">Seen</string>
     <!--Province Spinner-->
     <string-array name="provinces">
         <item>Choose Province!</item>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepros.prohub.model.User;
+import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +29,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -49,6 +54,8 @@ public class SettingsActivity extends AppCompatActivity {
     private DatabaseReference myUserRef;
     private StorageReference myStorageRef;
     //
+     List<Chat> allMessages = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +115,42 @@ public class SettingsActivity extends AppCompatActivity {
         layoutChatSettings=findViewById(R.id.layoutChatSettings);
 
         layoutUserInfo.setOnClickListener(new View.OnClickListener() {
+
+        /////////////////////////////////////////////////////////////////////////
+
+        // for unread chat messages counter in the toolbar
+        SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        userPhoneNum = myPreference.getString("phoneNum", "");
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(userPhoneNum) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(userPhoneNum))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        ////////////////////////////////////////////////////////////////////////
+
+        btnUserInfo = findViewById(R.id.btnUserInfo);
+        btnUserInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goUserInfo();

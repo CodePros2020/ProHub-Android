@@ -5,11 +5,21 @@
     android:orientation="vertical"
     android:id="@+id/layoutReceiver">
 
+    <TextView
+        android:id="@+id/messengerTextView"
+        android:layout_width="wrap_content"
+        android:text="@string/john_doe"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:layout_marginLeft="48dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/messengerImageView"
@@ -62,9 +72,10 @@
                 android:scaleType="fitCenter"/>
 
             <TextView
-                android:id="@+id/messengerTextView"
+                android:id="@+id/messengerTextSeen"
+                android:text="@string/chat_seen"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
-                android:text="@string/john_doe"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"/>
@@ -72,6 +83,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>

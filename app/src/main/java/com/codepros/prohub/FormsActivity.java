@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.Form;
 import com.codepros.prohub.model.Staff;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
@@ -103,6 +104,10 @@ public class FormsActivity extends AppCompatActivity {
     //
     String fileNameToUpload = "";
 
+     List<Chat> allMessages = new ArrayList<>();
+     private String userPhoneNum;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +145,41 @@ public class FormsActivity extends AppCompatActivity {
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         //////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////
+
+        // for unread chat messages counter in the toolbar
+        SharedPreferences myPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        userPhoneNum = myPreferences.getString("phoneNum", "");
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(userPhoneNum) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(userPhoneNum))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        ////////////////////////////////////////////////////////////////////////
+
+
         SimpleDateFormat format1 = new SimpleDateFormat("MMM dd, yyyy, KK:mm a");
         createTime = format1.format(Calendar.getInstance().getTime());
 

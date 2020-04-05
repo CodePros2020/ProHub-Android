@@ -2,12 +2,14 @@ package com.codepros.prohub;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -48,11 +50,11 @@ public class ChatList extends AppCompatActivity {
     List<ChatMessage> allChatMessages = new ArrayList<>();
     List<ChatMessage> filteredChatMessages = new ArrayList<>();
     List<Chat> allMessages = new ArrayList<>();
-    List<Chat> recentMessage = new ArrayList<>();
     private SharedPreferences mSharedPreferences;
     private String myRole;
     private String mPhoneNumber;
     String lastMessage;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +86,6 @@ public class ChatList extends AppCompatActivity {
 
         chatRecycler = (RecyclerView) findViewById(R.id.recyclerChatList);
         chatRecycler = findViewById(R.id.recyclerChatList);
-        mSharedPreferences = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        mPhoneNumber = mSharedPreferences.getString("phoneNum","0123456789");
 
         // read the list of ChatMessages from Firebase
 
@@ -93,17 +93,52 @@ public class ChatList extends AppCompatActivity {
             @Override
             public void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys) {
                 allChatMessages = chatMessages;
-                for (ChatMessage chat : allChatMessages)
-                {
-                    if (chat.getReceiverNumber().equals(mPhoneNumber))
+
+                if (allChatMessages != null) {
+                    for (ChatMessage chat : allChatMessages)
                     {
-                        filteredChatMessages.add(chat);
+                        if (chat.getReceiverNumber().equals(mPhoneNumber))
+                        {
+                            filteredChatMessages.add(chat);
+                        }
                     }
                 }
                 Log.d("FilteredLENGTH", String.valueOf(filteredChatMessages.size()));
                 setChatAdapter();
             }
         });
+
+
+        /////////////////////////////////////////////////////////////////////////
+
+        // for unread chat messages counter in the toolbar
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(mPhoneNumber) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(mPhoneNumber))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        ////////////////////////////////////////////////////////////////////////
     }
 
     private void setChatAdapter() {

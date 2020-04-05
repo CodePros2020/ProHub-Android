@@ -2,6 +2,7 @@ package com.codepros.prohub.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.codepros.prohub.ChatActivity;
+import com.codepros.prohub.ChatList;
 import com.codepros.prohub.R;
 import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.ChatMessage;
@@ -27,6 +31,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
     List<ChatMessage> chatList;
@@ -35,6 +41,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
     private List<Chat> latestChat;
     String theLastMessage;
     String theLastTimeStamp;
+    String num_unread;
+    List<Chat> allMessages = new ArrayList<>();
 
     public ChatAdapter(Context context, List<ChatMessage> chats)
     {
@@ -63,6 +71,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
         holder.txtSenderFullName.setText(chat.getSenderName());
 
         lastMessage(chat.getChatMessageId(), holder.txtLastMessage, holder.txtTimeDateSent);
+        numUnreadMsg(chat.getChatMessageId(), chat.getReceiverNumber(), holder.txtNumUnread);
+
+        if (chat.getSenderPhotoUrl() == null || chat.getSenderPhotoUrl().equals("")) {
+            holder.chatImageView.setImageDrawable(ContextCompat.getDrawable(holder.chatImageView.getContext(),
+                    R.drawable.ic_account_circle_black_36dp));
+        } else {
+            Glide.with(holder.chatImageView.getContext())
+                    .load(chat.getSenderPhotoUrl())
+                    .into(holder.chatImageView);
+        }
 
         holder.onChatClickListener = new OnChatClickListener() {
             @Override
@@ -91,6 +109,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
         TextView txtSenderFullName;
         TextView txtTimeDateSent;
         TextView txtLastMessage;
+        TextView txtNumUnread;
+        CircleImageView chatImageView;
         OnChatClickListener onChatClickListener = null;
 
         public ChatHolder(View view) {
@@ -99,6 +119,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
             txtSenderFullName = view.findViewById(R.id.chatSenderFullName);
             txtTimeDateSent = view.findViewById(R.id.chatSentDate);
             txtLastMessage = view.findViewById(R.id.chatLastMessage);
+            chatImageView = view.findViewById(R.id.chatImageView);
+            txtNumUnread = view.findViewById(R.id.txtNumUnread);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -147,6 +169,38 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void numUnreadMsg(final String chatMessageId, final String phoneNumber, final TextView numUnread) {
+        num_unread = "1";
+
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(phoneNumber) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().equals(chatMessageId))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0)
+                {
+                    num_unread = String.valueOf(count);
+                    numUnread.setText(num_unread);
+                } else {
+                    numUnread.setVisibility(View.GONE);
+                }
 
             }
         });

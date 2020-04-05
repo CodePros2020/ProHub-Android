@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.Staff;
 import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.model.Unit;
@@ -38,13 +40,14 @@ public class AddUnitActivity extends AppCompatActivity {
     // user interaction objects
     private EditText etUnitName, etTenantNumber;
     private String propId, unitName, tenantNumber, tenantName, landlordName, landlordPhoneNumber, myRole;
-    private String chatMessageId;
+    private String chatMessageId, landlordProfilePicture, tenantProfilePicture;
     private Button btnSaveUnit;
     private List<User> userList;
     private List<Unit>unitsList;
+    private List<ChatMessage>chatMessageList;
     public static final String ANONYMOUS = "anonymous";
     SharedPreferences myPref;
-
+    List<Chat> allMessages = new ArrayList<>();
     // firebase database objects
     private DatabaseReference myDataRef;
 
@@ -55,10 +58,13 @@ public class AddUnitActivity extends AppCompatActivity {
 
         myDataRef = FirebaseDatabase.getInstance().getReference();
         Log.d(TAG, "onCreate: Units DB" + myDataRef.child("-M3X8yzN8R0Bs41p0PVy"));
-        //Shared Preference
-        SharedPreferences myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+
+        myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
         propId = myPref.getString("propId", "");
-        myRole = myPref.getString("myRole", "");
+        landlordName = myPref.getString("username", ANONYMOUS);
+        landlordPhoneNumber = myPref.getString("phoneNum", "0123456789");
+        landlordProfilePicture = myPref.getString("profilePic", null);
+
         /////////////////////////////////////////////////////
         // declaring the buttons
 
@@ -76,12 +82,37 @@ public class AddUnitActivity extends AppCompatActivity {
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         /////////////////////////////////////
-        myDataRef = FirebaseDatabase.getInstance().getReference();
 
-        myPref = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
-        propId = myPref.getString("propId", "");
-        landlordName = myPref.getString("username", ANONYMOUS);
-        landlordPhoneNumber = myPref.getString("phoneNum", "0123456789");
+        /////////////////////////////////////////////////////////////////////////
+
+        // for unread chat messages counter
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(landlordPhoneNumber) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(landlordPhoneNumber))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        ////////////////////////////////////////////////////////////////////////
 
         //
         etUnitName = findViewById(R.id.etUnitName);
@@ -106,6 +137,14 @@ public class AddUnitActivity extends AppCompatActivity {
             }
         });
 
+        // read ChatList
+        new FirebaseDataseHelper().readChatMessages(new FirebaseDataseHelper.ChatMessageDataStatus() {
+            @Override
+            public void DataIsLoad(List<ChatMessage> chatMessages, List<String> keys) {
+                chatMessageList = chatMessages;
+            }
+        });
+
         btnSaveUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +166,7 @@ public class AddUnitActivity extends AppCompatActivity {
                 if (u.getRole().equals("Tenant")) {
                     isTenant = true;
                     tenantName = u.getFirstname() + " " + u.getLastname();
+                    tenantProfilePicture = u.getImageUrl();
                     chatMessageId = landlordPhoneNumber + "_" + tenantNumber;
                 }
 
@@ -154,27 +194,40 @@ public class AddUnitActivity extends AppCompatActivity {
             String message = "Sorry, entered number is not a tenant!";
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
         } else {
-            //  Unit newUnit = new Unit(propId, tenantNumber, unitName);
-            ChatMessage newChatMessage1 = new ChatMessage(chatMessageId, tenantNumber, landlordPhoneNumber, landlordName);
-            ChatMessage newChatMessage2 = new ChatMessage(chatMessageId, landlordPhoneNumber, tenantNumber, tenantName);
 
-            DatabaseReference chatRef = myDataRef.child("chatMessages");
-            DatabaseReference newChatRef1 = chatRef.push();
-            DatabaseReference newChatRef2 = chatRef.push();
-            newChatRef1.setValue(newChatMessage1);
-            newChatRef2.setValue(newChatMessage2);
-            boolean isExist=false;
-            for(Unit u:unitsList){
-                Log.d(TAG, "addUnit:Unit Name in DB"+u.getUnitName());
-                Log.d(TAG, "addUnit:Unit Name in input"+unitName);
-                if(u.getUnitName().toUpperCase().equals(unitName.toUpperCase())){
-                    isExist=true;
+            boolean isChatListAvailable = false;
+            for (ChatMessage c : chatMessageList) {
+                if (c.getChatMessageId().equals(chatMessageId)) {
+                    isChatListAvailable = true;
                 }
             }
-            if(isExist){
-                Toast.makeText(getApplicationContext(), "Please add different unit name.Unit already Exist!", Toast.LENGTH_LONG).show();
+
+            if (!isChatListAvailable)
+            {
+                ChatMessage newChatMessage1 = new ChatMessage(chatMessageId, tenantNumber, landlordProfilePicture, landlordPhoneNumber, landlordName);
+                ChatMessage newChatMessage2 = new ChatMessage(chatMessageId, landlordPhoneNumber, tenantProfilePicture, tenantNumber, tenantName);
+
+                DatabaseReference chatRef = myDataRef.child("chatMessages");
+                DatabaseReference newChatRef1 = chatRef.push();
+                DatabaseReference newChatRef2 = chatRef.push();
+                newChatRef1.setValue(newChatMessage1);
+                newChatRef2.setValue(newChatMessage2);
+
             }
-            else{
+
+            boolean isExist=false;
+
+            for (Unit u:unitsList) {
+                Log.d(TAG, "addUnit:Unit Name in DB" + u.getUnitName());
+                Log.d(TAG, "addUnit:Unit Name in input" + unitName);
+                if(u.getUnitName().toUpperCase().equals(unitName.toUpperCase())){
+                    isExist = true;
+                }
+            }
+            if (isExist) {
+                Toast.makeText(getApplicationContext(), "Please add different unit name. Unit name already Exist!", Toast.LENGTH_LONG).show();
+            }
+            else {
                 String unitId = myDataRef.push().getKey();
                 Unit newUnit = new Unit(unitId, propId, tenantNumber, unitName);
                 assert unitId != null;
@@ -183,7 +236,6 @@ public class AddUnitActivity extends AppCompatActivity {
                 // intent to next page
                 Intent intent = new Intent(this, ViewUnitsActivity.class);
                 this.startActivity(intent);
-
             }
         }
     }

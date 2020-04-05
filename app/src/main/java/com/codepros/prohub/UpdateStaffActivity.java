@@ -29,7 +29,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.model.Staff;
+import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +45,8 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,6 +91,10 @@ public class UpdateStaffActivity extends AppCompatActivity {
     // constant
     private static final String TAG = "UpdateStaffActivity";
 
+     List<Chat> allMessages = new ArrayList<>();
+     private String userPhoneNum;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +127,39 @@ public class UpdateStaffActivity extends AppCompatActivity {
                 toolbarBtnSettings, btnHome, toolbarBtnSearch, toolbarBtnMenu);
 
         //////////////////////////////////////////////
+
+        /////////////////////////////////////////////////////////////////////////
+
+        // for unread chat messages counter in the toolbar
+        SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", MODE_PRIVATE);
+        userPhoneNum = myPreference.getString("phoneNum", "");
+        new FirebaseDataseHelper().readChats(new FirebaseDataseHelper.ChatDataStatus() {
+            @Override
+            public void DataIsLoad(List<Chat> chats, List<String> keys) {
+                allMessages = chats;
+                int count = 0;
+                if (allMessages != null) {
+                    for (Chat chat : allMessages)
+                    {
+                        if (!chat.getPhoneNumber().equals(userPhoneNum) && chat.getChatSeen().equals("false")
+                                && chat.getChatMessageId().contains(userPhoneNum))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                if (count > 0) {
+                    toolbarBtnChat.setText("CHAT (" + count + ")");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#FF0000"));
+                } else if (count <= 0) {
+                    toolbarBtnChat.setText("CHAT");
+                    toolbarBtnChat.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        ////////////////////////////////////////////////////////////////////////
 
         // find Views
         etUpdateName = findViewById(R.id.etUpdateName);

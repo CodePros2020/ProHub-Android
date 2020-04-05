@@ -152,15 +152,8 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
                     case "News":
                         for (int i = 0; i < myNewsList.size(); i++) {
                             if (myNewsList.get(i).getNewsTitle().equals(selection)) {
-                                String content = myNewsList.get(i).getContent();
-                                String createTime = myNewsList.get(i).getCreateTime();
-                                String creatorPhoneNumber = myNewsList.get(i).getCreatorPhoneNumber();
-                                String hideFlag = Boolean.toString(myNewsList.get(i).getHideFlag());
-                                String imageUrl = myNewsList.get(i).getImageUrl();
                                 String newsTitle = myNewsList.get(i).getNewsTitle();
-                                String targetViewer = myNewsList.get(i).getTargetViewer();
 
-                                Bundle b = new Bundle();
                                 Intent intent = new Intent(SearchActivity.this, NewsViewActivity.class);
 
                                 SharedPreferences myPreference = getSharedPreferences("myUserSharedPref", 0);

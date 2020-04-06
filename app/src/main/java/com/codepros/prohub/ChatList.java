@@ -35,6 +35,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChatList extends AppCompatActivity {
@@ -104,6 +106,14 @@ public class ChatList extends AppCompatActivity {
                     }
                 }
                 Log.d("FilteredLENGTH", String.valueOf(filteredChatMessages.size()));
+
+                Collections.sort(filteredChatMessages, new Comparator<ChatMessage>() {
+                    @Override
+                    public int compare(ChatMessage o1, ChatMessage o2) {
+                        return (o2.getTimestamp().compareTo(o1.getTimestamp()));
+                    }
+                });
+
                 setChatAdapter();
             }
         });

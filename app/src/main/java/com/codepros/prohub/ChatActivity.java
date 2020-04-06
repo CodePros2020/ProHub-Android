@@ -33,6 +33,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepros.prohub.model.Chat;
+import com.codepros.prohub.model.ChatMessage;
+import com.codepros.prohub.model.User;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
 import com.codepros.prohub.utils.ToolbarHelper;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -52,6 +54,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -212,7 +215,7 @@ public class ChatActivity extends AppCompatActivity {
         // for export chat history
         toolbar.setChatHistoryExportInfo(chatMessageId, propId);
 
-        DateFormat dateFormat = new SimpleDateFormat("MMM dd, hh:mm a");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date now = Calendar.getInstance().getTime();
         timestamp = dateFormat.format(now);
 
@@ -260,7 +263,7 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull final MessageViewHolder holder, int position, @NonNull Chat model) {
+            protected void onBindViewHolder(@NonNull final MessageViewHolder holder, int position, @NonNull final Chat model) {
 
                 switch (holder.getItemViewType()) {
                     case 0: {
@@ -299,14 +302,25 @@ public class ChatActivity extends AppCompatActivity {
                         }
 
                         holder.messengerTextView.setText(model.getFullName());
-                        if (model.getPhotoUrl() == null || model.getPhotoUrl().equals("")) {
-                            holder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
-                                    R.drawable.ic_account_circle_black_36dp));
-                        } else {
-                            Glide.with(ChatActivity.this)
-                                    .load(model.getPhotoUrl())
-                                    .into(holder.messengerImageView);
-                        }
+//                        if (model.getPhotoUrl() == null || model.getPhotoUrl().equals("")) {
+//                            holder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
+//                                    R.drawable.ic_account_circle_black_36dp));
+//                        } else {
+//                            Glide.with(ChatActivity.this)
+//                                    .load(model.getPhotoUrl())
+//                                    .into(holder.messengerImageView);
+//                        }
+
+                        new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
+                            @Override
+                            public void DataIsLoad(List<User> listUsers, List<String> keys) {
+                                for (User user : listUsers) {
+                                    if (user.getPhone().equals(model.getPhoneNumber())) {
+                                        loadUserImage(user.getImageUrl(), holder.messengerImageView);
+                                    }
+                                }
+                            }
+                        });
 
                         if (position == mFirebaseAdapter.getItemCount() - 1)
                         {
@@ -355,15 +369,26 @@ public class ChatActivity extends AppCompatActivity {
                         }
 
                         holder.messengerTextView.setText(model.getFullName());
-                        if (model.getPhotoUrl() == null || model.getPhotoUrl().equals("")) {
-                        //if (mPhotoUrl == null) {
-                            holder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
-                                    R.drawable.ic_account_circle_black_36dp));
-                        } else {
-                            Glide.with(ChatActivity.this)
-                                    .load(model.getPhotoUrl())
-                                    .into(holder.messengerImageView);
-                        }
+//                        if (model.getPhotoUrl() == null || model.getPhotoUrl().equals("")) {
+//                        //if (mPhotoUrl == null) {
+//                            holder.messengerImageView.setImageDrawable(ContextCompat.getDrawable(ChatActivity.this,
+//                                    R.drawable.ic_account_circle_black_36dp));
+//                        } else {
+//                            Glide.with(ChatActivity.this)
+//                                    .load(model.getPhotoUrl())
+//                                    .into(holder.messengerImageView);
+//                        }
+
+                        new FirebaseDataseHelper().readUsers(new FirebaseDataseHelper.UserDataStatus() {
+                            @Override
+                            public void DataIsLoad(List<User> listUsers, List<String> keys) {
+                                for (User user : listUsers) {
+                                    if (user.getPhone().equals(model.getPhoneNumber())) {
+                                        loadUserImage(user.getImageUrl(), holder.messengerImageView);
+                                    }
+                                }
+                            }
+                        });
 
                         if (position == mFirebaseAdapter.getItemCount() - 1)
                         {
@@ -457,6 +482,7 @@ public class ChatActivity extends AppCompatActivity {
                 mFirebaseDatabaseReference.child(CHAT_CHILD)
                         .push().setValue(chat);
                 mMessageEditText.setText("");
+                setChatMessageTimestamp(chatMessageId, timestamp);
             }
         });
 
@@ -619,6 +645,39 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void setChatMessageTimestamp(final String chatMsgId, final String lastMsgTimestamp) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("chatMessages");
+        seenListener = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ChatMessage chatMessage = snapshot.getValue(ChatMessage.class);
+                    if (chatMessage.getChatMessageId().equals(chatMsgId)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("timestamp", lastMsgTimestamp);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    // loads the user image according to imageURL
+    private void loadUserImage(String imageUrl, ImageView profileImage){
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Picasso.get().load(imageUrl).into(profileImage);
+        }
+        else {
+            profileImage.setImageDrawable(ContextCompat.getDrawable(profileImage.getContext(),
+                    R.drawable.ic_account_circle_black_36dp));
+        }
     }
 
 }

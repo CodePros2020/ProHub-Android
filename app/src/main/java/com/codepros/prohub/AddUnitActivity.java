@@ -27,7 +27,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AddUnitActivity extends AppCompatActivity {
@@ -40,7 +44,7 @@ public class AddUnitActivity extends AppCompatActivity {
     // user interaction objects
     private EditText etUnitName, etTenantNumber;
     private String propId, unitName, tenantNumber, tenantName, landlordName, landlordPhoneNumber, myRole;
-    private String chatMessageId, landlordProfilePicture, tenantProfilePicture;
+    private String chatMessageId, landlordProfilePicture, tenantProfilePicture, timestamp;
     private Button btnSaveUnit;
     private List<User> userList;
     private List<Unit>unitsList;
@@ -64,6 +68,9 @@ public class AddUnitActivity extends AppCompatActivity {
         landlordName = myPref.getString("username", ANONYMOUS);
         landlordPhoneNumber = myPref.getString("phoneNum", "0123456789");
         landlordProfilePicture = myPref.getString("profilePic", null);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date now = Calendar.getInstance().getTime();
+        timestamp = dateFormat.format(now);
 
         /////////////////////////////////////////////////////
         // declaring the buttons
@@ -204,8 +211,8 @@ public class AddUnitActivity extends AppCompatActivity {
 
             if (!isChatListAvailable)
             {
-                ChatMessage newChatMessage1 = new ChatMessage(chatMessageId, tenantNumber, landlordProfilePicture, landlordPhoneNumber, landlordName);
-                ChatMessage newChatMessage2 = new ChatMessage(chatMessageId, landlordPhoneNumber, tenantProfilePicture, tenantNumber, tenantName);
+                ChatMessage newChatMessage1 = new ChatMessage(chatMessageId, tenantNumber, landlordProfilePicture, landlordPhoneNumber, landlordName, timestamp);
+                ChatMessage newChatMessage2 = new ChatMessage(chatMessageId, landlordPhoneNumber, tenantProfilePicture, tenantNumber, tenantName, timestamp);
 
                 DatabaseReference chatRef = myDataRef.child("chatMessages");
                 DatabaseReference newChatRef1 = chatRef.push();

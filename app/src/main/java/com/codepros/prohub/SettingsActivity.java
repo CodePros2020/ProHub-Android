@@ -171,7 +171,7 @@ public class SettingsActivity extends AppCompatActivity {
             case "Landlord":
                 break;
             case "Tenant":
-                btnStaff.setVisibility(View.GONE);
+                layoutStaff.setVisibility(View.GONE);
         }
     }
 

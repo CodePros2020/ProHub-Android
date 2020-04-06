@@ -1,5 +1,6 @@
 package com.codepros.prohub;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -24,6 +25,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepros.prohub.model.ChatMessage;
 import com.codepros.prohub.model.User;
 import com.codepros.prohub.model.Chat;
 import com.codepros.prohub.utils.FirebaseDataseHelper;
@@ -31,8 +33,11 @@ import com.codepros.prohub.utils.ToolbarHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.codepros.prohub.model.Property;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.itextpdf.text.Document;
@@ -49,6 +54,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PropertyHomeActivity extends AppCompatActivity {
@@ -85,7 +91,10 @@ public class PropertyHomeActivity extends AppCompatActivity {
     private String myRole;
 
     List<Chat> allMessages = new ArrayList<>();
+    List<Chat> allChats = new ArrayList<>();
+    List<ChatMessage> allChatMessages = new ArrayList<>();
     private String userPhoneNum;
+    private String picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +108,11 @@ public class PropertyHomeActivity extends AppCompatActivity {
         myRole = myPreference.getString("myRole", "");
         userName = myPreference.getString("username", "");
         phoneNum=myPreference.getString("phoneNum","");
+        picture = myPreference.getString("profilePic", null);
+
+        updateProfilePictureInChatList(phoneNum, picture);
+        //updateProfilePictureInChats(phoneNum, picture);
+
         //
         myPropRef = FirebaseDatabase.getInstance().getReference("users");
         myStorageRef = FirebaseStorage.getInstance().getReference("userIcons");
@@ -263,6 +277,50 @@ public class PropertyHomeActivity extends AppCompatActivity {
     public void goUnits(View view) {
         Intent intent = new Intent(this, ViewUnitsActivity.class);
         this.startActivity(intent);
+    }
+
+    private void updateProfilePictureInChatList(final String phoneNum, final String photoUrl) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("chatMessages");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ChatMessage chatMessage = snapshot.getValue(ChatMessage.class);
+                    if (chatMessage.getSenderNumber().equals(phoneNum)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("senderPhotoUrl", photoUrl);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void updateProfilePictureInChats(final String phoneNum, final String photoUrl) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("chatMessages");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getPhoneNumber().equals(phoneNum)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("photoUrl", photoUrl);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

@@ -164,6 +164,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
                         theLastTimeStamp = chat.getTimestamp();
                     }
                 }
+                if(theLastMessage == null || theLastMessage.isEmpty()){
+                    theLastMessage = "[image]";
+                }
 
                 if (theLastMessage.length() > 20) {
                     theLastMessage = theLastMessage.substring(0,20);

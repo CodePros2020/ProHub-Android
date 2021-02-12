@@ -10,7 +10,7 @@ public class AppSingleton {
     private static AppSingleton mAppSingletonInstance;
     private RequestQueue mRequestQueue;
 
-    private static Context mContext;
+    private  Context mContext;
 
     private AppSingleton(Context context) {
         mContext = context;
